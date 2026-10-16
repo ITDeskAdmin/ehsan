@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پنل مدیریت کار و تجهیزات IT</title>
+<title>پنل مدیریت IT — مهندس نجف‌زاده</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --sidebar-bg: #1c2331;
-  --sidebar-text: #b8c2d9;
-  --sidebar-hover: #252e42;
+  --sidebar-bg: #0b1120;
+  --sidebar-text: #8fa0c0;
+  --sidebar-hover: #16203a;
   --sidebar-active: #6c47c9;
   --bg: #f5f7fb;
   --bg-card: #ffffff;
@@ -30,6 +30,7 @@
   --info: #3b82f6;
   --info-soft: #e6f0fe;
   --pink: #ec4899;
+  --cyan: #06b6d4;
   --shadow-sm: 0 1px 2px rgba(16,24,40,.04);
   --shadow: 0 4px 16px rgba(16,24,40,.06);
   --shadow-lg: 0 12px 32px rgba(16,24,40,.10);
@@ -38,11 +39,11 @@
   --transition: .22s cubic-bezier(.4,0,.2,1);
 }
 [data-theme="dark"] {
-  --sidebar-bg: #0f1420;
-  --sidebar-hover: #1a2233;
-  --bg: #0f1420;
-  --bg-card: #171e2e;
-  --border: #2a344a;
+  --sidebar-bg: #070b14;
+  --sidebar-hover: #141b2e;
+  --bg: #0b1120;
+  --bg-card: #131a2c;
+  --border: #26304a;
   --text: #e8ecf5;
   --text-muted: #93a0bd;
   --primary-soft: #2a1f4a;
@@ -70,19 +71,18 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-/* SVG Safety */
 svg { max-width: 100%; max-height: 100%; }
 .dept-icon svg, .card-icon svg, .stat-icon svg, .nav-item svg, .btn svg, .icon-btn svg,
 .login-logo svg, .prod-thumb svg, .empty-guide .icon svg, .empty-state svg,
 .fp-header h2 svg, .cal-nav button svg, .hw-subsection h4 svg, .form-group label svg,
 .field label svg, .toast svg, .search-box svg, .search-side svg, .menu-btn svg,
-.round-btn svg, .empty-guide .icon svg {
+.round-btn svg, .empty-guide .icon svg, .sys-detail-header svg, .sys-detail-close svg {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-/* ============ LOGIN ============ */
+/* ============ LOGIN (IT THEME) ============ */
 .login-wrap {
   position: fixed;
   inset: 0;
@@ -90,84 +90,179 @@ svg { max-width: 100%; max-height: 100%; }
   display: grid;
   place-items: center;
   padding: 20px;
-  background: radial-gradient(circle at 20% 20%, #2a1f5c 0%, #1a1030 35%, #0a0518 100%);
+  background: #050a15;
   overflow: hidden;
+  font-family: 'Vazirmatn', sans-serif;
 }
-.login-wrap::before {
-  content:'';
+/* Grid background */
+.login-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(6,182,212,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+/* Radial glow */
+.login-glow {
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(108,71,201,.35) 0%, transparent 65%);
+  top: -250px; right: -150px;
+  filter: blur(60px);
+  animation: glowFloat 15s ease-in-out infinite;
+  pointer-events: none;
+}
+.login-glow2 {
   position: absolute;
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(108,71,201,.35), transparent 60%);
-  top: -200px; right: -200px;
   border-radius: 50%;
-  animation: floatOrb 12s ease-in-out infinite;
-  filter: blur(40px);
+  background: radial-gradient(circle, rgba(6,182,212,.28) 0%, transparent 65%);
+  bottom: -200px; left: -150px;
+  filter: blur(70px);
+  animation: glowFloat 18s ease-in-out infinite reverse;
+  pointer-events: none;
 }
-.login-wrap::after {
-  content:'';
-  position: absolute;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(236,72,153,.25), transparent 60%);
-  bottom: -150px; left: -100px;
-  border-radius: 50%;
-  animation: floatOrb 15s ease-in-out infinite reverse;
-  filter: blur(50px);
-}
-@keyframes floatOrb {
+@keyframes glowFloat {
   0%,100% { transform: translate(0,0) scale(1); }
-  50% { transform: translate(-40px, 40px) scale(1.15); }
+  50% { transform: translate(-30px, 30px) scale(1.15); }
 }
+/* Moving particles */
 .login-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .login-particles span {
   position: absolute;
-  background: rgba(255,255,255,.4);
+  background: #06b6d4;
   border-radius: 50%;
-  animation: rise linear infinite;
+  box-shadow: 0 0 8px #06b6d4, 0 0 16px rgba(6,182,212,.5);
+  animation: particleFloat linear infinite;
 }
-@keyframes rise {
-  from { transform: translateY(100vh) scale(0); opacity: 0; }
+@keyframes particleFloat {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  to { transform: translateY(-10vh) scale(1); opacity: 0; }
+  100% { transform: translateY(-10vh) translateX(20px); opacity: 0; }
 }
+/* Scan line effect */
+.login-scan {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+  box-shadow: 0 0 20px #06b6d4;
+  animation: scanLine 8s linear infinite;
+  opacity: .5;
+  pointer-events: none;
+}
+@keyframes scanLine {
+  0% { top: -5%; }
+  100% { top: 105%; }
+}
+
 .login-card {
   position: relative;
-  background: rgba(20, 15, 40, .75);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 26px;
-  padding: 44px 38px;
+  background: rgba(13, 20, 38, .8);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(6,182,212,.18);
+  border-radius: 24px;
+  padding: 44px 40px 36px;
   width: 100%;
-  max-width: 440px;
-  box-shadow: 0 30px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.05) inset;
-  animation: loginIn .7s cubic-bezier(.34,1.56,.64,1);
+  max-width: 460px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.6),
+    0 0 60px rgba(6,182,212,.08),
+    0 1px 0 rgba(255,255,255,.05) inset;
+  animation: loginIn .8s cubic-bezier(.34,1.56,.64,1);
   z-index: 2;
 }
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #06b6d4, #6c47c9, transparent);
+  border-radius: 24px 24px 0 0;
+  opacity: .8;
+}
 @keyframes loginIn {
-  from { opacity: 0; transform: translateY(40px) scale(.94); }
+  from { opacity: 0; transform: translateY(50px) scale(.92); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.login-brand { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 32px; }
+
+.login-brand { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 32px; }
+
 .login-logo {
-  width: 82px; height: 82px;
+  width: 88px; height: 88px;
   border-radius: 24px;
-  background: linear-gradient(135deg, #6c47c9 0%, #8a5cf6 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #6c47c9 50%, #8a5cf6 100%);
   display: grid; place-items: center;
   color: #fff;
-  box-shadow: 0 20px 50px rgba(108,71,201,.55), 0 0 0 8px rgba(108,71,201,.08), 0 0 0 16px rgba(108,71,201,.04);
+  position: relative;
+  box-shadow:
+    0 20px 50px rgba(6,182,212,.4),
+    0 0 0 1px rgba(255,255,255,.15) inset,
+    0 0 60px rgba(6,182,212,.3);
   animation: logoPulse 3s ease-in-out infinite;
+}
+.login-logo::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 30px;
+  border: 1px dashed rgba(6,182,212,.4);
+  animation: rotateRing 20s linear infinite;
+}
+@keyframes rotateRing {
+  to { transform: rotate(360deg); }
 }
 @keyframes logoPulse {
   0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-5px); }
 }
-.login-logo svg { width: 42px !important; height: 42px !important; }
-.login-card h2 { text-align: center; font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-.login-card .sub { text-align: center; color: rgba(255,255,255,.55); font-size: 13px; }
+.login-logo svg { width: 44px !important; height: 44px !important; color: #fff; }
+
+.login-card h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.5px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.login-card .sub {
+  text-align: center;
+  color: #6b83a3;
+  font-size: 12.5px;
+  letter-spacing: .3px;
+  font-family: 'JetBrains Mono', monospace;
+  direction: ltr;
+}
+.login-card .sub::before {
+  content: '> ';
+  color: #06b6d4;
+}
+.login-card .sub::after {
+  content: '_';
+  color: #06b6d4;
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
 .login-error {
-  background: rgba(239,68,68,.15);
-  border: 1px solid rgba(239,68,68,.3);
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.35);
   color: #fca5a5;
   padding: 11px 14px;
   border-radius: 12px;
@@ -182,56 +277,85 @@ svg { max-width: 100%; max-height: 100%; }
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
 }
+
 .login-field { position: relative; margin-bottom: 16px; }
-.login-field label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.7); margin-bottom: 8px; padding-right: 4px; }
+.login-field label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8fa5c9;
+  margin-bottom: 8px;
+  padding-right: 4px;
+  letter-spacing: .3px;
+}
+.login-field label .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #06b6d4;
+  box-shadow: 0 0 8px #06b6d4;
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.3); }
+}
 .login-field input {
   width: 100%;
   padding: 14px 46px 14px 16px;
-  border: 1.5px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.05);
+  border: 1.5px solid rgba(6,182,212,.15);
+  background: rgba(6,182,212,.04);
   color: #fff;
-  border-radius: 13px;
-  font-size: 14.5px;
-  font-family: inherit;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
   outline: none;
   transition: all var(--transition);
   letter-spacing: .5px;
+  direction: ltr;
+  text-align: right;
 }
-.login-field input::placeholder { color: rgba(255,255,255,.3); }
+.login-field input::placeholder { color: rgba(6,182,212,.3); font-family: 'JetBrains Mono', monospace; }
 .login-field input:focus {
-  border-color: rgba(138,92,246,.8);
-  background: rgba(255,255,255,.08);
-  box-shadow: 0 0 0 4px rgba(138,92,246,.2);
+  border-color: rgba(6,182,212,.6);
+  background: rgba(6,182,212,.08);
+  box-shadow: 0 0 0 4px rgba(6,182,212,.15), 0 0 20px rgba(6,182,212,.25);
 }
 .login-field .icon {
   position: absolute;
-  right: 16px;
-  top: 38px;
+  right: 14px;
+  top: 37px;
   width: 18px; height: 18px;
-  color: rgba(255,255,255,.4);
+  color: rgba(6,182,212,.5);
   pointer-events: none;
+  transition: color var(--transition);
 }
+.login-field input:focus + .icon { color: #06b6d4; }
+
 .login-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 12.5px;
+  font-size: 12px;
   margin: 4px 0 24px;
-  color: rgba(255,255,255,.6);
+  color: #6b83a3;
 }
 .login-options label { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
 .login-options input[type="checkbox"] {
   appearance: none;
   width: 18px; height: 18px;
-  border: 1.5px solid rgba(255,255,255,.25);
+  border: 1.5px solid rgba(6,182,212,.3);
   border-radius: 5px;
   cursor: pointer;
   position: relative;
   transition: all var(--transition);
+  background: rgba(6,182,212,.05);
 }
 .login-options input[type="checkbox"]:checked {
-  background: linear-gradient(135deg, #6c47c9, #8a5cf6);
+  background: linear-gradient(135deg, #06b6d4, #6c47c9);
   border-color: transparent;
+  box-shadow: 0 0 10px rgba(6,182,212,.5);
 }
 .login-options input[type="checkbox"]:checked::after {
   content: '✓';
@@ -242,12 +366,13 @@ svg { max-width: 100%; max-height: 100%; }
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .login-btn {
   width: 100%;
   padding: 15px;
   border: none;
-  border-radius: 13px;
-  background: linear-gradient(135deg, #6c47c9 0%, #8a5cf6 50%, #ec4899 100%);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #06b6d4 0%, #6c47c9 50%, #8a5cf6 100%);
   background-size: 200% 200%;
   color: #fff;
   font-size: 15px;
@@ -255,27 +380,47 @@ svg { max-width: 100%; max-height: 100%; }
   font-family: inherit;
   cursor: pointer;
   transition: all var(--transition);
-  box-shadow: 0 12px 30px rgba(108,71,201,.5);
+  box-shadow: 0 10px 30px rgba(6,182,212,.35), 0 0 0 1px rgba(255,255,255,.08) inset;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  animation: gradientShift 8s ease infinite;
+  letter-spacing: .5px;
+  animation: gradientShift 6s ease infinite;
+  position: relative;
+  overflow: hidden;
 }
+.login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+  transition: left .5s;
+}
+.login-btn:hover::before { left: 100%; }
 .login-btn svg { width: 18px !important; height: 18px !important; }
 @keyframes gradientShift {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
-.login-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(108,71,201,.7); }
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(6,182,212,.5), 0 0 0 1px rgba(255,255,255,.12) inset;
+}
+.login-btn:active { transform: translateY(0); }
 .login-btn:disabled { opacity: .7; cursor: not-allowed; }
+
 .login-footer {
   text-align: center;
-  font-size: 11px;
-  color: rgba(255,255,255,.35);
-  margin-top: 28px;
+  font-size: 10.5px;
+  color: #4a5a78;
+  margin-top: 26px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,.08);
+  border-top: 1px solid rgba(6,182,212,.1);
+  letter-spacing: 1px;
+  font-family: 'JetBrains Mono', monospace;
+  direction: ltr;
 }
 
 /* ========== APP LAYOUT ========== */
@@ -318,7 +463,7 @@ svg { max-width: 100%; max-height: 100%; }
 }
 .user-info { flex: 1; min-width: 0; }
 .user-info h4 { font-size: 13.5px; color: #fff; font-weight: 700; }
-.user-info span { font-size: 11px; color: var(--sidebar-text); opacity: .7; display: block; }
+.user-info span { font-size: 11px; color: var(--sidebar-text); opacity: .7; display: block; direction: ltr; text-align: right; }
 .search-side {
   display: flex;
   align-items: center;
@@ -421,22 +566,16 @@ svg { max-width: 100%; max-height: 100%; }
 @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
 
 /* ========= CARDS ========= */
-.card {
+.panel-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 18px;
   box-shadow: var(--shadow-sm);
   margin-bottom: 18px;
   overflow: hidden;
 }
-.card-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
+.card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
 .card-head h2 { font-size: 15px; font-weight: 700; }
 .card-head .sub { font-size: 12px; color: var(--text-muted); }
 .card-head .actions { margin-right: auto; display: flex; gap: 8px; flex-wrap: wrap; }
@@ -449,17 +588,6 @@ svg { max-width: 100%; max-height: 100%; }
   flex-shrink: 0;
 }
 .card-icon svg { width: 19px !important; height: 19px !important; }
-
-/* Unified single-card style: card with toolbar + content */
-.panel-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 18px;
-  overflow: hidden;
-}
 
 /* ========= EMPTY GUIDE ========= */
 .empty-guide { text-align: center; padding: 50px 20px; }
@@ -527,48 +655,6 @@ svg { max-width: 100%; max-height: 100%; }
 .stat-value { font-size: 25px; font-weight: 800; margin-top: 12px; letter-spacing: -.5px; }
 .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
-/* ========= FORMS ========= */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-  gap: 12px;
-  align-items: end;
-}
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field.full { grid-column: 1 / -1; }
-.field label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.field label svg { width: 13px !important; height: 13px !important; }
-.field label .req { color: var(--danger); margin-right: 2px; }
-.field input, .field select, .field textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-family: inherit;
-  transition: all var(--transition);
-  outline: none;
-}
-.field textarea { resize: vertical; min-height: 70px; }
-.field input:focus, .field select:focus, .field textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(108,71,201,.12);
-}
-.field input[readonly], .field input:disabled {
-  cursor: not-allowed;
-  background: var(--bg);
-  color: var(--text-muted);
-}
-
 /* ========= BUTTONS ========= */
 .btn {
   display: inline-flex;
@@ -602,14 +688,8 @@ svg { max-width: 100%; max-height: 100%; }
 .btn-sm svg { width: 13px !important; height: 13px !important; }
 .btn-lg { padding: 13px 24px; font-size: 14px; }
 
-/* Toolbar - like systems */
-.toolbar {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
+/* Toolbar */
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
 .toolbar .search-box { flex: 1; min-width: 200px; }
 .toolbar .filter-select {
   min-width: 140px;
@@ -623,11 +703,7 @@ svg { max-width: 100%; max-height: 100%; }
   outline: none;
   cursor: pointer;
 }
-.toolbar .action-btns {
-  display: flex;
-  gap: 6px;
-  margin-right: auto;
-}
+.toolbar .action-btns { display: flex; gap: 6px; margin-right: auto; }
 .round-btn {
   width: 38px; height: 38px;
   border-radius: 10px;
@@ -646,8 +722,6 @@ svg { max-width: 100%; max-height: 100%; }
 .round-btn.danger:hover { background: #db2777; transform: translateY(-2px); }
 .round-btn.info { background: var(--info); }
 .round-btn.info:hover { background: #2563eb; transform: translateY(-2px); }
-.round-btn.success { background: var(--success); }
-.round-btn.success:hover { background: #059669; transform: translateY(-2px); }
 
 /* ========= TABLE ========= */
 .table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
@@ -767,7 +841,7 @@ tbody tr:hover td { background: var(--bg); }
   padding: 13px;
   width: 305px;
   box-shadow: var(--shadow-lg);
-  z-index: 100;
+  z-index: 10000;
   display: none;
   animation: popIn .2s ease;
 }
@@ -975,6 +1049,192 @@ tbody tr:hover td { background: var(--bg); }
 .hw-grid .form-group select { padding: 9px 11px; font-size: 12.5px; }
 .hw-grid .form-group label { font-size: 11.5px; }
 
+/* ========= SYSTEM DETAIL MODAL (NEW - like screenshot) ========= */
+.sys-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,15,25,.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 20px;
+  animation: fadeIn .25s ease;
+}
+.sys-detail-overlay.show { display: flex; }
+.sys-detail-modal {
+  background: var(--bg-card);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 40px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.05) inset;
+  animation: modalIn .35s cubic-bezier(.34,1.56,.64,1);
+  overflow: hidden;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.92) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+/* Header */
+.sys-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 22px;
+  background: linear-gradient(135deg, #1c2331 0%, #252e42 100%);
+  color: #fff;
+  position: relative;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .sys-detail-header {
+  background: linear-gradient(135deg, #0a0f1a 0%, #131a2c 100%);
+}
+.sys-detail-header .header-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), #8a5cf6);
+  color: #fff;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(108,71,201,.5);
+}
+.sys-detail-header .header-icon svg { width: 22px !important; height: 22px !important; }
+.sys-detail-header .header-info { flex: 1; min-width: 0; }
+.sys-detail-header .header-info h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 3px;
+}
+.sys-detail-header .header-info .meta {
+  font-size: 11.5px;
+  color: rgba(255,255,255,.55);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sys-detail-header .header-info .meta span { display: inline-flex; align-items: center; gap: 4px; }
+.sys-detail-header .header-actions {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
+  align-items: center;
+}
+.sys-detail-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.sys-detail-close:hover {
+  background: rgba(239,68,68,.2);
+  border-color: rgba(239,68,68,.5);
+  color: #fca5a5;
+  transform: rotate(90deg);
+}
+.sys-detail-close svg { width: 16px !important; height: 16px !important; }
+.sys-detail-edit {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(245,158,11,.15);
+  color: #fcd34d;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.sys-detail-edit:hover {
+  background: rgba(245,158,11,.3);
+  border-color: rgba(245,158,11,.5);
+  color: #fbbf24;
+}
+.sys-detail-edit svg { width: 14px !important; height: 14px !important; }
+
+/* Body */
+.sys-detail-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  background: var(--bg);
+}
+.sys-detail-body::-webkit-scrollbar { width: 6px; }
+.sys-detail-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Section card */
+.detail-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  transition: all var(--transition);
+}
+.detail-section:last-child { margin-bottom: 0; }
+.detail-section:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(108,71,201,.08); }
+.detail-section-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.detail-section-head svg { width: 16px !important; height: 16px !important; flex-shrink: 0; }
+.detail-rows { display: flex; flex-direction: column; gap: 0; }
+.detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px;
+  border-bottom: 1px dashed var(--border);
+  font-size: 13px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row .lbl {
+  color: var(--text-muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.detail-row .lbl .dot-mark {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+  opacity: .5;
+}
+.detail-row .val {
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  direction: ltr;
+}
+.detail-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
 /* ========= MODALS ========= */
 .modal-overlay {
   position: fixed;
@@ -1000,30 +1260,16 @@ tbody tr:hover td { background: var(--bg); }
   max-height: 90vh;
   overflow-y: auto;
 }
-.modal.lg { max-width: 780px; }
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(.9); }
-  to { opacity: 1; transform: scale(1); }
-}
 .modal h3 { font-size: 16px; margin-bottom: 8px; }
 .modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-start; margin-top: 18px; }
-.hw-detail-row {
-  display: flex;
-  padding: 9px 0;
-  border-bottom: 1px dashed var(--border);
-  font-size: 12.5px;
-}
-.hw-detail-row:last-child { border-bottom: none; }
-.hw-detail-row .lbl { color: var(--text-muted); min-width: 140px; font-weight: 500; }
-.hw-detail-row .val { font-weight: 500; flex: 1; }
 
 /* ========= TOAST ========= */
 .toast-container {
   position: fixed;
   top: 20px;
   left: 20px;
-  z-index: 9999;
+  z-index: 99999;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1052,22 +1298,6 @@ tbody tr:hover td { background: var(--bg); }
   from { opacity: 0; transform: translateX(-20px); }
   to { opacity: 1; transform: translateX(0); }
 }
-
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.chip {
-  padding: 5px 12px;
-  border-radius: 20px;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  color: var(--text-muted);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition);
-  font-family: inherit;
-}
-.chip:hover { border-color: var(--primary); color: var(--primary); }
-.chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
 .prio-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-left: 5px; }
 .prio-high { background: var(--danger); }
@@ -1138,7 +1368,7 @@ tbody tr:hover td { background: var(--bg); }
 .sys-item:hover { background: var(--primary-soft); border-color: var(--primary); }
 .sys-item:last-child { margin-bottom: 0; }
 
-/* ========= RESPONSIVE ========= */
+/* ========= RESPONSIVE ========== */
 @media (max-width: 900px) {
   .sidebar { position: fixed; right: 0; top: 0; transform: translateX(100%); box-shadow: var(--shadow-lg); }
   .sidebar.open { transform: translateX(0); }
@@ -1151,15 +1381,21 @@ tbody tr:hover td { background: var(--bg); }
   .topbar { padding: 0 14px; height: 58px; }
   .greeting { font-size: 13px; }
   .stat-value { font-size: 21px; }
-  .card { padding: 15px; }
+  .panel-card { padding: 15px; }
   .login-card { padding: 32px 24px; }
+  .sys-detail-header { padding: 16px; }
+  .sys-detail-header .header-info h3 { font-size: 15px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ========= LOGIN ========= -->
+<!-- ========= LOGIN (IT THEME) ========= -->
 <div class="login-wrap" id="loginWrap">
+  <div class="login-grid"></div>
+  <div class="login-glow"></div>
+  <div class="login-glow2"></div>
+  <div class="login-scan"></div>
   <div class="login-particles" id="particles"></div>
   <div class="login-card">
     <div class="login-brand">
@@ -1170,30 +1406,30 @@ tbody tr:hover td { background: var(--bg); }
         </svg>
       </div>
       <div>
-        <h2>خوش آمدید</h2>
-        <p class="sub">سیستم مدیریت هوشمند کار و تجهیزات IT</p>
+        <h2>ورود به سیستم مدیریت</h2>
+        <p class="sub">IT Management System v2.0</p>
       </div>
     </div>
     <div class="login-error" id="loginError"></div>
     <div class="login-field">
-      <label>نام کاربری</label>
-      <input type="text" id="loginUser" inputmode="numeric" autocomplete="username" placeholder="••••••••">
+      <label><span class="dot"></span> نام کاربری</label>
+      <input type="text" id="loginUser" inputmode="numeric" autocomplete="username" placeholder="09900153578">
       <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
     </div>
     <div class="login-field">
-      <label>رمز عبور</label>
+      <label><span class="dot"></span> رمز عبور</label>
       <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••">
       <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
     </div>
     <div class="login-options">
       <label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label>
-      <a href="#" onclick="event.preventDefault();" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:12px;">فراموشی رمز؟</a>
+      <a href="#" onclick="event.preventDefault();" style="color:#4a5a78;text-decoration:none;font-size:12px;">فراموشی رمز؟</a>
     </div>
     <button class="login-btn" onclick="doLogin()" id="loginBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      ورود به سیستم
+      ورود امن
     </button>
-    <div class="login-footer">© ۱۴۰۵ — تمامی حقوق محفوظ است</div>
+    <div class="login-footer">// SECURE_LOGIN_v2.0 // ENCRYPTED</div>
   </div>
 </div>
 
@@ -1203,7 +1439,7 @@ tbody tr:hover td { background: var(--bg); }
     <div class="user-box">
       <div class="user-avatar">م</div>
       <div class="user-info">
-        <h4>خانم مهندس مهناز نجف زاده</h4>
+        <h4>مهندس نجف‌زاده</h4>
         <span>09900153578</span>
       </div>
     </div>
@@ -1523,6 +1759,31 @@ tbody tr:hover td { background: var(--bg); }
   </div>
 </div>
 
+<!-- ===== SYSTEM DETAIL MODAL (NEW - like screenshot) ===== -->
+<div class="sys-detail-overlay" id="sysDetailOverlay">
+  <div class="sys-detail-modal">
+    <div class="sys-detail-header">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/></svg>
+      </div>
+      <div class="header-info">
+        <h3 id="sysDetailName">نام سیستم</h3>
+        <div class="meta" id="sysDetailMeta"></div>
+      </div>
+      <div class="header-actions">
+        <button class="sys-detail-edit" onclick="editFromDetail()" id="sysDetailEditBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          ویرایش
+        </button>
+        <button class="sys-detail-close" onclick="closeSysDetail()" title="بستن">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="sys-detail-body" id="sysDetailBody"></div>
+  </div>
+</div>
+
 <!-- ===== FULL-PAGE SYSTEM FORM ===== -->
 <div class="fullpage-modal" id="sysFormModal">
   <div class="fp-header">
@@ -1531,7 +1792,7 @@ tbody tr:hover td { background: var(--bg); }
       ذخیره
     </button>
     <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
       <span id="sysFormTitle">تعریف سیستم جدید</span>
     </h2>
     <button class="close-btn" onclick="closeSystemForm()">
@@ -1546,7 +1807,7 @@ tbody tr:hover td { background: var(--bg); }
           <label>بخش مورد نظر <span class="req">*</span></label>
           <div class="input-with-btn">
             <select id="sfDeptId" required><option value="">— انتخاب بخش —</option></select>
-            <button class="btn btn-primary" onclick="quickAddDeptInForm()" title="افزودن بخش جدید">
+            <button class="btn btn-primary" onclick="quickAddDeptInForm()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               بخش
             </button>
@@ -1632,17 +1893,14 @@ tbody tr:hover td { background: var(--bg); }
   </div>
 </div>
 
-<!-- ===== FULL-PAGE MY WORK FORM ===== -->
+<!-- ===== FULL-PAGE FORMS (MY WORK, ATT, HOME, TASK, DEVICE) ===== -->
 <div class="fullpage-modal" id="mwFormModal">
   <div class="fp-header">
     <button class="save-btn" onclick="saveMyWork()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       ذخیره
     </button>
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      <span id="mwFormTitle">افزودن کار جدید</span>
-    </h2>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span id="mwFormTitle">افزودن کار جدید</span></h2>
     <button class="close-btn" onclick="closeMyWorkForm()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -1671,17 +1929,13 @@ tbody tr:hover td { background: var(--bg); }
   </div>
 </div>
 
-<!-- ===== FULL-PAGE ATTENDANCE FORM ===== -->
 <div class="fullpage-modal" id="attFormModal">
   <div class="fp-header">
     <button class="save-btn" onclick="saveAttendance()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       ذخیره
     </button>
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>ثبت ورود / خروج</span>
-    </h2>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>ثبت ورود / خروج</span></h2>
     <button class="close-btn" onclick="document.getElementById('attFormModal').classList.remove('show')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -1698,17 +1952,13 @@ tbody tr:hover td { background: var(--bg); }
   </div>
 </div>
 
-<!-- ===== FULL-PAGE HOME FORM ===== -->
 <div class="fullpage-modal" id="homeFormModal">
   <div class="fp-header">
     <button class="save-btn" onclick="saveHome()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       ذخیره
     </button>
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>ثبت کار در خانه</span>
-    </h2>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>ثبت کار در خانه</span></h2>
     <button class="close-btn" onclick="document.getElementById('homeFormModal').classList.remove('show')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -1728,17 +1978,13 @@ tbody tr:hover td { background: var(--bg); }
   </div>
 </div>
 
-<!-- ===== FULL-PAGE TASK FORM ===== -->
 <div class="fullpage-modal" id="taskFormModal">
   <div class="fp-header">
     <button class="save-btn" onclick="saveTask()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       ذخیره
     </button>
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span>ثبت کار محول شده</span>
-    </h2>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>ثبت کار محول شده</span></h2>
     <button class="close-btn" onclick="document.getElementById('taskFormModal').classList.remove('show')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -1765,17 +2011,13 @@ tbody tr:hover td { background: var(--bg); }
   </div>
 </div>
 
-<!-- ===== FULL-PAGE DEVICE FORM ===== -->
 <div class="fullpage-modal" id="deviceFormModal">
   <div class="fp-header">
     <button class="save-btn" onclick="saveDevice()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       ذخیره
     </button>
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      <span>افزودن وسیله IT</span>
-    </h2>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>افزودن وسیله IT</span></h2>
     <button class="close-btn" onclick="document.getElementById('deviceFormModal').classList.remove('show')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -1791,16 +2033,6 @@ tbody tr:hover td { background: var(--bg); }
         <div class="form-group"><label>تاریخ بررسی <span class="req">*</span></label><input type="text" id="devDate" readonly onclick="openCal('devDate', this)"></div>
         <div class="form-group"><label>توضیحات</label><input type="text" id="devNote" placeholder="اختیاری"></div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- SYSTEM DETAIL MODAL -->
-<div class="modal-overlay" id="sysDetailModal">
-  <div class="modal lg">
-    <div id="sysDetailContent"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="document.getElementById('sysDetailModal').classList.remove('show')">بستن</button>
     </div>
   </div>
 </div>
@@ -1854,7 +2086,14 @@ const ICONS = {
   edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
   view: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
   cpu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
-  empty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+  ram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="10" rx="1"/><line x1="6" y1="7" x2="6" y2="4"/><line x1="10" y1="7" x2="10" y2="4"/><line x1="14" y1="7" x2="14" y2="4"/><line x1="18" y1="7" x2="18" y2="4"/></svg>',
+  disk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="12" x2="16" y2="8"/></svg>',
+  gpu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="9" cy="12" r="2"/><circle cx="15" cy="12" r="2"/></svg>',
+  mb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><rect x="13" y="13" width="4" height="4"/></svg>',
+  psu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+  mon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+  network: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="16" y="2" width="6" height="6" rx="1"/><rect x="9" y="16" width="6" height="6" rx="1"/><path d="M5 8v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><line x1="12" y1="14" x2="12" y2="16"/></svg>',
+  empty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
   star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'
 };
 
@@ -1868,7 +2107,7 @@ function doLogin() {
   const err = document.getElementById('loginError');
 
   btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px;animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> در حال ورود...';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px;animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> در حال احراز هویت...';
 
   setTimeout(() => {
     if (u === DEFAULT_USER && p === DEFAULT_PASS) {
@@ -1878,14 +2117,14 @@ function doLogin() {
       document.getElementById('loginWrap').style.display = 'none';
       document.getElementById('app').classList.add('show');
       initApp();
-      toast('خوش آمدید 👋', 'success');
+      toast('دسترسی تأیید شد 👋', 'success');
     } else {
       err.style.display = 'block';
-      err.textContent = 'نام کاربری یا رمز عبور نادرست است';
+      err.textContent = '⛔ نام کاربری یا رمز عبور نادرست است';
       btn.disabled = false;
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> ورود به سیستم';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> ورود امن';
     }
-  }, 500);
+  }, 600);
 }
 function doLogout() {
   confirmAction('خروج از سیستم', 'آیا می‌خواهید خارج شوید؟', () => {
@@ -1899,14 +2138,15 @@ document.getElementById('loginUser').addEventListener('keypress', e => { if (e.k
 (function createParticles() {
   const box = document.getElementById('particles');
   if (!box) return;
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 30; i++) {
     const s = document.createElement('span');
     s.style.left = Math.random() * 100 + '%';
-    s.style.animationDuration = (8 + Math.random() * 12) + 's';
-    s.style.animationDelay = Math.random() * 8 + 's';
-    const size = 1 + Math.random() * 3;
+    s.style.animationDuration = (10 + Math.random() * 15) + 's';
+    s.style.animationDelay = Math.random() * 10 + 's';
+    const size = 1 + Math.random() * 2.5;
     s.style.width = size + 'px';
     s.style.height = size + 'px';
+    s.style.opacity = 0.3 + Math.random() * 0.5;
     box.appendChild(s);
   }
 })();
@@ -2156,15 +2396,9 @@ function faNum(n) {
 
 /* ============ TABS ============ */
 const PAGE_TITLES = {
-  dashboard: 'خوش آمدید',
-  mywork: 'کارهای من',
-  attendance: 'ورود و خروج',
-  home: 'کار در خانه',
-  tasks: 'کارهای محول',
-  devices: 'وسایل IT',
-  systems: 'سیستم‌ها',
-  departments: 'بخش‌ها',
-  report: 'گزارش ماهانه'
+  dashboard: 'خوش آمدید', mywork: 'کارهای من', attendance: 'ورود و خروج',
+  home: 'کار در خانه', tasks: 'کارهای محول', devices: 'وسایل IT',
+  systems: 'سیستم‌ها', departments: 'بخش‌ها', report: 'گزارش ماهانه'
 };
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.onclick = () => {
@@ -2187,18 +2421,13 @@ function updateDate() {
   if (el) el.textContent = `${dayName}، ${faNum(jd)} ${faMonths[jm-1]} ${faNum(jy)}`;
 }
 
-/* ============ Pagination Helper ============ */
+/* ============ PAGINATION HELPER ============ */
 function paginate(list, page, perPage) {
   const total = list.length;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   if (page > totalPages) page = totalPages;
   const start = (page - 1) * perPage;
-  return {
-    pageList: list.slice(start, start + perPage),
-    start,
-    total,
-    totalPages
-  };
+  return { pageList: list.slice(start, start + perPage), start, total, totalPages };
 }
 function renderPages(containerId, currentPage, totalPages, onPageFn) {
   const cont = document.getElementById(containerId);
@@ -2218,9 +2447,7 @@ function getMonthOptions() {
   const months = new Set();
   ['attendance','home','tasks','mywork','devices'].forEach(k => {
     DB.get(k).forEach(r => {
-      if (r.date && /^\d{4}\/\d{2}/.test(r.date)) {
-        months.add(r.date.slice(0,7));
-      }
+      if (r.date && /^\d{4}\/\d{2}/.test(r.date)) months.add(r.date.slice(0,7));
     });
   });
   return Array.from(months).sort().reverse();
@@ -2238,11 +2465,7 @@ function fillMonthFilter(selectId) {
 }
 
 /* ============ MY WORK ============ */
-let mwFilter = 'all';
-let mwPage = 1;
-const MW_PER = 10;
-let editingMyWork = null;
-
+let mwFilter = 'all', mwPage = 1, editingMyWork = null;
 function openMyWorkForm() {
   editingMyWork = null;
   document.getElementById('mwFormTitle').textContent = 'افزودن کار جدید';
@@ -2280,8 +2503,7 @@ function saveMyWork() {
   updateBadge();
 }
 function editMyWork(id) {
-  const list = DB.get('mywork');
-  const item = list.find(r => r.id === id);
+  const item = DB.get('mywork').find(r => r.id === id);
   if (!item) return;
   editingMyWork = id;
   document.getElementById('mwFormTitle').textContent = 'ویرایش کار';
@@ -2323,42 +2545,35 @@ function renderMyWork() {
   }
 
   pagWrap.style.display = 'flex';
-  const { pageList, start, total, totalPages } = paginate(list, mwPage, MW_PER);
+  const { pageList, start, total, totalPages } = paginate(list, mwPage, 10);
 
-  content.innerHTML = `<div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th style="width:50px;">ردیف</th>
-        <th>وضعیت</th><th>عنوان</th><th>اولویت</th><th>مهلت</th><th>توضیحات</th><th>عملیات</th>
-      </tr></thead>
-      <tbody>
-        ${pageList.map((r, i) => {
-          const prioClass = r.priority === 'high' ? 'prio-high' : r.priority === 'med' ? 'prio-med' : 'prio-low';
-          const prioLabel = r.priority === 'high' ? 'بالا' : r.priority === 'med' ? 'متوسط' : 'پایین';
-          return `<tr>
-            <td class="row-num">${faNum(start + i + 1)}</td>
-            <td>
-              <select class="status-select ${r.status}" onchange="updateStatus(${r.id}, this.value)">
-                <option value="pending" ${r.status==='pending'?'selected':''}>در انتظار</option>
-                <option value="inprogress" ${r.status==='inprogress'?'selected':''}>در حال انجام</option>
-                <option value="done" ${r.status==='done'?'selected':''}>انجام شده</option>
-              </select>
-            </td>
-            <td><strong style="${r.status==='done'?'text-decoration:line-through;opacity:.6;':''}">${r.title}</strong></td>
-            <td><span class="prio-dot ${prioClass}"></span>${prioLabel}</td>
-            <td>${r.deadline || '<span style="color:var(--text-muted)">—</span>'}</td>
-            <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.desc || '<span style="color:var(--text-muted)">—</span>'}</td>
-            <td>
-              <div style="display:flex;gap:4px;">
-                <button class="btn btn-warning btn-sm" onclick="editMyWork(${r.id})" title="ویرایش">${ICONS.edit}</button>
-                <button class="btn btn-danger btn-sm" onclick="del('mywork',${r.id},renderMyWork)" title="حذف">${ICONS.trash}</button>
-              </div>
-            </td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-  </div>`;
+  content.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th style="width:50px;">ردیف</th><th>وضعیت</th><th>عنوان</th><th>اولویت</th><th>مهلت</th><th>توضیحات</th><th>عملیات</th></tr></thead>
+    <tbody>
+      ${pageList.map((r, i) => {
+        const prioClass = r.priority === 'high' ? 'prio-high' : r.priority === 'med' ? 'prio-med' : 'prio-low';
+        const prioLabel = r.priority === 'high' ? 'بالا' : r.priority === 'med' ? 'متوسط' : 'پایین';
+        return `<tr>
+          <td class="row-num">${faNum(start + i + 1)}</td>
+          <td>
+            <select class="status-select ${r.status}" onchange="updateStatus(${r.id}, this.value)">
+              <option value="pending" ${r.status==='pending'?'selected':''}>در انتظار</option>
+              <option value="inprogress" ${r.status==='inprogress'?'selected':''}>در حال انجام</option>
+              <option value="done" ${r.status==='done'?'selected':''}>انجام شده</option>
+            </select>
+          </td>
+          <td><strong style="${r.status==='done'?'text-decoration:line-through;opacity:.6;':''}">${r.title}</strong></td>
+          <td><span class="prio-dot ${prioClass}"></span>${prioLabel}</td>
+          <td>${r.deadline || '<span style="color:var(--text-muted)">—</span>'}</td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.desc || '<span style="color:var(--text-muted)">—</span>'}</td>
+          <td><div style="display:flex;gap:4px;">
+            <button class="btn btn-warning btn-sm" onclick="editMyWork(${r.id})" title="ویرایش">${ICONS.edit}</button>
+            <button class="btn btn-danger btn-sm" onclick="del('mywork',${r.id},renderMyWork)" title="حذف">${ICONS.trash}</button>
+          </div></td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table></div>`;
 
   document.getElementById('mwTotal').textContent = faNum(total);
   renderPages('mwPagination', mwPage, totalPages, 'gotoMwPage');
@@ -2427,23 +2642,19 @@ function renderAttendance() {
   pagWrap.style.display = 'flex';
   const { pageList, start, total, totalPages } = paginate(list, attPage, 10);
 
-  content.innerHTML = `<div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th style="width:50px;">ردیف</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th>
-      </tr></thead>
-      <tbody>
-        ${pageList.map((r, i) => `<tr>
-          <td class="row-num">${faNum(start + i + 1)}</td>
-          <td><strong>${r.date}</strong></td>
-          <td><span class="badge badge-green">${r.start}</span></td>
-          <td><span class="badge badge-red">${r.end}</span></td>
-          <td><strong>${formatHours(r.hours)}</strong></td>
-          <td><button class="btn btn-danger btn-sm" onclick="del('attendance',${r.id},renderAttendance)">${ICONS.trash}حذف</button></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>`;
+  content.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th style="width:50px;">ردیف</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th></tr></thead>
+    <tbody>
+      ${pageList.map((r, i) => `<tr>
+        <td class="row-num">${faNum(start + i + 1)}</td>
+        <td><strong>${r.date}</strong></td>
+        <td><span class="badge badge-green">${r.start}</span></td>
+        <td><span class="badge badge-red">${r.end}</span></td>
+        <td><strong>${formatHours(r.hours)}</strong></td>
+        <td><button class="btn btn-danger btn-sm" onclick="del('attendance',${r.id},renderAttendance)">${ICONS.trash}حذف</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
 
   document.getElementById('attTotal').textContent = faNum(total);
   renderPages('attPagination', attPage, totalPages, 'gotoAttPage');
@@ -2504,24 +2715,20 @@ function renderHome() {
   pagWrap.style.display = 'flex';
   const { pageList, start, total, totalPages } = paginate(list, homePage, 10);
 
-  content.innerHTML = `<div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th style="width:50px;">ردیف</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th>
-      </tr></thead>
-      <tbody>
-        ${pageList.map((r, i) => `<tr>
-          <td class="row-num">${faNum(start + i + 1)}</td>
-          <td><strong>${r.date}</strong></td>
-          <td><span class="badge badge-green">${r.start}</span></td>
-          <td><span class="badge badge-red">${r.end}</span></td>
-          <td><strong>${formatHours(r.hours)}</strong></td>
-          <td>${r.desc || '<span style="color:var(--text-muted)">—</span>'}</td>
-          <td><button class="btn btn-danger btn-sm" onclick="del('home',${r.id},renderHome)">${ICONS.trash}حذف</button></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>`;
+  content.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th style="width:50px;">ردیف</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th></tr></thead>
+    <tbody>
+      ${pageList.map((r, i) => `<tr>
+        <td class="row-num">${faNum(start + i + 1)}</td>
+        <td><strong>${r.date}</strong></td>
+        <td><span class="badge badge-green">${r.start}</span></td>
+        <td><span class="badge badge-red">${r.end}</span></td>
+        <td><strong>${formatHours(r.hours)}</strong></td>
+        <td>${r.desc || '<span style="color:var(--text-muted)">—</span>'}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="del('home',${r.id},renderHome)">${ICONS.trash}حذف</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
 
   document.getElementById('homeTotal').textContent = faNum(total);
   renderPages('homePagination', homePage, totalPages, 'gotoHomePage');
@@ -2533,11 +2740,8 @@ document.getElementById('homeMonthFilter').addEventListener('change', () => { ho
 /* ============ TASKS ============ */
 let taskPage = 1;
 const TASK_COLORS = {
-  'کارهای آی تی': 'badge-blue',
-  'پشتیبانی سایت': 'badge-green',
-  'بروشورها': 'badge-orange',
-  'طراحی‌ها': 'badge-purple',
-  'موارد متفرقه': 'badge-red'
+  'کارهای آی تی': 'badge-blue', 'پشتیبانی سایت': 'badge-green',
+  'بروشورها': 'badge-orange', 'طراحی‌ها': 'badge-purple', 'موارد متفرقه': 'badge-red'
 };
 function openTaskForm() {
   const [jy,jm,jd] = todayJalali();
@@ -2593,26 +2797,21 @@ function renderTasks() {
   pagWrap.style.display = 'flex';
   const { pageList, start, total, totalPages } = paginate(list, taskPage, 10);
 
-  content.innerHTML = `<div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th style="width:50px;">ردیف</th><th>نوع</th><th>عنوان</th><th>تاریخ</th>
-        <th>شروع</th><th>پایان</th><th>مدت</th><th>عملیات</th>
-      </tr></thead>
-      <tbody>
-        ${pageList.map((r, i) => `<tr>
-          <td class="row-num">${faNum(start + i + 1)}</td>
-          <td><span class="badge ${TASK_COLORS[r.type]||'badge-blue'}">${r.type}</span></td>
-          <td><strong>${r.title}</strong></td>
-          <td>${r.date}</td>
-          <td>${r.start}</td>
-          <td>${r.end}</td>
-          <td><strong>${formatHours(r.hours)}</strong></td>
-          <td><button class="btn btn-danger btn-sm" onclick="del('tasks',${r.id},renderTasks)">${ICONS.trash}حذف</button></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>`;
+  content.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th style="width:50px;">ردیف</th><th>نوع</th><th>عنوان</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>عملیات</th></tr></thead>
+    <tbody>
+      ${pageList.map((r, i) => `<tr>
+        <td class="row-num">${faNum(start + i + 1)}</td>
+        <td><span class="badge ${TASK_COLORS[r.type]||'badge-blue'}">${r.type}</span></td>
+        <td><strong>${r.title}</strong></td>
+        <td>${r.date}</td>
+        <td>${r.start}</td>
+        <td>${r.end}</td>
+        <td><strong>${formatHours(r.hours)}</strong></td>
+        <td><button class="btn btn-danger btn-sm" onclick="del('tasks',${r.id},renderTasks)">${ICONS.trash}حذف</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
 
   document.getElementById('taskTotal').textContent = faNum(total);
   renderPages('taskPagination', taskPage, totalPages, 'gotoTaskPage');
@@ -2670,23 +2869,19 @@ function renderDevices() {
   pagWrap.style.display = 'flex';
   const { pageList, start, total, totalPages } = paginate(list, devPage, 10);
 
-  content.innerHTML = `<div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th style="width:50px;">ردیف</th><th>نام</th><th>تعداد</th><th>تاریخ بررسی</th><th>توضیحات</th><th>عملیات</th>
-      </tr></thead>
-      <tbody>
-        ${pageList.map((r, i) => `<tr>
-          <td class="row-num">${faNum(start + i + 1)}</td>
-          <td><strong>${r.name}</strong></td>
-          <td><span class="badge badge-blue">${faNum(r.qty)} عدد</span></td>
-          <td>${r.date}</td>
-          <td>${r.note || '<span style="color:var(--text-muted)">—</span>'}</td>
-          <td><button class="btn btn-danger btn-sm" onclick="del('devices',${r.id},renderDevices)">${ICONS.trash}حذف</button></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>`;
+  content.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th style="width:50px;">ردیف</th><th>نام</th><th>تعداد</th><th>تاریخ بررسی</th><th>توضیحات</th><th>عملیات</th></tr></thead>
+    <tbody>
+      ${pageList.map((r, i) => `<tr>
+        <td class="row-num">${faNum(start + i + 1)}</td>
+        <td><strong>${r.name}</strong></td>
+        <td><span class="badge badge-blue">${faNum(r.qty)} عدد</span></td>
+        <td>${r.date}</td>
+        <td>${r.note || '<span style="color:var(--text-muted)">—</span>'}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="del('devices',${r.id},renderDevices)">${ICONS.trash}حذف</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
 
   document.getElementById('devTotal').textContent = faNum(total);
   renderPages('devPagination', devPage, totalPages, 'gotoDevPage');
@@ -2695,7 +2890,7 @@ function gotoDevPage(p) { devPage = p; renderDevices(); }
 document.getElementById('devSearch').addEventListener('input', () => { devPage = 1; renderDevices(); });
 
 /* ============ SYSTEMS ============ */
-let sysPage = 1;
+let sysPage = 1, currentSysDetail = null;
 const SYS_PER_PAGE = 10;
 
 function getAllSystems() {
@@ -2720,17 +2915,15 @@ function renderSystems() {
   const pagWrap = document.getElementById('sysPaginationWrap');
 
   if (!depts.length) {
-    content.innerHTML = `
-      <div class="empty-guide">
-        <div class="icon">${ICONS.empty}</div>
-        <h3>هنوز بخشی ثبت نشده است</h3>
-        <p>برای شروع، ابتدا یک «بخش» (مانند صندوق ۱، دفتر مدیر، واحد فروش) ایجاد کنید. سپس می‌توانید سیستم‌ها را به آن اضافه کنید.</p>
-        <button class="btn btn-primary btn-lg" onclick="quickAddDept()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          افزودن بخش جدید
-        </button>
-      </div>
-    `;
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.empty}</div>
+      <h3>هنوز بخشی ثبت نشده است</h3>
+      <p>برای شروع، ابتدا یک «بخش» ایجاد کنید.</p>
+      <button class="btn btn-primary btn-lg" onclick="quickAddDept()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        افزودن بخش جدید
+      </button>
+    </div>`;
     pagWrap.style.display = 'none';
     document.getElementById('sysTotal').textContent = '۰';
     return;
@@ -2746,17 +2939,15 @@ function renderSystems() {
   if (search) filtered = filtered.filter(s => (s.title||s.name||'').includes(search));
 
   if (!allSys.length) {
-    content.innerHTML = `
-      <div class="empty-guide">
-        <div class="icon">${ICONS.cpu}</div>
-        <h3>هنوز سیستمی ثبت نشده است</h3>
-        <p>شما ${faNum(depts.length)} بخش دارید. حالا می‌توانید اولین سیستم را با مشخصات کامل سخت‌افزاری اضافه کنید.</p>
-        <button class="btn btn-primary btn-lg" onclick="openSystemForm()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          افزودن اولین سیستم
-        </button>
-      </div>
-    `;
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.cpu}</div>
+      <h3>هنوز سیستمی ثبت نشده است</h3>
+      <p>شما ${faNum(depts.length)} بخش دارید. حالا اولین سیستم را با مشخصات سخت‌افزاری اضافه کنید.</p>
+      <button class="btn btn-primary btn-lg" onclick="openSystemForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        افزودن اولین سیستم
+      </button>
+    </div>`;
     pagWrap.style.display = 'none';
     return;
   }
@@ -2778,60 +2969,197 @@ function renderSystems() {
   pagWrap.style.display = 'flex';
   const { pageList, start, total, totalPages } = paginate(filtered, sysPage, SYS_PER_PAGE);
 
-  content.innerHTML = `<div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th style="width:50px;">ردیف</th>
-          <th>عنوان</th>
-          <th>گروه / بخش</th>
-          <th>نوع سیستم</th>
-          <th>CPU</th>
-          <th>RAM</th>
-          <th>حافظه</th>
-          <th>عملیات</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${pageList.map((s, i) => {
-          const hw = s.hardware || {};
-          const cpuTxt = hw.cpu && hw.cpu.model ? (hw.cpu.brand ? hw.cpu.brand + ' ' : '') + hw.cpu.model : '—';
-          const ramTxt = hw.ram && hw.ram.size ? (hw.ram.type ? hw.ram.type + ' ' : '') + hw.ram.size : '—';
-          const diskTxt = hw.disk && hw.disk.size ? hw.disk.size : '—';
-          return `<tr>
-            <td class="row-num">${faNum(start + i + 1)}</td>
-            <td>
-              <div class="prod-cell">
-                <div class="prod-thumb">${ICONS.cpu}</div>
-                <div>
-                  <div class="prod-name">${s.title || s.name || '—'}</div>
-                  <div class="prod-meta">${s.shortDesc || ''}</div>
-                </div>
+  content.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th style="width:50px;">ردیف</th><th>عنوان</th><th>گروه / بخش</th><th>نوع سیستم</th><th>CPU</th><th>RAM</th><th>حافظه</th><th>عملیات</th></tr></thead>
+    <tbody>
+      ${pageList.map((s, i) => {
+        const hw = s.hardware || {};
+        const cpuTxt = hw.cpu && hw.cpu.model ? (hw.cpu.brand ? hw.cpu.brand + ' ' : '') + hw.cpu.model : '—';
+        const ramTxt = hw.ram && hw.ram.size ? (hw.ram.type ? hw.ram.type + ' ' : '') + hw.ram.size : '—';
+        const diskTxt = hw.disk && hw.disk.size ? hw.disk.size : '—';
+        return `<tr>
+          <td class="row-num">${faNum(start + i + 1)}</td>
+          <td>
+            <div class="prod-cell">
+              <div class="prod-thumb">${ICONS.cpu}</div>
+              <div>
+                <div class="prod-name">${s.title || s.name || '—'}</div>
+                <div class="prod-meta">${s.shortDesc || ''}</div>
               </div>
-            </td>
-            <td><span class="badge badge-purple">${s.deptName}</span></td>
-            <td><span class="badge badge-blue">${s.type || '—'}</span></td>
-            <td style="font-size:12px;">${cpuTxt}</td>
-            <td style="font-size:12px;">${ramTxt}</td>
-            <td style="font-size:12px;">${diskTxt}</td>
-            <td>
-              <div style="display:flex;gap:4px;">
-                <button class="btn btn-info btn-sm" onclick="showSysDetail(${s.deptId}, ${s.id})" title="مشاهده">${ICONS.view}</button>
-                <button class="btn btn-warning btn-sm" onclick="editSystem(${s.deptId}, ${s.id})" title="ویرایش">${ICONS.edit}</button>
-                <button class="btn btn-danger btn-sm" onclick="delSystem(${s.deptId},${s.id})" title="حذف">${ICONS.trash}</button>
-              </div>
-            </td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-  </div>`;
+            </div>
+          </td>
+          <td><span class="badge badge-purple">${s.deptName}</span></td>
+          <td><span class="badge badge-blue">${s.type || '—'}</span></td>
+          <td style="font-size:12px;">${cpuTxt}</td>
+          <td style="font-size:12px;">${ramTxt}</td>
+          <td style="font-size:12px;">${diskTxt}</td>
+          <td>
+            <div style="display:flex;gap:4px;">
+              <button class="btn btn-info btn-sm" onclick="showSysDetail(${s.deptId}, ${s.id})" title="مشاهده">${ICONS.view}</button>
+              <button class="btn btn-warning btn-sm" onclick="editSystem(${s.deptId}, ${s.id})" title="ویرایش">${ICONS.edit}</button>
+              <button class="btn btn-danger btn-sm" onclick="delSystem(${s.deptId},${s.id})" title="حذف">${ICONS.trash}</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table></div>`;
 
   document.getElementById('sysTotal').textContent = faNum(total);
   renderPages('sysPagination', sysPage, totalPages, 'gotoSysPage');
 }
 function gotoSysPage(p) { sysPage = p; renderSystems(); }
 document.getElementById('sysSearch').addEventListener('input', () => { sysPage = 1; renderSystems(); });
+
+/* ============ SYSTEM DETAIL MODAL (NEW) ============ */
+function showSysDetail(deptId, sysId) {
+  const dept = DB.get('departments').find(d => d.id === deptId);
+  if (!dept) return;
+  const sys = dept.systems.find(s => s.id === sysId);
+  if (!sys) return;
+
+  currentSysDetail = {deptId, sysId};
+
+  // Header
+  document.getElementById('sysDetailName').textContent = sys.title || sys.name || 'نامشخص';
+  document.getElementById('sysDetailMeta').innerHTML = `
+    <span>📁 ${dept.name}</span>
+    <span>•</span>
+    <span>🏷️ ${sys.type || '—'}</span>
+    <span>•</span>
+    <span>📅 ${sys.date || '—'}</span>
+  `;
+
+  // Body sections
+  const hw = sys.hardware || {};
+  const row = (lbl, val) => val ? `<div class="detail-row">
+    <div class="lbl"><span class="dot-mark"></span>${lbl}</div>
+    <div class="val">${val}</div>
+  </div>` : '';
+
+  let bodyHtml = '';
+
+  // CPU
+  if (hw.cpu && (hw.cpu.brand || hw.cpu.model || hw.cpu.gen || hw.cpu.freq || hw.cpu.cores)) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.cpu} پردازنده</div>
+      <div class="detail-rows">
+        ${row('برند', hw.cpu.brand)}
+        ${row('مدل', hw.cpu.model)}
+        ${row('نسل', hw.cpu.gen)}
+        ${row('فرکانس', hw.cpu.freq ? hw.cpu.freq + ' GHz' : '')}
+        ${row('تعداد هسته', hw.cpu.cores)}
+      </div>
+    </div>`;
+  }
+  // RAM
+  if (hw.ram && (hw.ram.type || hw.ram.size || hw.ram.freq || hw.ram.slots)) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.ram} رم</div>
+      <div class="detail-rows">
+        ${row('نوع', hw.ram.type)}
+        ${row('حجم', hw.ram.size)}
+        ${row('فرکانس', hw.ram.freq ? hw.ram.freq + ' MHz' : '')}
+        ${row('اسلات‌ها', hw.ram.slots)}
+      </div>
+    </div>`;
+  }
+  // Disk
+  if (hw.disk && (hw.disk.type || hw.disk.brand || hw.disk.size)) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.disk} ذخیره‌سازی</div>
+      <div class="detail-rows">
+        ${row('نوع', hw.disk.type)}
+        ${row('برند', hw.disk.brand)}
+        ${row('حجم', hw.disk.size)}
+      </div>
+    </div>`;
+  }
+  // GPU
+  if (hw.gpu && (hw.gpu.brand || hw.gpu.model || hw.gpu.mem)) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.gpu} کارت گرافیک</div>
+      <div class="detail-rows">
+        ${row('برند', hw.gpu.brand)}
+        ${row('مدل', hw.gpu.model)}
+        ${row('حافظه', hw.gpu.mem)}
+      </div>
+    </div>`;
+  }
+  // MB & PSU
+  if ((hw.mb && (hw.mb.brand || hw.mb.model || hw.mb.chip)) || (hw.psu && (hw.psu.brand || hw.psu.watt))) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.mb} مادربرد و پاور</div>
+      <div class="detail-rows">
+        ${row('مادربرد - برند', hw.mb && hw.mb.brand)}
+        ${row('مادربرد - مدل', hw.mb && hw.mb.model)}
+        ${row('چیپست', hw.mb && hw.mb.chip)}
+        ${row('پاور - برند', hw.psu && hw.psu.brand)}
+        ${row('پاور - توان', hw.psu && hw.psu.watt ? hw.psu.watt + 'W' : '')}
+      </div>
+    </div>`;
+  }
+  // Monitor
+  if (hw.monitor && (hw.monitor.brand || hw.monitor.model || hw.monitor.size || hw.monitor.res)) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.mon} مانیتور</div>
+      <div class="detail-rows">
+        ${row('برند', hw.monitor.brand)}
+        ${row('مدل', hw.monitor.model)}
+        ${row('سایز', hw.monitor.size ? hw.monitor.size + ' اینچ' : '')}
+        ${row('رزولوشن', hw.monitor.res)}
+      </div>
+    </div>`;
+  }
+  // Peripherals
+  if (hw.peripherals && (hw.peripherals.mouse || hw.peripherals.keyboard || hw.peripherals.network || hw.peripherals.optical)) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">${ICONS.network} جانبی و شبکه</div>
+      <div class="detail-rows">
+        ${row('ماوس', hw.peripherals.mouse)}
+        ${row('کیبورد', hw.peripherals.keyboard)}
+        ${row('شبکه', hw.peripherals.network)}
+        ${row('درایو نوری', hw.peripherals.optical)}
+      </div>
+    </div>`;
+  }
+  // Notes
+  if (sys.notes) {
+    bodyHtml += `<div class="detail-section">
+      <div class="detail-section-head">📝 توضیحات</div>
+      <div style="font-size:13px;line-height:1.9;color:var(--text);padding:4px;">${sys.notes}</div>
+    </div>`;
+  }
+
+  if (!bodyHtml) {
+    bodyHtml = `<div class="detail-empty">
+      ${ICONS.empty}
+      <p style="margin-top:12px;">هیچ مشخصات سخت‌افزاری برای این سیستم ثبت نشده است.</p>
+    </div>`;
+  }
+
+  document.getElementById('sysDetailBody').innerHTML = bodyHtml;
+  document.getElementById('sysDetailOverlay').classList.add('show');
+}
+
+function closeSysDetail() {
+  document.getElementById('sysDetailOverlay').classList.remove('show');
+  currentSysDetail = null;
+}
+document.getElementById('sysDetailOverlay').addEventListener('click', e => {
+  if (e.target.id === 'sysDetailOverlay') closeSysDetail();
+});
+
+/* Edit from detail — transitions to form */
+function editFromDetail() {
+  if (!currentSysDetail) return;
+  const {deptId, sysId} = currentSysDetail;
+  closeSysDetail();
+  // Small delay for smooth transition
+  setTimeout(() => {
+    editSystem(deptId, sysId);
+  }, 200);
+}
 
 /* ============ SYSTEM FORM ============ */
 let editingSystem = null;
@@ -2855,7 +3183,7 @@ function editSystem(deptId, sysId) {
   const sys = dept.systems.find(s => s.id === sysId);
   if (!sys) return;
   editingSystem = {deptId, sysId};
-  document.getElementById('sysFormTitle').textContent = 'ویرایش سیستم';
+  document.getElementById('sysFormTitle').textContent = 'ویرایش سیستم: ' + (sys.title || sys.name);
   updateDeptSelects();
   resetSystemForm();
   document.getElementById('sfDeptId').value = deptId;
@@ -2931,69 +3259,17 @@ function saveSystem() {
     deptObj.systems.push(sys);
   }
   DB.set('departments', list);
+  const wasEditing = editingSystem;
   closeSystemForm();
-  toast(editingSystem ? 'سیستم ویرایش شد' : 'سیستم ذخیره شد', 'success');
+  toast(wasEditing ? 'سیستم ویرایش شد ✅' : 'سیستم ذخیره شد ✅', 'success');
   renderSystems();
   renderDepts();
-}
-
-function showSysDetail(deptId, sysId) {
-  const dept = DB.get('departments').find(d => d.id === deptId);
-  if (!dept) return;
-  const sys = dept.systems.find(s => s.id === sysId);
-  if (!sys) return;
-  const hw = sys.hardware || {};
-  const row = (lbl, val) => val ? `<div class="hw-detail-row"><div class="lbl">${lbl}</div><div class="val">${val}</div></div>` : '';
-  let html = `<h3>🖥️ ${sys.title || sys.name}</h3><p>${dept.name} — ${sys.type || ''} — تاریخ: ${sys.date || '—'}</p>`;
-  if (hw.cpu && (hw.cpu.brand || hw.cpu.model)) {
-    html += `<div class="hw-subsection"><h4>🖥️ پردازنده</h4>`;
-    html += row('برند', hw.cpu.brand); html += row('مدل', hw.cpu.model);
-    html += row('نسل', hw.cpu.gen); html += row('فرکانس', hw.cpu.freq ? hw.cpu.freq + ' GHz' : '');
-    html += row('هسته', hw.cpu.cores); html += `</div>`;
+  // Reopen detail with fresh data if we were editing
+  if (wasEditing) {
+    setTimeout(() => {
+      showSysDetail(deptId, sys.id);
+    }, 300);
   }
-  if (hw.ram && (hw.ram.type || hw.ram.size)) {
-    html += `<div class="hw-subsection"><h4>🧠 رم</h4>`;
-    html += row('نوع', hw.ram.type); html += row('حجم', hw.ram.size);
-    html += row('فرکانس', hw.ram.freq ? hw.ram.freq + ' MHz' : ''); html += row('اسلات', hw.ram.slots);
-    html += `</div>`;
-  }
-  if (hw.disk && (hw.disk.type || hw.disk.size)) {
-    html += `<div class="hw-subsection"><h4>💾 ذخیره‌سازی</h4>`;
-    html += row('نوع', hw.disk.type); html += row('برند', hw.disk.brand); html += row('حجم', hw.disk.size);
-    html += `</div>`;
-  }
-  if (hw.gpu && (hw.gpu.brand || hw.gpu.model)) {
-    html += `<div class="hw-subsection"><h4>🎮 کارت گرافیک</h4>`;
-    html += row('برند', hw.gpu.brand); html += row('مدل', hw.gpu.model); html += row('حافظه', hw.gpu.mem);
-    html += `</div>`;
-  }
-  if (hw.mb && (hw.mb.brand || hw.mb.model)) {
-    html += `<div class="hw-subsection"><h4>⚡ مادربرد</h4>`;
-    html += row('برند', hw.mb.brand); html += row('مدل', hw.mb.model); html += row('چیپست', hw.mb.chip);
-    html += `</div>`;
-  }
-  if (hw.psu && (hw.psu.brand || hw.psu.watt)) {
-    html += `<div class="hw-subsection"><h4>🔌 پاور</h4>`;
-    html += row('برند', hw.psu.brand); html += row('توان', hw.psu.watt ? hw.psu.watt + 'W' : '');
-    html += `</div>`;
-  }
-  if (hw.monitor && (hw.monitor.brand || hw.monitor.model)) {
-    html += `<div class="hw-subsection"><h4>🖥️ مانیتور</h4>`;
-    html += row('برند', hw.monitor.brand); html += row('مدل', hw.monitor.model);
-    html += row('سایز', hw.monitor.size ? hw.monitor.size + ' اینچ' : ''); html += row('رزولوشن', hw.monitor.res);
-    html += `</div>`;
-  }
-  if (hw.peripherals && (hw.peripherals.mouse || hw.peripherals.keyboard || hw.peripherals.network || hw.peripherals.optical)) {
-    html += `<div class="hw-subsection"><h4>📡 جانبی و شبکه</h4>`;
-    html += row('ماوس', hw.peripherals.mouse); html += row('کیبورد', hw.peripherals.keyboard);
-    html += row('شبکه', hw.peripherals.network); html += row('درایو نوری', hw.peripherals.optical);
-    html += `</div>`;
-  }
-  if (sys.notes) {
-    html += `<div class="hw-subsection"><h4>📝 توضیحات</h4><p style="font-size:12.5px;line-height:1.8;">${sys.notes}</p></div>`;
-  }
-  document.getElementById('sysDetailContent').innerHTML = html;
-  document.getElementById('sysDetailModal').classList.add('show');
 }
 
 /* ============ DEPARTMENTS ============ */
@@ -3012,7 +3288,7 @@ function renderDepts() {
     cont.innerHTML = `<div class="empty-guide">
       <div class="icon">${ICONS.empty}</div>
       <h3>بخشی ثبت نشده است</h3>
-      <p>بخش‌ها برای دسته‌بندی سیستم‌ها استفاده می‌شوند. یک بخش جدید ایجاد کنید.</p>
+      <p>بخش‌ها برای دسته‌بندی سیستم‌ها استفاده می‌شوند.</p>
       <button class="btn btn-primary btn-lg" onclick="openDeptForm()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         افزودن بخش جدید
@@ -3025,7 +3301,9 @@ function renderDepts() {
       ? d.systems.map(s => `<div class="sys-item" onclick="showSysDetail(${d.id}, ${s.id})">
           <span class="badge badge-purple">${s.type || 'سیستم'}</span>
           <span style="flex:1;font-weight:600;">${s.title || s.name}</span>
-          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delSystem(${d.id},${s.id})">${ICONS.trash}</button>
+          <button class="btn btn-info btn-sm" onclick="event.stopPropagation();showSysDetail(${d.id},${s.id})" title="مشاهده">${ICONS.view}</button>
+          <button class="btn btn-warning btn-sm" onclick="event.stopPropagation();editSystem(${d.id},${s.id})" title="ویرایش">${ICONS.edit}</button>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delSystem(${d.id},${s.id})" title="حذف">${ICONS.trash}</button>
         </div>`).join('')
       : `<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12.5px;">سیستمی برای این بخش ثبت نشده</div>`;
     return `<div class="dept-card">
@@ -3083,31 +3361,11 @@ function renderDashboard() {
   const totalHours = sumAtt + sumHome;
 
   document.getElementById('dashStats').innerHTML = `
-    <div class="stat">
-      <div class="stat-top"><div class="stat-icon">${ICONS.clock}</div></div>
-      <div class="stat-value">${faNum(sumAtt.toFixed(1))}</div>
-      <div class="stat-label">ساعت کار در محل (این ماه)</div>
-    </div>
-    <div class="stat success">
-      <div class="stat-top"><div class="stat-icon">${ICONS.home}</div></div>
-      <div class="stat-value">${faNum(sumHome.toFixed(1))}</div>
-      <div class="stat-label">ساعت کار در خانه (این ماه)</div>
-    </div>
-    <div class="stat warning">
-      <div class="stat-top"><div class="stat-icon">${ICONS.check}</div></div>
-      <div class="stat-value">${faNum(tasks.length)}</div>
-      <div class="stat-label">کارهای محول (این ماه)</div>
-    </div>
-    <div class="stat info">
-      <div class="stat-top"><div class="stat-icon">${ICONS.star}</div></div>
-      <div class="stat-value">${faNum(mywork.length)}</div>
-      <div class="stat-label">کارهای در جریان من</div>
-    </div>
-    <div class="stat danger">
-      <div class="stat-top"><div class="stat-icon">${ICONS.box}</div></div>
-      <div class="stat-value">${faNum(totalHours.toFixed(1))}</div>
-      <div class="stat-label">جمع کل ساعات این ماه</div>
-    </div>
+    <div class="stat"><div class="stat-top"><div class="stat-icon">${ICONS.clock}</div></div><div class="stat-value">${faNum(sumAtt.toFixed(1))}</div><div class="stat-label">ساعت کار در محل (این ماه)</div></div>
+    <div class="stat success"><div class="stat-top"><div class="stat-icon">${ICONS.home}</div></div><div class="stat-value">${faNum(sumHome.toFixed(1))}</div><div class="stat-label">ساعت کار در خانه (این ماه)</div></div>
+    <div class="stat warning"><div class="stat-top"><div class="stat-icon">${ICONS.check}</div></div><div class="stat-value">${faNum(tasks.length)}</div><div class="stat-label">کارهای محول (این ماه)</div></div>
+    <div class="stat info"><div class="stat-top"><div class="stat-icon">${ICONS.star}</div></div><div class="stat-value">${faNum(mywork.length)}</div><div class="stat-label">کارهای در جریان من</div></div>
+    <div class="stat danger"><div class="stat-top"><div class="stat-icon">${ICONS.box}</div></div><div class="stat-value">${faNum(totalHours.toFixed(1))}</div><div class="stat-label">جمع کل ساعات این ماه</div></div>
   `;
   drawBarChart('dashChart', [
     { label: 'محل کار', value: sumAtt, color: '#6c47c9' },
@@ -3123,10 +3381,8 @@ function drawBarChart(id, data) {
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   const W = rect.width, H = 280;
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, W, H);
@@ -3147,10 +3403,7 @@ function drawBarChart(id, data) {
   ctx.textAlign = 'left';
   for (let i = 0; i <= 4; i++) {
     const y = padT + (chartH / 4) * i;
-    ctx.beginPath();
-    ctx.moveTo(padL, y);
-    ctx.lineTo(W - padR, y);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
     ctx.fillText(faNum((maxVal * (4 - i) / 4).toFixed(1)), 8, y + 4);
   }
 
@@ -3162,8 +3415,7 @@ function drawBarChart(id, data) {
     const h = (d.value / maxVal) * chartH;
     const y = padT + chartH - h;
     const grad = ctx.createLinearGradient(x, y, x, padT + chartH);
-    grad.addColorStop(0, d.color);
-    grad.addColorStop(1, d.color + '70');
+    grad.addColorStop(0, d.color); grad.addColorStop(1, d.color + '70');
     ctx.fillStyle = grad;
     ctx.beginPath();
     const r = 8;
@@ -3173,8 +3425,7 @@ function drawBarChart(id, data) {
     ctx.lineTo(x + barW - r, y);
     ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
     ctx.lineTo(x + barW, padT + chartH);
-    ctx.closePath();
-    ctx.fill();
+    ctx.closePath(); ctx.fill();
     ctx.fillStyle = textColor;
     ctx.font = 'bold 13px Vazirmatn';
     ctx.textAlign = 'center';
@@ -3197,26 +3448,10 @@ function calcReport() {
   const total = sumOffice + sumHome;
 
   document.getElementById('reportStats').innerHTML = `
-    <div class="stat">
-      <div class="stat-top"><div class="stat-icon">${ICONS.clock}</div></div>
-      <div class="stat-value">${faNum(sumOffice.toFixed(1))}</div>
-      <div class="stat-label">جمع ساعت محل کار</div>
-    </div>
-    <div class="stat success">
-      <div class="stat-top"><div class="stat-icon">${ICONS.home}</div></div>
-      <div class="stat-value">${faNum(sumHome.toFixed(1))}</div>
-      <div class="stat-label">جمع ساعت کار در خانه</div>
-    </div>
-    <div class="stat warning">
-      <div class="stat-top"><div class="stat-icon">${ICONS.check}</div></div>
-      <div class="stat-value">${faNum(total.toFixed(1))}</div>
-      <div class="stat-label">جمع کل ساعات</div>
-    </div>
-    <div class="stat danger">
-      <div class="stat-top"><div class="stat-icon">${ICONS.monitor}</div></div>
-      <div class="stat-value">${faNum(tasks.length)}</div>
-      <div class="stat-label">کارهای ثبت‌شده</div>
-    </div>
+    <div class="stat"><div class="stat-top"><div class="stat-icon">${ICONS.clock}</div></div><div class="stat-value">${faNum(sumOffice.toFixed(1))}</div><div class="stat-label">جمع ساعت محل کار</div></div>
+    <div class="stat success"><div class="stat-top"><div class="stat-icon">${ICONS.home}</div></div><div class="stat-value">${faNum(sumHome.toFixed(1))}</div><div class="stat-label">جمع ساعت کار در خانه</div></div>
+    <div class="stat warning"><div class="stat-top"><div class="stat-icon">${ICONS.check}</div></div><div class="stat-value">${faNum(total.toFixed(1))}</div><div class="stat-label">جمع کل ساعات</div></div>
+    <div class="stat danger"><div class="stat-top"><div class="stat-icon">${ICONS.monitor}</div></div><div class="stat-value">${faNum(tasks.length)}</div><div class="stat-label">کارهای ثبت‌شده</div></div>
   `;
   drawBarChart('reportChart', [
     { label: 'محل کار', value: sumOffice, color: '#6c47c9' },
@@ -3227,8 +3462,7 @@ function calcReport() {
   const types = {};
   tasks.forEach(t => {
     if (!types[t.type]) types[t.type] = {count:0, hours:0};
-    types[t.type].count++;
-    types[t.type].hours += t.hours;
+    types[t.type].count++; types[t.type].hours += t.hours;
   });
   const cont = document.getElementById('taskReportContent');
   const keys = Object.keys(types);
@@ -3261,20 +3495,14 @@ function calcReport() {
 /* ============ EXPORT ============ */
 function exportData() {
   const data = {
-    attendance: DB.get('attendance'),
-    home: DB.get('home'),
-    tasks: DB.get('tasks'),
-    mywork: DB.get('mywork'),
-    devices: DB.get('devices'),
-    departments: DB.get('departments'),
+    attendance: DB.get('attendance'), home: DB.get('home'), tasks: DB.get('tasks'),
+    mywork: DB.get('mywork'), devices: DB.get('devices'), departments: DB.get('departments'),
     exportedAt: new Date().toISOString()
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `backup-${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
+  a.href = url; a.download = `backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
   URL.revokeObjectURL(url);
   toast('فایل پشتیبان دانلود شد', 'success');
 }
@@ -3309,16 +3537,9 @@ function initApp() {
   document.getElementById('sysSearch').addEventListener('input', () => { sysPage = 1; renderSystems(); });
   document.getElementById('mwSearch').addEventListener('input', () => { mwPage = 1; renderMyWork(); });
 
-  renderAttendance();
-  renderHome();
-  renderTasks();
-  renderMyWork();
-  renderDevices();
-  renderDepts();
-  updateDeptSelects();
-  renderSystems();
-  renderDashboard();
-  updateDate();
+  renderAttendance(); renderHome(); renderTasks(); renderMyWork();
+  renderDevices(); renderDepts(); updateDeptSelects();
+  renderSystems(); renderDashboard(); updateDate();
 }
 
 window.addEventListener('load', () => {
