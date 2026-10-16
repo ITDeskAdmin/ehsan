@@ -1006,6 +1006,138 @@ tbody tr:hover td { background: var(--bg); }
 #userPreviewName { font-size:17px; font-weight:800; color:var(--text); line-height:1.7; }
 #profilePhone, .user-role { font-family:'Vazirmatn','Tahoma',sans-serif; font-size:11.5px; font-weight:500; color:var(--text-muted); margin-top:2px; }
 @media (max-width:600px) { #profileName{font-size:19px;} #userPreviewName{font-size:16px;} }
+
+body.mobile-menu-open{overflow:hidden;}
+/* ===== FIX: MOBILE SIDEBAR ===== */
+@media (max-width: 900px){
+  .topbar .menu-btn{
+    display:grid !important;
+    place-items:center;
+    position:relative;
+    z-index:100;
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+    cursor:pointer;
+    pointer-events:auto;
+  }
+  .sidebar{
+    position:fixed !important;
+    right:0 !important;
+    left:auto !important;
+    top:0 !important;
+    bottom:0 !important;
+    height:100dvh !important;
+    width:min(300px,86vw) !important;
+    transform:translate3d(100%,0,0) !important;
+    visibility:hidden;
+    transition:transform .25s ease, visibility .25s ease !important;
+  }
+  .sidebar.open{
+    transform:translate3d(0,0,0) !important;
+    visibility:visible;
+  }
+  .sidebar-backdrop{
+    display:none;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:39 !important;
+  }
+  .sidebar-backdrop.show{display:block !important;}
+}
+
+
+
+
+/* ===== RIGHT SIDEBAR — FINAL MOBILE/DESKTOP ===== */
+.sidebar{
+  position:fixed !important;
+  top:0 !important;
+  right:0 !important;
+  left:auto !important;
+  width:240px !important;
+  height:100vh !important;
+  height:100dvh !important;
+  transform:translate3d(0,0,0);
+  transition:transform .28s ease;
+  z-index:99999 !important;
+  visibility:visible;
+}
+.main{
+  margin-right:240px !important;
+  margin-left:0 !important;
+  width:calc(100% - 240px) !important;
+  transition:margin-right .28s ease,width .28s ease;
+}
+#menuToggleBtn{
+  position:fixed !important;
+  top:16px !important;
+  right:254px !important;
+  width:44px !important;
+  height:44px !important;
+  z-index:100001 !important;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--bg-card);
+  color:var(--text);
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:var(--shadow-lg);
+  pointer-events:auto !important;
+  touch-action:manipulation;
+}
+#menuToggleBtn svg{width:21px !important;height:21px !important;pointer-events:none;}
+
+body.sidebar-collapsed .sidebar{
+  transform:translate3d(100%,0,0);
+  visibility:hidden;
+}
+body.sidebar-collapsed .main{
+  margin-right:0 !important;
+  width:100% !important;
+}
+body.sidebar-collapsed #menuToggleBtn{right:16px !important;}
+
+.sidebar-overlay{display:none !important;pointer-events:none;}
+
+@media (max-width:900px){
+  .sidebar{
+    width:min(290px,86vw) !important;
+    max-width:290px !important;
+    transform:translate3d(100%,0,0);
+    visibility:hidden;
+    opacity:1 !important;
+    box-shadow:-12px 0 35px rgba(0,0,0,.25);
+  }
+  .main{
+    margin-right:0 !important;
+    width:100% !important;
+  }
+  #menuToggleBtn{
+    top:12px !important;
+    right:12px !important;
+    width:46px !important;
+    height:46px !important;
+    z-index:100001 !important;
+  }
+  body.sidebar-open .sidebar{
+    transform:translate3d(0,0,0) !important;
+    visibility:visible !important;
+  }
+  body.sidebar-open .sidebar-overlay{
+    display:block !important;
+    position:fixed !important;
+    inset:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    z-index:99998 !important;
+    background:rgba(0,0,0,.42) !important;
+    pointer-events:auto !important;
+  }
+  .menu-btn{display:none !important;}
+}
 </style>
 </head>
 <body>
@@ -1143,6 +1275,14 @@ tbody tr:hover td { background: var(--bg); }
     </div>
   </aside>
 
+  <button id="menuToggleBtn" type="button" aria-label="باز و بسته کردن منو" title="باز و بسته کردن منو">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="4" y1="6" x2="20" y2="6"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+      <line x1="4" y1="18" x2="20" y2="18"/>
+    </svg>
+  </button>
+  <div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true"></div>
   <div class="main">
     <header class="topbar">
       <button class="menu-btn" onclick="toggleMobileSidebar()">
@@ -2066,8 +2206,29 @@ function faNum(n) { return String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[
 const PAGE_TITLES = {
   mywork:'کارهای روزانه', dashboard:'خوش آمدید', attendance:'ورود و خروج', home:'کار در خانه', tasks:'کارها', devices:'وسایل IT', systems:'سیستم‌ها', departments:'بخش‌ها', report:'گزارش ماهانه', users:'کاربران'
 };
-function closeMobileSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarBackdrop').classList.remove('show');}
-function toggleMobileSidebar(){const s=document.getElementById('sidebar'),b=document.getElementById('sidebarBackdrop');const open=!s.classList.contains('open');s.classList.toggle('open',open);b.classList.toggle('show',open);}
+function closeMobileSidebar(){
+  const s=document.getElementById('sidebar'), b=document.getElementById('sidebarBackdrop');
+  if(s) s.classList.remove('open');
+  if(b) b.classList.remove('show');
+  document.body.classList.remove('mobile-menu-open');
+}
+function toggleMobileSidebar(){
+  const s=document.getElementById('sidebar'), b=document.getElementById('sidebarBackdrop');
+  if(!s) return;
+  const open=!s.classList.contains('open');
+  s.classList.toggle('open',open);
+  if(b) b.classList.toggle('show',open);
+  document.body.classList.toggle('mobile-menu-open',open);
+}
+function initMobileMenu(){
+  const btn=document.querySelector('.menu-btn');
+  if(btn){
+    btn.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); toggleMobileSidebar(); });
+  }
+  const backdrop=document.getElementById('sidebarBackdrop');
+  if(backdrop) backdrop.addEventListener('click',closeMobileSidebar);
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initMobileMenu);}else{initMobileMenu();}
 document.querySelectorAll('.nav-item').forEach(btn=>{btn.onclick=()=>{if(btn.dataset.action==='new-task'){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));closeMobileSidebar();openTaskForm();return;} const page=btn.dataset.page;if(!page)return;if(page==='users'&&!isAdmin()){closeMobileSidebar();toast('این بخش فقط برای مدیر سیستم است','error');return;}document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').innerHTML=PAGE_TITLES[page]+'<small id="todayDate"></small>';updateDate();if(page==='dashboard')renderDashboard();if(page==='systems')renderSystems();if(page==='tasks')renderTasks();if(page==='users')renderUsers();closeMobileSidebar();};});
 function updateDate() {
   const [jy,jm,jd] = todayJalali();
@@ -3123,5 +3284,103 @@ window.addEventListener('resize', () => {
 window.addEventListener('resize',()=>{if(window.innerWidth>900)closeMobileSidebar();});
 document.querySelector('.main').addEventListener('click',()=>{if(window.innerWidth<=900)closeMobileSidebar();});
 </script>
+
+
+
+<script>
+(function(){
+  function getBtn(){ return document.getElementById('menuToggleBtn'); }
+  function getSidebar(){ return document.querySelector('.sidebar'); }
+  function getOverlay(){ return document.getElementById('sidebarOverlay'); }
+  function isMobile(){ return window.innerWidth <= 900; }
+
+  function openMenu(){
+    var b=document.body;
+    b.classList.add('sidebar-open');
+    b.classList.remove('sidebar-collapsed');
+    if(isMobile()) b.style.overflow='hidden';
+  }
+
+  function closeMenu(){
+    var b=document.body;
+    b.classList.remove('sidebar-open');
+    if(isMobile()) b.style.overflow='';
+    else b.classList.add('sidebar-collapsed');
+  }
+
+  function toggleMenu(){
+    var b=document.body;
+    if(isMobile()){
+      if(b.classList.contains('sidebar-open')) closeMenu();
+      else openMenu();
+    }else{
+      b.classList.toggle('sidebar-collapsed');
+      b.classList.remove('sidebar-open');
+    }
+  }
+
+  function initMenu(){
+    var btn=getBtn(), sidebar=getSidebar(), overlay=getOverlay();
+    if(!btn || !sidebar) return false;
+
+    // Prevent duplicate handlers if initMenu runs again.
+    if(btn.dataset.menuReady==='1') return true;
+    btn.dataset.menuReady='1';
+
+    btn.onclick=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+      return false;
+    };
+
+    btn.ontouchend=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+      return false;
+    };
+
+    if(overlay){
+      overlay.onclick=function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        closeMenu();
+      };
+      overlay.ontouchend=function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        closeMenu();
+      };
+    }
+
+    sidebar.addEventListener('click',function(e){
+      var item=e.target.closest && e.target.closest('.nav-item');
+      if(item && isMobile()) closeMenu();
+    });
+
+    window.addEventListener('resize',function(){
+      if(!isMobile()){
+        document.body.classList.remove('sidebar-open');
+        document.body.style.overflow='';
+      }
+    });
+
+    return true;
+  }
+
+  // Wait until the application DOM is fully present.
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){
+      setTimeout(initMenu,50);
+    });
+  }else{
+    setTimeout(initMenu,50);
+  }
+
+  // Extra retry for pages that build/modify the app after load.
+  setTimeout(initMenu,300);
+  setTimeout(initMenu,1000);
+})();
+</script>
 </body>
-</html>
