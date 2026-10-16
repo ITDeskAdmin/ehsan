@@ -1189,57 +1189,26 @@ function renderJobs(){const me=getCurrentUser();const all=DB.get('tasks').filter
 let jobsFilter='all';function setJobsFilter(f){jobsFilter=f;renderJobs();}
 function openDeviceForm(){const[jy,jm,jd]=todayJalali();document.getElementById('devName').value='';document.getElementById('devQty').value=1;document.getElementById('devDate').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('devNote').value='';document.getElementById('deviceFormModal').classList.add('show');}
 function saveDevice(){const name=document.getElementById('devName').value.trim();const qty=document.getElementById('devQty').value;const date=document.getElementById('devDate').value;const note=document.getElementById('devNote').value;if(!name||!date)return toast('لازم','error');const list=DB.get('devices');list.push({id:Date.now(),name,qty,date,note});DB.set('devices',list);document.getElementById('deviceFormModal').classList.remove('show');toast('اضافه شد','success');renderDevices();}
-function renderDevices(){
-  const s=(document.getElementById('devSearch').value||'').trim();
-  let list=DB.get('devices').sort((a,b)=>b.date.localeCompare(a.date));
-  if(s)list=list.filter(r=>r.name.includes(s));
-  const c=document.getElementById('devContent');
-  const pw=document.getElementById('devPaginationWrap');
-  if(!list.length){
-    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.monitor+'</div><h3>وسیله‌ای ثبت نشده</h3><p>برای شروع یک وسیله جدید اضافه کنید</p><button class="btn btn-primary btn-lg" onclick="openDeviceForm()">+ افزودن وسیله</button></div>';
-    pw.style.display='none';
-    return;
-  }
-  pw.style.display='flex';
-  const{pageList,start,total,totalPages}=paginate(list,devPage,12);
-  const totalQty=list.reduce((sum,r)=>sum+(+r.qty||0),0);
-  c.innerHTML='<div class="dev-stats"><div class="stat"><div class="stat-top"><div class="stat-icon">'+ICONS.monitor+'</div></div><div class="stat-value">'+faNum(total)+'</div><div class="stat-label">تعداد اقلام</div></div><div class="stat success"><div class="stat-top"><div class="stat-icon">'+ICONS.box+'</div></div><div class="stat-value">'+faNum(totalQty)+'</div><div class="stat-label">جمع تعداد</div></div></div>'+
-    '<div>'+pageList.map((r,i)=>'<div class="dev-card"><div class="dev-icon">'+ICONS.monitor+'</div><div class="dev-info"><h4>'+escapeHtml(r.name)+'</h4><div class="meta"><span>📅 '+r.date+'</span><span>🔢 '+faNum(r.qty)+' عدد</span></div>'+(r.note?'<div style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">'+escapeHtml(r.note)+'</div>':'')+'</div><div class="dev-actions"><button class="btn btn-danger btn-sm" onclick="del(\'devices\','+r.id+',renderDevices)">'+ICONS.trash+'</button></div></div>').join('')+'</div>';
-  document.getElementById('devTotal').textContent=faNum(total);
-  renderPages('devPagination',devPage,totalPages,'gotoDevPage');
-}
-  let filtered=allSys;
-  if(df.value)filtered=filtered.filter(s=>s.deptId==df.value);
-  const s=(document.getElementById('sysSearch').value||'').trim();
-  if(s)filtered=filtered.filter(x=>(x.title||x.name||'').includes(s)||(x.remoteCode||'').includes(s)||(x.ip||'').includes(s));
-  if(!filtered.length){
-    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>نتیجه‌ای نیست</h3></div>';
+function renderDevices(){const s=(document.getElementById('devSearch').value||'').trim();let list=DB.get('devices').sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));if(s)list=list.filter(r=>String(r.name||'').includes(s)||String(r.note||'').includes(s));const c=document.getElementById('devContent');const pw=document.getElementById('devPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.monitor+'</div><h3>وسیله‌ای ثبت نشده</h3><p>موجودی وسایل IT را ثبت کنید.</p><button class="btn btn-primary btn-lg" onclick="openDeviceForm()">'+ICONS.plus+'افزودن وسیله</button></div>';pw.style.display='none';document.getElementById('devTotal').textContent='۰';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,devPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>نام</th><th>تعداد</th><th>تاریخ بررسی</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+escapeHtml(r.name||'—')+'</strong></td><td><span class="badge badge-blue">'+faNum(r.qty||0)+' عدد</span></td><td>'+escapeHtml(r.date||'—')+'</td><td>'+escapeHtml(r.note||'—')+'</td><td><button class="btn btn-danger btn-sm" onclick="del(\'devices\','+r.id+',renderDevices)" title="حذف">'+ICONS.trash+'</button></td></tr>').join('')+'</tbody></table></div>';document.getElementById('devTotal').textContent=faNum(total);renderPages('devPagination',devPage,totalPages,'gotoDevPage');}
+function gotoDevPage(p){devPage=p;renderDevices();}
+
+/* ============ SYSTEMS ============ */
+function getAllSystems(){const depts=DB.get('departments');const all=[];depts.forEach(d=>{(d.systems||[]).forEach(s=>all.push({...s,deptId:d.id,deptName:d.name}));});return all;}
+function renderSystems(){
+  const depts=DB.get('departments');
+  const allSys=getAllSystems();
+  const df=document.getElementById('sysFilterDept');
+  const cf=df.value;
+  df.innerHTML='<option value="">همه بخش‌ها</option>'+depts.map(d=>'<option value="'+d.id+'">'+d.name+'</option>').join('');
+  df.value=cf;
+  const c=document.getElementById('sysContent');
+  const pw=document.getElementById('sysPaginationWrap');
+  if(!depts.length){
+    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3><button class="btn btn-primary btn-lg" onclick="quickAddDept()">افزودن بخش</button></div>';
     pw.style.display='none';
     document.getElementById('sysTotal').textContent='۰';
     return;
   }
-  const grouped={};
-  filtered.forEach(sys=>{
-    if(!grouped[sys.deptId]){
-      const dept=depts.find(d=>d.id==sys.deptId);
-      grouped[sys.deptId]={dept,items:[]};
-    }
-    grouped[sys.deptId].items.push(sys);
-  });
-  c.innerHTML=Object.keys(grouped).map(did=>{
-    const g=grouped[did];
-    const totalSys=(g.dept.systems||[]).length;
-    return '<div class="dept-card"><div class="dept-head"><div class="dept-icon">'+ICONS.box+'</div><h3>'+escapeHtml(g.dept.name)+'</h3><div class="dept-stats"><span class="badge badge-purple">'+faNum(totalSys)+' سیستم</span></div></div>'+
-      g.items.map(sys=>{
-        return '<div class="sys-card"><span class="sys-type-badge">'+(sys.type||'کیس')+'</span><span class="sys-name">'+escapeHtml(sys.title||sys.name||'—')+'</span>'+
-          (sys.remoteCode?'<span class="sys-remote" onclick="copyToClipboard(\''+escapeHtml(sys.remoteCode)+'\')">'+escapeHtml(sys.remoteType||'')+' '+escapeHtml(sys.remoteCode)+'</span>':'')+
-          (sys.ip?'<span class="sys-remote" onclick="copyToClipboard(\''+escapeHtml(sys.ip)+'\')">'+escapeHtml(sys.ip)+'</span>':'')+
-          '<div class="sys-actions"><button class="btn btn-info btn-sm" onclick="showSystemDetail('+g.dept.id+','+sys.id+')" title="جزئیات">'+ICONS.eye+'</button><button class="btn btn-success btn-sm" onclick="showQR('+g.dept.id+','+sys.id+')" title="QR">QR</button><button class="btn btn-warning btn-sm" onclick="editSystem('+g.dept.id+','+sys.id+')" title="ویرایش">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="delSystem('+g.dept.id+','+sys.id+')" title="حذف">'+ICONS.trash+'</button></div></div>';
-      }).join('')+'</div>';
-  }).join('');
-  document.getElementById('sysTotal').textContent=faNum(filtered.length);
-  pw.style.display='none';
-}
   let filtered=allSys;
   if(df.value)filtered=filtered.filter(s=>s.deptId==df.value);
   const s=(document.getElementById('sysSearch').value||'').trim();
