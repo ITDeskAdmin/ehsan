@@ -1,0 +1,3340 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل مدیریت کار و تجهیزات IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sidebar-bg: #1c2331;
+  --sidebar-text: #b8c2d9;
+  --sidebar-hover: #252e42;
+  --sidebar-active: #6c47c9;
+  --bg: #f5f7fb;
+  --bg-card: #ffffff;
+  --border: #e5e9f2;
+  --text: #1a2233;
+  --text-muted: #6b7692;
+  --primary: #6c47c9;
+  --primary-hover: #5838a8;
+  --primary-soft: #efe9fb;
+  --success: #10b981;
+  --success-soft: #e7f8f2;
+  --danger: #ef4444;
+  --danger-soft: #feefef;
+  --warning: #f59e0b;
+  --warning-soft: #fef3e2;
+  --info: #3b82f6;
+  --info-soft: #e6f0fe;
+  --pink: #ec4899;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.04);
+  --shadow: 0 4px 16px rgba(16,24,40,.06);
+  --shadow-lg: 0 12px 32px rgba(16,24,40,.10);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --transition: .22s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --sidebar-bg: #0f1420;
+  --sidebar-hover: #1a2233;
+  --bg: #0f1420;
+  --bg-card: #171e2e;
+  --border: #2a344a;
+  --text: #e8ecf5;
+  --text-muted: #93a0bd;
+  --primary-soft: #2a1f4a;
+  --success-soft: #113027;
+  --danger-soft: #3a1c1c;
+  --warning-soft: #3a2a10;
+  --info-soft: #16294a;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow: 0 4px 16px rgba(0,0,0,.35);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,.5);
+}
+* { box-sizing: border-box; margin:0; padding:0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Vazirmatn', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background var(--transition), color var(--transition);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* SVG Safety */
+svg { max-width: 100%; max-height: 100%; }
+.dept-icon svg, .card-icon svg, .stat-icon svg, .nav-item svg, .btn svg, .icon-btn svg,
+.login-logo svg, .prod-thumb svg, .empty-guide .icon svg, .empty-state svg,
+.fp-header h2 svg, .cal-nav button svg, .hw-subsection h4 svg, .form-group label svg,
+.field label svg, .toast svg, .search-box svg, .search-side svg, .menu-btn svg,
+.round-btn svg, .empty-guide .icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============ LOGIN ============ */
+.login-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: radial-gradient(circle at 20% 20%, #2a1f5c 0%, #1a1030 35%, #0a0518 100%);
+  overflow: hidden;
+}
+.login-wrap::before {
+  content:'';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(108,71,201,.35), transparent 60%);
+  top: -200px; right: -200px;
+  border-radius: 50%;
+  animation: floatOrb 12s ease-in-out infinite;
+  filter: blur(40px);
+}
+.login-wrap::after {
+  content:'';
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(236,72,153,.25), transparent 60%);
+  bottom: -150px; left: -100px;
+  border-radius: 50%;
+  animation: floatOrb 15s ease-in-out infinite reverse;
+  filter: blur(50px);
+}
+@keyframes floatOrb {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-40px, 40px) scale(1.15); }
+}
+.login-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.login-particles span {
+  position: absolute;
+  background: rgba(255,255,255,.4);
+  border-radius: 50%;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  from { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  to { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+.login-card {
+  position: relative;
+  background: rgba(20, 15, 40, .75);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 26px;
+  padding: 44px 38px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 30px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.05) inset;
+  animation: loginIn .7s cubic-bezier(.34,1.56,.64,1);
+  z-index: 2;
+}
+@keyframes loginIn {
+  from { opacity: 0; transform: translateY(40px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.login-brand { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 32px; }
+.login-logo {
+  width: 82px; height: 82px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #6c47c9 0%, #8a5cf6 50%, #ec4899 100%);
+  display: grid; place-items: center;
+  color: #fff;
+  box-shadow: 0 20px 50px rgba(108,71,201,.55), 0 0 0 8px rgba(108,71,201,.08), 0 0 0 16px rgba(108,71,201,.04);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.login-logo svg { width: 42px !important; height: 42px !important; }
+.login-card h2 { text-align: center; font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.login-card .sub { text-align: center; color: rgba(255,255,255,.55); font-size: 13px; }
+.login-error {
+  background: rgba(239,68,68,.15);
+  border: 1px solid rgba(239,68,68,.3);
+  color: #fca5a5;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  margin-bottom: 16px;
+  display: none;
+  animation: shake .4s;
+  text-align: center;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.login-field { position: relative; margin-bottom: 16px; }
+.login-field label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.7); margin-bottom: 8px; padding-right: 4px; }
+.login-field input {
+  width: 100%;
+  padding: 14px 46px 14px 16px;
+  border: 1.5px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  color: #fff;
+  border-radius: 13px;
+  font-size: 14.5px;
+  font-family: inherit;
+  outline: none;
+  transition: all var(--transition);
+  letter-spacing: .5px;
+}
+.login-field input::placeholder { color: rgba(255,255,255,.3); }
+.login-field input:focus {
+  border-color: rgba(138,92,246,.8);
+  background: rgba(255,255,255,.08);
+  box-shadow: 0 0 0 4px rgba(138,92,246,.2);
+}
+.login-field .icon {
+  position: absolute;
+  right: 16px;
+  top: 38px;
+  width: 18px; height: 18px;
+  color: rgba(255,255,255,.4);
+  pointer-events: none;
+}
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  margin: 4px 0 24px;
+  color: rgba(255,255,255,.6);
+}
+.login-options label { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.login-options input[type="checkbox"] {
+  appearance: none;
+  width: 18px; height: 18px;
+  border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition);
+}
+.login-options input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, #6c47c9, #8a5cf6);
+  border-color: transparent;
+}
+.login-options input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #6c47c9 0%, #8a5cf6 50%, #ec4899 100%);
+  background-size: 200% 200%;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  box-shadow: 0 12px 30px rgba(108,71,201,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: gradientShift 8s ease infinite;
+}
+.login-btn svg { width: 18px !important; height: 18px !important; }
+@keyframes gradientShift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(108,71,201,.7); }
+.login-btn:disabled { opacity: .7; cursor: not-allowed; }
+.login-footer {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,.35);
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+/* ========== APP LAYOUT ========== */
+.app { display: none; min-height: 100vh; }
+.app.show { display: flex; }
+.sidebar {
+  width: 240px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 40;
+  transition: transform var(--transition);
+}
+.sidebar::-webkit-scrollbar-thumb { background: #303a52; }
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 10px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,.05);
+  border-radius: 12px;
+}
+.user-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6c47c9, #8a5cf6);
+  display: grid; place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-info h4 { font-size: 13.5px; color: #fff; font-weight: 700; }
+.user-info span { font-size: 11px; color: var(--sidebar-text); opacity: .7; display: block; }
+.search-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 9px 12px;
+  margin-bottom: 12px;
+}
+.search-side svg { width: 15px !important; height: 15px !important; color: var(--sidebar-text); opacity: .7; flex-shrink: 0; }
+.search-side input {
+  border: none; background: transparent; outline: none;
+  color: #fff; font-family: inherit; font-size: 12.5px;
+  width: 100%;
+}
+.search-side input::placeholder { color: var(--sidebar-text); opacity: .6; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--sidebar-text);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: right;
+  font-family: inherit;
+}
+.nav-item svg { width: 17px !important; height: 17px !important; flex-shrink: 0; }
+.nav-item:hover { background: var(--sidebar-hover); color: #fff; }
+.nav-item.active {
+  background: var(--sidebar-active);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(108,71,201,.35);
+}
+.nav-item .badge-num {
+  margin-right: auto;
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  font-size: 10.5px;
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.nav-item.active .badge-num { background: rgba(255,255,255,.25); }
+
+/* ========== MAIN ========== */
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.topbar {
+  height: 64px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-shadow: var(--shadow-sm);
+}
+.menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  width: 34px; height: 34px;
+}
+.menu-btn:hover { background: var(--bg); }
+.menu-btn svg { width: 22px !important; height: 22px !important; }
+.greeting { font-size: 14.5px; font-weight: 700; }
+.greeting small { display: block; font-size: 11.5px; font-weight: 400; color: var(--text-muted); margin-top: 1px; }
+.topbar-actions { margin-right: auto; display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all var(--transition);
+}
+.icon-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.icon-btn svg { width: 17px !important; height: 17px !important; }
+
+.content { padding: 24px; flex: 1; overflow-x: hidden; }
+.page { display: none; animation: fadeIn .35s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+
+/* ========= CARDS ========= */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.card-head h2 { font-size: 15px; font-weight: 700; }
+.card-head .sub { font-size: 12px; color: var(--text-muted); }
+.card-head .actions { margin-right: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.card-icon svg { width: 19px !important; height: 19px !important; }
+
+/* Unified single-card style: card with toolbar + content */
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+/* ========= EMPTY GUIDE ========= */
+.empty-guide { text-align: center; padding: 50px 20px; }
+.empty-guide .icon {
+  width: 90px; height: 90px;
+  margin: 0 auto 20px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--primary-soft), #e0d5fa);
+  color: var(--primary);
+  display: grid; place-items: center;
+  animation: floatIcon 3s ease-in-out infinite;
+}
+@keyframes floatIcon {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.empty-guide .icon svg { width: 44px !important; height: 44px !important; }
+.empty-guide h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.empty-guide p { font-size: 13.5px; color: var(--text-muted); margin-bottom: 24px; max-width: 460px; margin-left: auto; margin-right: auto; line-height: 1.9; }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+.empty-state svg { width: 44px !important; height: 44px !important; opacity: .35; margin-bottom: 10px; display: inline-block; }
+.empty-state p { font-size: 13px; }
+
+/* ========= STATS ========= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.stat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+.stat::before {
+  content:'';
+  position: absolute;
+  top:0; right:0;
+  width: 4px; height: 100%;
+  background: var(--primary);
+}
+.stat.success::before { background: var(--success); }
+.stat.warning::before { background: var(--warning); }
+.stat.danger::before { background: var(--danger); }
+.stat.info::before { background: var(--info); }
+.stat:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.stat-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.stat-icon {
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: grid; place-items: center;
+}
+.stat.success .stat-icon { background: var(--success-soft); color: var(--success); }
+.stat.warning .stat-icon { background: var(--warning-soft); color: var(--warning); }
+.stat.danger .stat-icon { background: var(--danger-soft); color: var(--danger); }
+.stat.info .stat-icon { background: var(--info-soft); color: var(--info); }
+.stat-icon svg { width: 21px !important; height: 21px !important; }
+.stat-value { font-size: 25px; font-weight: 800; margin-top: 12px; letter-spacing: -.5px; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* ========= FORMS ========= */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field.full { grid-column: 1 / -1; }
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.field label svg { width: 13px !important; height: 13px !important; }
+.field label .req { color: var(--danger); margin-right: 2px; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: inherit;
+  transition: all var(--transition);
+  outline: none;
+}
+.field textarea { resize: vertical; min-height: 70px; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108,71,201,.12);
+}
+.field input[readonly], .field input:disabled {
+  cursor: not-allowed;
+  background: var(--bg);
+  color: var(--text-muted);
+}
+
+/* ========= BUTTONS ========= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.btn svg { width: 15px !important; height: 15px !important; }
+.btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(108,71,201,.28); }
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(108,71,201,.4); }
+.btn-ghost { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+.btn-danger { background: var(--danger-soft); color: var(--danger); }
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-success { background: var(--success-soft); color: var(--success); }
+.btn-success:hover { background: var(--success); color: #fff; }
+.btn-warning { background: var(--warning-soft); color: var(--warning); }
+.btn-warning:hover { background: var(--warning); color: #fff; }
+.btn-info { background: var(--info-soft); color: var(--info); }
+.btn-info:hover { background: var(--info); color: #fff; }
+.btn-sm { padding: 6px 11px; font-size: 11.5px; }
+.btn-sm svg { width: 13px !important; height: 13px !important; }
+.btn-lg { padding: 13px 24px; font-size: 14px; }
+
+/* Toolbar - like systems */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.toolbar .search-box { flex: 1; min-width: 200px; }
+.toolbar .filter-select {
+  min-width: 140px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+.toolbar .action-btns {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
+}
+.round-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all var(--transition);
+  color: #fff;
+}
+.round-btn svg { width: 17px !important; height: 17px !important; }
+.round-btn.primary { background: var(--primary); }
+.round-btn.primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.round-btn.warning { background: var(--warning); }
+.round-btn.warning:hover { background: #d97706; transform: translateY(-2px); }
+.round-btn.danger { background: var(--pink); }
+.round-btn.danger:hover { background: #db2777; transform: translateY(-2px); }
+.round-btn.info { background: var(--info); }
+.round-btn.info:hover { background: #2563eb; transform: translateY(-2px); }
+.round-btn.success { background: var(--success); }
+.round-btn.success:hover { background: #059669; transform: translateY(-2px); }
+
+/* ========= TABLE ========= */
+.table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: #1c2331;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 13px;
+  text-align: right;
+  white-space: nowrap;
+}
+[data-theme="dark"] thead th { background: #0a0f1a; }
+tbody td {
+  padding: 12px 13px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+  font-size: 12.5px;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--bg); }
+.row-num {
+  background: var(--bg);
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  width: 50px;
+}
+.prod-cell { display: flex; align-items: center; gap: 10px; }
+.prod-thumb {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.prod-thumb svg { width: 20px !important; height: 20px !important; }
+.prod-name { font-weight: 600; }
+.prod-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ========= PAGINATION ========= */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px 4px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pagination .total { font-weight: 600; }
+.pagination .pages { display: flex; gap: 4px; align-items: center; }
+.page-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.page-btn:hover:not(:disabled) { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
+.page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ========= BADGES ========= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-blue { background: var(--info-soft); color: var(--info); }
+.badge-green { background: var(--success-soft); color: var(--success); }
+.badge-orange { background: var(--warning-soft); color: #d97706; }
+.badge-red { background: var(--danger-soft); color: var(--danger); }
+.badge-purple { background: var(--primary-soft); color: var(--primary); }
+.badge-gray { background: var(--bg); color: var(--text-muted); }
+
+/* ========= SEARCH ========= */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  transition: all var(--transition);
+}
+.search-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,71,201,.12); }
+.search-box svg { width: 15px !important; height: 15px !important; color: var(--text-muted); flex-shrink: 0; }
+.search-box input {
+  border: none; background: transparent; outline: none;
+  color: var(--text); font-family: inherit; font-size: 12.5px;
+  width: 100%;
+}
+
+/* ========= CALENDAR ========= */
+.calendar-popup {
+  position: fixed;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px;
+  width: 305px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  display: none;
+  animation: popIn .2s ease;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(-6px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.cal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.cal-head .title { font-weight: 700; font-size: 13.5px; }
+.cal-nav { display: flex; gap: 4px; }
+.cal-nav button {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all var(--transition);
+}
+.cal-nav button:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.cal-nav button svg { width: 13px !important; height: 13px !important; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-grid .dow {
+  text-align: center; font-size: 10.5px; font-weight: 700;
+  color: var(--text-muted); padding: 7px 0;
+}
+.cal-grid .day {
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  font-size: 12.5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-weight: 500;
+}
+.cal-grid .day:hover { background: var(--primary-soft); color: var(--primary); }
+.cal-grid .day.today {
+  background: var(--primary); color: #fff; font-weight: 700;
+  box-shadow: 0 3px 10px rgba(108,71,201,.35);
+}
+.cal-grid .day.holiday { color: var(--danger); }
+.cal-grid .day.empty { cursor: default; opacity: .35; }
+
+/* ========= FULLPAGE MODAL ========= */
+.fullpage-modal {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 150;
+  display: none;
+  flex-direction: column;
+  animation: slideUp .3s ease;
+  overflow-y: auto;
+}
+.fullpage-modal.show { display: flex; }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fp-header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.fp-header h2 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.fp-header h2 svg { width: 22px !important; height: 22px !important; color: var(--primary); flex-shrink: 0; }
+.fp-header .close-btn {
+  margin-right: auto;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: grid; place-items: center;
+  color: var(--text);
+  transition: all var(--transition);
+}
+.fp-header .close-btn:hover { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+.fp-header .close-btn svg { width: 18px !important; height: 18px !important; }
+.fp-header .save-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 11px 22px;
+  border-radius: 11px;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition);
+  box-shadow: 0 4px 12px rgba(108,71,201,.3);
+}
+.fp-header .save-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.fp-header .save-btn svg { width: 16px !important; height: 16px !important; }
+.fp-body {
+  padding: 28px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+}
+.form-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.form-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: .3px;
+}
+.form-rows { display: grid; gap: 16px; }
+.form-row-2 { grid-template-columns: repeat(2, 1fr); }
+.form-row-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 800px) {
+  .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
+}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.form-group label .req { color: var(--danger); font-weight: 700; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-family: inherit;
+  transition: all var(--transition);
+  outline: none;
+}
+.form-group textarea { resize: vertical; min-height: 70px; }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108,71,201,.12);
+}
+.form-group input:disabled,
+.form-group input[readonly],
+.form-group select:disabled {
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+.input-with-btn { display: flex; gap: 6px; align-items: stretch; }
+.input-with-btn select,
+.input-with-btn input { flex: 1; }
+.input-with-btn .btn { padding: 0 12px; flex-shrink: 0; min-height: 44px; }
+.hw-subsection {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.hw-subsection h4 {
+  font-size: 12.5px;
+  color: var(--primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+}
+.hw-subsection h4 svg { width: 15px !important; height: 15px !important; }
+.hw-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.hw-grid .form-group input,
+.hw-grid .form-group select { padding: 9px 11px; font-size: 12.5px; }
+.hw-grid .form-group label { font-size: 11.5px; }
+
+/* ========= MODALS ========= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+  animation: fadeIn .2s ease;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn .3s cubic-bezier(.34,1.56,.64,1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal.lg { max-width: 780px; }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.modal h3 { font-size: 16px; margin-bottom: 8px; }
+.modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-start; margin-top: 18px; }
+.hw-detail-row {
+  display: flex;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 12.5px;
+}
+.hw-detail-row:last-child { border-bottom: none; }
+.hw-detail-row .lbl { color: var(--text-muted); min-width: 140px; font-weight: 500; }
+.hw-detail-row .val { font-weight: 500; flex: 1; }
+
+/* ========= TOAST ========= */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.toast {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  box-shadow: var(--shadow-lg);
+  min-width: 250px;
+  animation: slideIn .3s cubic-bezier(.34,1.56,.64,1);
+  border-right: 3px solid var(--primary);
+}
+.toast.success { border-right-color: var(--success); }
+.toast.error { border-right-color: var(--danger); }
+.toast svg { width: 17px !important; height: 17px !important; flex-shrink: 0; }
+.toast.success svg { color: var(--success); }
+.toast.error svg { color: var(--danger); }
+.toast.primary svg { color: var(--primary); }
+.toast span { font-size: 12.5px; font-weight: 500; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+.chip:hover { border-color: var(--primary); color: var(--primary); }
+.chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+.prio-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-left: 5px; }
+.prio-high { background: var(--danger); }
+.prio-med { background: var(--warning); }
+.prio-low { background: var(--success); }
+
+.status-select {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.status-select.pending { color: var(--warning); border-color: var(--warning); background: var(--warning-soft); }
+.status-select.inprogress { color: var(--info); border-color: var(--info); background: var(--info-soft); }
+.status-select.done { color: var(--success); border-color: var(--success); background: var(--success-soft); }
+
+.progress-bar { width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-bar > div { height: 100%; background: linear-gradient(90deg, var(--primary), #8a5cf6); border-radius: 3px; transition: width .5s ease; }
+
+.dept-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+  transition: all var(--transition);
+  overflow: hidden;
+}
+.dept-card:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+.dept-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.dept-head h3 { font-size: 14px; font-weight: 700; flex: 1; min-width: 100px; }
+.dept-icon {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--primary), #8a5cf6);
+  color: #fff;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.dept-icon svg { width: 16px !important; height: 16px !important; display: block; }
+.sys-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 13px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  font-size: 12.5px;
+  transition: all var(--transition);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.sys-item:hover { background: var(--primary-soft); border-color: var(--primary); }
+.sys-item:last-child { margin-bottom: 0; }
+
+/* ========= RESPONSIVE ========= */
+@media (max-width: 900px) {
+  .sidebar { position: fixed; right: 0; top: 0; transform: translateX(100%); box-shadow: var(--shadow-lg); }
+  .sidebar.open { transform: translateX(0); }
+  .menu-btn { display: grid; place-items: center; }
+  .content { padding: 16px; }
+  .fp-body { padding: 20px 14px; }
+  .fp-header { padding: 14px 16px; flex-wrap: wrap; }
+}
+@media (max-width: 640px) {
+  .topbar { padding: 0 14px; height: 58px; }
+  .greeting { font-size: 13px; }
+  .stat-value { font-size: 21px; }
+  .card { padding: 15px; }
+  .login-card { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========= LOGIN ========= -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-particles" id="particles"></div>
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"/>
+          <path d="M7 15l4-4 4 4 5-5"/>
+        </svg>
+      </div>
+      <div>
+        <h2>خوش آمدید</h2>
+        <p class="sub">سیستم مدیریت هوشمند کار و تجهیزات IT</p>
+      </div>
+    </div>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-field">
+      <label>نام کاربری</label>
+      <input type="text" id="loginUser" inputmode="numeric" autocomplete="username" placeholder="••••••••">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    </div>
+    <div class="login-field">
+      <label>رمز عبور</label>
+      <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    </div>
+    <div class="login-options">
+      <label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label>
+      <a href="#" onclick="event.preventDefault();" style="color:rgba(255,255,255,.5);text-decoration:none;font-size:12px;">فراموشی رمز؟</a>
+    </div>
+    <button class="login-btn" onclick="doLogin()" id="loginBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      ورود به سیستم
+    </button>
+    <div class="login-footer">© ۱۴۰۵ — تمامی حقوق محفوظ است</div>
+  </div>
+</div>
+
+<!-- ========= APP ========= -->
+<div class="app" id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="user-box">
+      <div class="user-avatar">م</div>
+      <div class="user-info">
+        <h4>مدیر سیستم</h4>
+        <span>09900153578</span>
+      </div>
+    </div>
+    <div class="search-side">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="جستجو...">
+    </div>
+    <button class="nav-item active" data-page="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      <span>داشبورد</span>
+    </button>
+    <button class="nav-item" data-page="mywork">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span>کارهای من</span>
+      <span class="badge-num" id="myWorkBadge">۰</span>
+    </button>
+    <button class="nav-item" data-page="attendance">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>ورود / خروج</span>
+    </button>
+    <button class="nav-item" data-page="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>کار در خانه</span>
+    </button>
+    <button class="nav-item" data-page="tasks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>کارهای محول</span>
+    </button>
+    <button class="nav-item" data-page="devices">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>وسایل IT</span>
+    </button>
+    <button class="nav-item" data-page="systems">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/></svg>
+      <span>سیستم‌ها</span>
+    </button>
+    <button class="nav-item" data-page="departments">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>بخش‌ها</span>
+    </button>
+    <button class="nav-item" data-page="report">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>گزارش ماهانه</span>
+    </button>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="greeting" id="pageTitle">خوش آمدید<small id="todayDate"></small></div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeBtn" title="تغییر تم">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="icon-btn" onclick="exportData()" title="پشتیبان‌گیری">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <button class="icon-btn" onclick="doLogout()" title="خروج">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-grid" id="dashStats"></div>
+        <div class="panel-card">
+          <div class="card-head">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+            <div><h2>نمای کلی ساعات این ماه</h2><div class="sub">مقایسه کار در محل و خانه</div></div>
+          </div>
+          <div style="position:relative;height:280px;padding:10px 0;"><canvas id="dashChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- MY WORK -->
+      <div class="page" id="page-mywork">
+        <div class="panel-card">
+          <div class="toolbar">
+            <select class="filter-select" id="mwFilterSelect" onchange="mwFilter=this.value;renderMyWork()">
+              <option value="all">همه وضعیت‌ها</option>
+              <option value="pending">در انتظار</option>
+              <option value="inprogress">در حال انجام</option>
+              <option value="done">انجام شده</option>
+            </select>
+            <select class="filter-select" id="mwPrioFilter" onchange="renderMyWork()">
+              <option value="">همه اولویت‌ها</option>
+              <option value="high">بالا</option>
+              <option value="med">متوسط</option>
+              <option value="low">پایین</option>
+            </select>
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="mwSearch" placeholder="جستجو...">
+            </div>
+            <div class="action-btns">
+              <button class="round-btn primary" onclick="openMyWorkForm()" title="افزودن کار جدید">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderMyWork()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="myWorkContent"></div>
+          <div class="pagination" id="mwPaginationWrap">
+            <div class="total">تعداد کل: <span id="mwTotal">۰</span></div>
+            <div class="pages" id="mwPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATTENDANCE -->
+      <div class="page" id="page-attendance">
+        <div class="panel-card">
+          <div class="toolbar">
+            <select class="filter-select" id="attMonthFilter" onchange="renderAttendance()">
+              <option value="">همه ماه‌ها</option>
+            </select>
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="attSearch" placeholder="جستجو...">
+            </div>
+            <div class="action-btns">
+              <button class="round-btn primary" onclick="openAttendanceForm()" title="ثبت ورود/خروج">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderAttendance()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="attContent"></div>
+          <div class="pagination" id="attPaginationWrap">
+            <div class="total">تعداد کل: <span id="attTotal">۰</span></div>
+            <div class="pages" id="attPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOME -->
+      <div class="page" id="page-home">
+        <div class="panel-card">
+          <div class="toolbar">
+            <select class="filter-select" id="homeMonthFilter" onchange="renderHome()">
+              <option value="">همه ماه‌ها</option>
+            </select>
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="homeSearch" placeholder="جستجو...">
+            </div>
+            <div class="action-btns">
+              <button class="round-btn primary" onclick="openHomeForm()" title="ثبت کار در خانه">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderHome()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="homeContent"></div>
+          <div class="pagination" id="homePaginationWrap">
+            <div class="total">تعداد کل: <span id="homeTotal">۰</span></div>
+            <div class="pages" id="homePagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS -->
+      <div class="page" id="page-tasks">
+        <div class="panel-card">
+          <div class="toolbar">
+            <select class="filter-select" id="taskTypeFilter" onchange="renderTasks()">
+              <option value="">همه انواع</option>
+              <option>کارهای آی تی</option><option>پشتیبانی سایت</option>
+              <option>بروشورها</option><option>طراحی‌ها</option><option>موارد متفرقه</option>
+            </select>
+            <select class="filter-select" id="taskMonthFilter" onchange="renderTasks()">
+              <option value="">همه ماه‌ها</option>
+            </select>
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="taskSearch" placeholder="جستجو...">
+            </div>
+            <div class="action-btns">
+              <button class="round-btn primary" onclick="openTaskForm()" title="ثبت کار جدید">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderTasks()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="taskContent"></div>
+          <div class="pagination" id="taskPaginationWrap">
+            <div class="total">تعداد کل: <span id="taskTotal">۰</span></div>
+            <div class="pages" id="taskPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEVICES -->
+      <div class="page" id="page-devices">
+        <div class="panel-card">
+          <div class="toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="devSearch" placeholder="جستجو در نام وسیله...">
+            </div>
+            <div class="action-btns">
+              <button class="round-btn primary" onclick="openDeviceForm()" title="افزودن وسیله">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderDevices()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="devContent"></div>
+          <div class="pagination" id="devPaginationWrap">
+            <div class="total">تعداد کل: <span id="devTotal">۰</span></div>
+            <div class="pages" id="devPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SYSTEMS -->
+      <div class="page" id="page-systems">
+        <div class="panel-card">
+          <div class="toolbar">
+            <select class="filter-select" id="sysFilterDept" onchange="renderSystems()">
+              <option value="">همه بخش‌ها</option>
+            </select>
+            <select class="filter-select" id="sysFilterType" onchange="renderSystems()">
+              <option value="">همه انواع</option>
+              <option>کیس</option><option>مانیتور</option><option>لپ‌تاپ</option>
+              <option>صندوق</option><option>سرور</option><option>سایر</option>
+            </select>
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="sysSearch" placeholder="جستجو...">
+            </div>
+            <div class="action-btns">
+              <button class="btn btn-ghost btn-sm" onclick="quickAddDept()" title="افزودن بخش جدید">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+                بخش
+              </button>
+              <button class="round-btn primary" onclick="openSystemForm()" title="افزودن سیستم">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn warning" onclick="toast('فیلتر اعمال شد', 'success')" title="فیلتر">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              </button>
+              <button class="round-btn danger" onclick="exportData()" title="دانلود">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderSystems()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="sysContent"></div>
+          <div class="pagination" id="sysPaginationWrap">
+            <div class="total">تعداد کل: <span id="sysTotal">۰</span></div>
+            <div class="pages" id="sysPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPARTMENTS -->
+      <div class="page" id="page-departments">
+        <div class="panel-card">
+          <div class="toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="deptSearch" placeholder="جستجو در بخش‌ها..." oninput="renderDepts()">
+            </div>
+            <div class="action-btns">
+              <button class="round-btn primary" onclick="openDeptForm()" title="افزودن بخش جدید">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <button class="round-btn info" onclick="renderDepts()" title="بازنشانی">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="deptList"></div>
+        </div>
+      </div>
+
+      <!-- REPORT -->
+      <div class="page" id="page-report">
+        <div class="panel-card">
+          <div class="toolbar">
+            <input type="text" id="reportMonth" readonly placeholder="انتخاب ماه..." onclick="openCal('reportMonth', this, true)" style="padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;background:var(--bg-card);color:var(--text);font-family:inherit;font-size:13px;min-width:180px;outline:none;cursor:pointer;">
+            <button class="btn btn-primary" onclick="calcReport()" style="height:40px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              محاسبه گزارش
+            </button>
+          </div>
+        </div>
+        <div class="stats-grid" id="reportStats"></div>
+        <div class="panel-card">
+          <div class="card-head"><h2>نمودار ساعات</h2></div>
+          <div style="position:relative;height:280px;padding:10px 0;"><canvas id="reportChart"></canvas></div>
+        </div>
+        <div class="panel-card">
+          <div class="card-head"><h2>تفکیک کارها</h2></div>
+          <div id="taskReportContent"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== FULL-PAGE SYSTEM FORM ===== -->
+<div class="fullpage-modal" id="sysFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveSystem()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      ذخیره
+    </button>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/></svg>
+      <span id="sysFormTitle">تعریف سیستم جدید</span>
+    </h2>
+    <button class="close-btn" onclick="closeSystemForm()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section" style="border:2px solid var(--primary); background: var(--primary-soft);">
+      <div class="form-section-title" style="color:var(--primary);">📦 اطلاعات پایه</div>
+      <div class="form-rows form-row-3">
+        <div class="form-group">
+          <label>بخش مورد نظر <span class="req">*</span></label>
+          <div class="input-with-btn">
+            <select id="sfDeptId" required><option value="">— انتخاب بخش —</option></select>
+            <button class="btn btn-primary" onclick="quickAddDeptInForm()" title="افزودن بخش جدید">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              بخش
+            </button>
+          </div>
+        </div>
+        <div class="form-group"><label>عنوان سیستم <span class="req">*</span></label><input type="text" id="sfTitle" placeholder="مثلاً: کیس دفتر مدیر"></div>
+        <div class="form-group">
+          <label>نوع سیستم</label>
+          <select id="sfSysType"><option>کیس</option><option>مانیتور</option><option>لپ‌تاپ</option><option>صندوق</option><option>سرور</option><option>سایر</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">مشخصات سخت‌افزاری</div>
+      <div class="hw-subsection">
+        <h4>🖥️ پردازنده (CPU)</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>برند</label><select id="sfCpuBrand"><option value="">—</option><option>Intel</option><option>AMD</option><option>سایر</option></select></div>
+          <div class="form-group"><label>مدل</label><input type="text" id="sfCpuModel" placeholder="Core i7-12700"></div>
+          <div class="form-group"><label>نسل</label><input type="text" id="sfCpuGen" placeholder="12th"></div>
+          <div class="form-group"><label>فرکانس (GHz)</label><input type="text" id="sfCpuFreq" placeholder="3.6"></div>
+          <div class="form-group"><label>تعداد هسته</label><input type="text" id="sfCpuCores" placeholder="8"></div>
+        </div>
+      </div>
+      <div class="hw-subsection">
+        <h4>🧠 حافظه رم (RAM)</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>نوع</label><select id="sfRamType"><option value="">—</option><option>DDR3</option><option>DDR4</option><option>DDR5</option></select></div>
+          <div class="form-group"><label>حجم کل</label><input type="text" id="sfRamSize" placeholder="16GB"></div>
+          <div class="form-group"><label>فرکانس (MHz)</label><input type="text" id="sfRamFreq" placeholder="3200"></div>
+          <div class="form-group"><label>تعداد اسلات</label><input type="text" id="sfRamSlots" placeholder="2 از 4"></div>
+        </div>
+      </div>
+      <div class="hw-subsection">
+        <h4>💾 حافظه ذخیره‌سازی</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>نوع</label><select id="sfDiskType"><option value="">—</option><option>HDD</option><option>SSD SATA</option><option>SSD NVMe</option><option>ترکیبی</option></select></div>
+          <div class="form-group"><label>برند</label><input type="text" id="sfDiskBrand" placeholder="Samsung / WD"></div>
+          <div class="form-group"><label>حجم</label><input type="text" id="sfDiskSize" placeholder="512GB SSD + 1TB"></div>
+        </div>
+      </div>
+      <div class="hw-subsection">
+        <h4>🎮 کارت گرافیک</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>برند</label><select id="sfGpuBrand"><option value="">—</option><option>NVIDIA</option><option>AMD</option><option>Intel</option><option>Onboard</option></select></div>
+          <div class="form-group"><label>مدل</label><input type="text" id="sfGpuModel" placeholder="GTX 1650"></div>
+          <div class="form-group"><label>حافظه</label><input type="text" id="sfGpuMem" placeholder="4GB"></div>
+        </div>
+      </div>
+      <div class="hw-subsection">
+        <h4>⚡ مادربرد و پاور</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>مادربرد - برند</label><input type="text" id="sfMbBrand" placeholder="ASUS"></div>
+          <div class="form-group"><label>مادربرد - مدل</label><input type="text" id="sfMbModel" placeholder="B660M"></div>
+          <div class="form-group"><label>چیپست</label><input type="text" id="sfMbChip" placeholder="B660"></div>
+          <div class="form-group"><label>پاور - برند</label><input type="text" id="sfPsuBrand" placeholder="Green"></div>
+          <div class="form-group"><label>پاور - توان (W)</label><input type="text" id="sfPsuWatt" placeholder="500"></div>
+        </div>
+      </div>
+      <div class="hw-subsection">
+        <h4>🖥️ مانیتور</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>برند</label><input type="text" id="sfMonBrand" placeholder="LG"></div>
+          <div class="form-group"><label>مدل</label><input type="text" id="sfMonModel" placeholder="22MP48"></div>
+          <div class="form-group"><label>سایز (اینچ)</label><input type="text" id="sfMonSize" placeholder="22"></div>
+          <div class="form-group"><label>رزولوشن</label><input type="text" id="sfMonRes" placeholder="1920x1080"></div>
+        </div>
+      </div>
+      <div class="hw-subsection">
+        <h4>📡 جانبی و شبکه</h4>
+        <div class="hw-grid">
+          <div class="form-group"><label>ماوس</label><input type="text" id="sfMouse" placeholder="برند/مدل"></div>
+          <div class="form-group"><label>کیبورد</label><input type="text" id="sfKeyboard" placeholder="برند/مدل"></div>
+          <div class="form-group"><label>شبکه</label><input type="text" id="sfNetwork" placeholder="Wi-Fi + LAN"></div>
+          <div class="form-group"><label>درایو نوری</label><input type="text" id="sfOptical" placeholder="DVD-RW"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">توضیحات</div>
+      <div class="form-group"><textarea id="sfNotes" placeholder="سایر اطلاعات..." style="min-height:100px;"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FULL-PAGE MY WORK FORM ===== -->
+<div class="fullpage-modal" id="mwFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveMyWork()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      ذخیره
+    </button>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span id="mwFormTitle">افزودن کار جدید</span>
+    </h2>
+    <button class="close-btn" onclick="closeMyWorkForm()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section">
+      <div class="form-section-title">اطلاعات کار</div>
+      <div class="form-rows form-row-2">
+        <div class="form-group"><label>عنوان کار <span class="req">*</span></label><input type="text" id="mwTitle" placeholder="عنوان کار..."></div>
+        <div class="form-group">
+          <label>اولویت</label>
+          <select id="mwPriority"><option value="high">🔴 بالا</option><option value="med" selected>🟡 متوسط</option><option value="low">🟢 پایین</option></select>
+        </div>
+      </div>
+      <div class="form-rows form-row-2" style="margin-top:16px;">
+        <div class="form-group">
+          <label>وضعیت</label>
+          <select id="mwStatus"><option value="pending">در انتظار</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select>
+        </div>
+        <div class="form-group"><label>مهلت انجام</label><input type="text" id="mwDeadline" readonly placeholder="انتخاب تاریخ" onclick="openCal('mwDeadline', this)"></div>
+      </div>
+      <div class="form-rows" style="margin-top:16px;">
+        <div class="form-group"><label>توضیحات</label><textarea id="mwDesc" placeholder="توضیحات اختیاری..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FULL-PAGE ATTENDANCE FORM ===== -->
+<div class="fullpage-modal" id="attFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveAttendance()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      ذخیره
+    </button>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>ثبت ورود / خروج</span>
+    </h2>
+    <button class="close-btn" onclick="document.getElementById('attFormModal').classList.remove('show')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section">
+      <div class="form-section-title">اطلاعات حضور</div>
+      <div class="form-rows form-row-3">
+        <div class="form-group"><label>تاریخ <span class="req">*</span></label><input type="text" id="attDate" readonly onclick="openCal('attDate', this)"></div>
+        <div class="form-group"><label>ساعت ورود <span class="req">*</span></label><input type="time" id="attIn"></div>
+        <div class="form-group"><label>ساعت خروج <span class="req">*</span></label><input type="time" id="attOut"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FULL-PAGE HOME FORM ===== -->
+<div class="fullpage-modal" id="homeFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      ذخیره
+    </button>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>ثبت کار در خانه</span>
+    </h2>
+    <button class="close-btn" onclick="document.getElementById('homeFormModal').classList.remove('show')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section">
+      <div class="form-section-title">اطلاعات دورکاری</div>
+      <div class="form-rows form-row-3">
+        <div class="form-group"><label>تاریخ <span class="req">*</span></label><input type="text" id="homeDate" readonly onclick="openCal('homeDate', this)"></div>
+        <div class="form-group"><label>ساعت شروع <span class="req">*</span></label><input type="time" id="homeStart"></div>
+        <div class="form-group"><label>ساعت پایان <span class="req">*</span></label><input type="time" id="homeEnd"></div>
+      </div>
+      <div class="form-rows" style="margin-top:16px;">
+        <div class="form-group"><label>توضیحات</label><input type="text" id="homeDesc" placeholder="اختیاری"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FULL-PAGE TASK FORM ===== -->
+<div class="fullpage-modal" id="taskFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveTask()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      ذخیره
+    </button>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>ثبت کار محول شده</span>
+    </h2>
+    <button class="close-btn" onclick="document.getElementById('taskFormModal').classList.remove('show')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section">
+      <div class="form-section-title">اطلاعات کار</div>
+      <div class="form-rows form-row-3">
+        <div class="form-group">
+          <label>نوع کار <span class="req">*</span></label>
+          <select id="taskType">
+            <option>کارهای آی تی</option><option>پشتیبانی سایت</option>
+            <option>بروشورها</option><option>طراحی‌ها</option><option>موارد متفرقه</option>
+          </select>
+        </div>
+        <div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="taskTitle" placeholder="عنوان کار..."></div>
+        <div class="form-group"><label>تاریخ <span class="req">*</span></label><input type="text" id="taskDate" readonly onclick="openCal('taskDate', this)"></div>
+      </div>
+      <div class="form-rows form-row-2" style="margin-top:16px;">
+        <div class="form-group"><label>ساعت شروع <span class="req">*</span></label><input type="time" id="taskStart"></div>
+        <div class="form-group"><label>ساعت پایان <span class="req">*</span></label><input type="time" id="taskEnd"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FULL-PAGE DEVICE FORM ===== -->
+<div class="fullpage-modal" id="deviceFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveDevice()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      ذخیره
+    </button>
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>افزودن وسیله IT</span>
+    </h2>
+    <button class="close-btn" onclick="document.getElementById('deviceFormModal').classList.remove('show')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section">
+      <div class="form-section-title">اطلاعات وسیله</div>
+      <div class="form-rows form-row-2">
+        <div class="form-group"><label>نام وسیله <span class="req">*</span></label><input type="text" id="devName" placeholder="موس، کیبورد..."></div>
+        <div class="form-group"><label>تعداد <span class="req">*</span></label><input type="number" id="devQty" min="1" value="1"></div>
+      </div>
+      <div class="form-rows form-row-2" style="margin-top:16px;">
+        <div class="form-group"><label>تاریخ بررسی <span class="req">*</span></label><input type="text" id="devDate" readonly onclick="openCal('devDate', this)"></div>
+        <div class="form-group"><label>توضیحات</label><input type="text" id="devNote" placeholder="اختیاری"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SYSTEM DETAIL MODAL -->
+<div class="modal-overlay" id="sysDetailModal">
+  <div class="modal lg">
+    <div id="sysDetailContent"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('sysDetailModal').classList.remove('show')">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK ADD DEPT MODAL -->
+<div class="modal-overlay" id="quickDeptModal">
+  <div class="modal">
+    <h3>➕ افزودن بخش جدید</h3>
+    <p>نام بخش را وارد کنید (مثلاً: صندوق ۱، دفتر مدیر، واحد فروش)</p>
+    <div class="field">
+      <label>نام بخش</label>
+      <input type="text" id="quickDeptName" placeholder="نام بخش..." autofocus>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="confirmQuickDept()">افزودن</button>
+      <button class="btn btn-ghost" onclick="closeQuickDept()">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <h3 id="confirmTitle">تأیید</h3>
+    <p id="confirmText">آیا مطمئن هستید؟</p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="confirmBtn">بله</button>
+      <button class="btn btn-ghost" onclick="closeConfirm()">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<div class="calendar-popup" id="calPopup"></div>
+<div class="toast-container" id="toastBox"></div>
+
+<script>
+/* ============ DB ============ */
+const DB = {
+  get: k => JSON.parse(localStorage.getItem(k) || '[]'),
+  set: (k,v) => localStorage.setItem(k, JSON.stringify(v))
+};
+
+/* ============ ICONS ============ */
+const ICONS = {
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+  monitor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+  box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  view: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  cpu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>',
+  empty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'
+};
+
+/* ============ LOGIN ============ */
+const DEFAULT_USER = '09900153578', DEFAULT_PASS = '35783578';
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+
+  btn.disabled = true;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px;animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> در حال ورود...';
+
+  setTimeout(() => {
+    if (u === DEFAULT_USER && p === DEFAULT_PASS) {
+      err.style.display = 'none';
+      localStorage.setItem('loggedIn', '1');
+      if (document.getElementById('rememberMe').checked) localStorage.setItem('savedUser', u);
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('app').classList.add('show');
+      initApp();
+      toast('خوش آمدید 👋', 'success');
+    } else {
+      err.style.display = 'block';
+      err.textContent = 'نام کاربری یا رمز عبور نادرست است';
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:18px;height:18px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> ورود به سیستم';
+    }
+  }, 500);
+}
+function doLogout() {
+  confirmAction('خروج از سیستم', 'آیا می‌خواهید خارج شوید؟', () => {
+    localStorage.removeItem('loggedIn');
+    location.reload();
+  }, 'خروج', 'btn-danger');
+}
+document.getElementById('loginPass').addEventListener('keypress', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('loginUser').addEventListener('keypress', e => { if (e.key === 'Enter') doLogin(); });
+
+(function createParticles() {
+  const box = document.getElementById('particles');
+  if (!box) return;
+  for (let i = 0; i < 25; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.animationDuration = (8 + Math.random() * 12) + 's';
+    s.style.animationDelay = Math.random() * 8 + 's';
+    const size = 1 + Math.random() * 3;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    box.appendChild(s);
+  }
+})();
+
+const styleEl = document.createElement('style');
+styleEl.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+document.head.appendChild(styleEl);
+
+/* ============ TOAST ============ */
+function toast(msg, type='primary') {
+  const box = document.getElementById('toastBox');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    primary: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  };
+  el.innerHTML = `${icons[type]}<span>${msg}</span>`;
+  box.appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-20px)';
+    el.style.transition = '.3s';
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
+
+/* ============ CONFIRM ============ */
+let confirmCb = null;
+function confirmAction(title, text, cb, btnText='بله، حذف کن', btnClass='btn-danger') {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmText').textContent = text;
+  const btn = document.getElementById('confirmBtn');
+  btn.textContent = btnText;
+  btn.className = 'btn ' + btnClass;
+  document.getElementById('confirmModal').classList.add('show');
+  confirmCb = cb;
+}
+document.getElementById('confirmBtn').onclick = () => { if (confirmCb) confirmCb(); closeConfirm(); };
+function closeConfirm() {
+  document.getElementById('confirmModal').classList.remove('show');
+  confirmCb = null;
+}
+document.getElementById('confirmModal').onclick = e => { if (e.target.id === 'confirmModal') closeConfirm(); };
+
+/* ============ QUICK DEPT ============ */
+let quickDeptCallback = null;
+function quickAddDept() {
+  document.getElementById('quickDeptName').value = '';
+  document.getElementById('quickDeptModal').classList.add('show');
+  setTimeout(() => document.getElementById('quickDeptName').focus(), 100);
+  quickDeptCallback = null;
+}
+function quickAddDeptInForm() {
+  document.getElementById('quickDeptName').value = '';
+  document.getElementById('quickDeptModal').classList.add('show');
+  setTimeout(() => document.getElementById('quickDeptName').focus(), 100);
+  quickDeptCallback = 'selectInForm';
+}
+function confirmQuickDept() {
+  const name = document.getElementById('quickDeptName').value.trim();
+  if (!name) return toast('نام بخش را وارد کنید', 'error');
+  const list = DB.get('departments');
+  if (list.find(d => d.name === name)) return toast('این بخش قبلاً ثبت شده', 'error');
+  const newDept = {id: Date.now(), name, systems: []};
+  list.push(newDept);
+  DB.set('departments', list);
+  closeQuickDept();
+  toast('بخش «' + name + '» اضافه شد', 'success');
+  updateDeptSelects();
+  renderDepts();
+  renderSystems();
+  if (quickDeptCallback === 'selectInForm') {
+    document.getElementById('sfDeptId').value = newDept.id;
+  }
+  quickDeptCallback = null;
+}
+function closeQuickDept() {
+  document.getElementById('quickDeptModal').classList.remove('show');
+  quickDeptCallback = null;
+}
+document.getElementById('quickDeptName').addEventListener('keypress', e => {
+  if (e.key === 'Enter') confirmQuickDept();
+});
+document.getElementById('quickDeptModal').onclick = e => {
+  if (e.target.id === 'quickDeptModal') closeQuickDept();
+};
+
+function updateDeptSelects() {
+  const list = DB.get('departments');
+  const filterSel = document.getElementById('sysFilterDept');
+  const curFilter = filterSel.value;
+  filterSel.innerHTML = '<option value="">همه بخش‌ها</option>' + list.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  filterSel.value = curFilter;
+  const formSel = document.getElementById('sfDeptId');
+  const curForm = formSel.value;
+  formSel.innerHTML = '<option value="">— انتخاب بخش —</option>' + list.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  if (curForm) formSel.value = curForm;
+}
+
+/* ============ JALALI ============ */
+const faMonths = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const faDaysShort = ['ش','ی','د','س','چ','پ','ج'];
+const faDaysFull = ['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+
+function toJalali(gy, gm, gd) {
+  const g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+  let jy = (gy <= 1600) ? 0 : 979;
+  gy -= (gy <= 1600) ? 621 : 1600;
+  const gy2 = (gm > 2) ? (gy + 1) : gy;
+  let days = (365*gy) + Math.floor((gy2+3)/4) - Math.floor((gy2+99)/100) + Math.floor((gy2+399)/400) - 80 + gd + g_d_m[gm-1];
+  jy += 33 * Math.floor(days/12053); days %= 12053;
+  jy += 4 * Math.floor(days/1461); days %= 1461;
+  if (days > 365) { jy += Math.floor((days-1)/365); days = (days-1)%365; }
+  const jm = (days < 186) ? 1 + Math.floor(days/31) : 7 + Math.floor((days-186)/30);
+  const jd = 1 + ((days < 186) ? (days%31) : ((days-186)%30));
+  return [jy, jm, jd];
+}
+function jalaliToGregorian(jy, jm, jd) {
+  let gy = (jy <= 979) ? 621 : 1600;
+  jy -= (jy <= 979) ? 0 : 979;
+  let days = (365*jy) + (Math.floor(jy/33)*8) + Math.floor(((jy%33)+3)/4) + 78 + jd + ((jm<7) ? (jm-1)*31 : ((jm-7)*30)+186);
+  gy += 400 * Math.floor(days/146097); days %= 146097;
+  if (days > 36524) { gy += 100 * Math.floor(--days/36524); days %= 36524; if (days >= 365) days++; }
+  gy += 4 * Math.floor(days/1461); days %= 1461;
+  if (days > 365) { gy += Math.floor((days-1)/365); days = (days-1)%365; }
+  let gd = days + 1;
+  const sal_a = [0,31,(gy%4==0 && gy%100!=0)||(gy%400==0) ? 29:28,31,30,31,30,31,31,30,31,30,31];
+  let gm = 0;
+  for (gm=1; gm<=12; gm++) { if (gd <= sal_a[gm]) break; gd -= sal_a[gm]; }
+  return [gy, gm, gd];
+}
+function pad(n){ return n<10 ? '0'+n : n; }
+function todayJalali() {
+  const now = new Date();
+  return toJalali(now.getFullYear(), now.getMonth()+1, now.getDate());
+}
+function jMonthDays(jy, jm) {
+  if (jm <= 6) return 31;
+  if (jm <= 11) return 30;
+  const leap = ((jy+12)%33)%4 === 0 || ((jy+12)%33)%4 === 1;
+  return leap ? 30 : 29;
+}
+function jWeekDay(jy, jm, jd) {
+  const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
+  const d = new Date(gy, gm-1, gd);
+  return (d.getDay() + 1) % 7;
+}
+
+/* ============ CALENDAR ============ */
+let calTarget = null, calYear, calMonth, calMonthlyOnly = false;
+function openCal(id, el, monthlyOnly=false) {
+  calTarget = id;
+  calMonthlyOnly = monthlyOnly;
+  const cur = document.getElementById(id).value;
+  let jy, jm;
+  if (cur && /^\d{4}\/\d{2}/.test(cur)) {
+    const p = cur.split('/'); jy = +p[0]; jm = +p[1];
+  } else {
+    [jy, jm] = todayJalali();
+  }
+  calYear = jy; calMonth = jm;
+  renderCal(el);
+}
+function renderCal(el) {
+  const pop = document.getElementById('calPopup');
+  const rect = el.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.left;
+  if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
+  if (top + 360 > window.innerHeight) top = rect.top - 370;
+  pop.style.top = top + 'px';
+  pop.style.left = left + 'px';
+
+  const [ty,tm,td] = todayJalali();
+  const firstDay = jWeekDay(calYear, calMonth, 1);
+  const days = jMonthDays(calYear, calMonth);
+  const prevDays = jMonthDays(calYear, calMonth === 1 ? 12 : calMonth - 1);
+
+  let html = `<div class="cal-head">
+    <div class="title">${faMonths[calMonth-1]} ${faNum(calYear)}</div>
+    <div class="cal-nav">
+      <button onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    </div>
+  </div><div class="cal-grid">`;
+  faDaysShort.forEach(d => html += `<div class="dow">${d}</div>`);
+  for (let i=0; i<firstDay; i++) html += `<div class="day empty">${faNum(prevDays - firstDay + i + 1)}</div>`;
+  for (let d=1; d<=days; d++) {
+    const isToday = (ty===calYear && tm===calMonth && td===d);
+    const wd = jWeekDay(calYear, calMonth, d);
+    const isHoliday = wd === 6;
+    html += `<div class="day ${isToday?'today':''} ${isHoliday?'holiday':''}" onclick="pickDate(${d})">${faNum(d)}</div>`;
+  }
+  html += `</div>`;
+  if (calMonthlyOnly) {
+    html += `<div style="text-align:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+      <button class="btn btn-primary btn-sm" style="width:100%;" onclick="pickMonth()">انتخاب همین ماه</button>
+    </div>`;
+  }
+  pop.innerHTML = html;
+  pop.style.display = 'block';
+}
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 12) { calMonth = 1; calYear++; }
+  if (calMonth < 1) { calMonth = 12; calYear--; }
+  renderCal(document.getElementById(calTarget));
+}
+function pickDate(d) {
+  document.getElementById(calTarget).value = `${calYear}/${pad(calMonth)}/${pad(d)}`;
+  document.getElementById('calPopup').style.display = 'none';
+}
+function pickMonth() {
+  document.getElementById(calTarget).value = `${calYear}/${pad(calMonth)}`;
+  document.getElementById('calPopup').style.display = 'none';
+  if (calTarget === 'reportMonth') calcReport();
+}
+document.addEventListener('click', e => {
+  const pop = document.getElementById('calPopup');
+  if (pop.style.display === 'none') return;
+  if (!pop.contains(e.target) && e.target.tagName !== 'INPUT') pop.style.display = 'none';
+});
+
+/* ============ HELPERS ============ */
+function diffHours(s, e) {
+  if (!s || !e) return 0;
+  const [sh,sm] = s.split(':').map(Number);
+  const [eh,em] = e.split(':').map(Number);
+  let m = (eh*60+em) - (sh*60+sm);
+  if (m < 0) m += 24*60;
+  return +(m/60).toFixed(2);
+}
+function formatHours(h) {
+  if (!h) return '۰';
+  const hours = Math.floor(h);
+  const mins = Math.round((h - hours) * 60);
+  return mins > 0 ? `${faNum(hours)}س ${faNum(mins)}د` : `${faNum(hours)} ساعت`;
+}
+function emptyRow(cols, text='موردی ثبت نشده است') {
+  return `<tr><td colspan="${cols}"><div class="empty-state">${ICONS.empty}<p>${text}</p></div></td></tr>`;
+}
+function faNum(n) {
+  return String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+}
+
+/* ============ TABS ============ */
+const PAGE_TITLES = {
+  dashboard: 'خوش آمدید',
+  mywork: 'کارهای من',
+  attendance: 'ورود و خروج',
+  home: 'کار در خانه',
+  tasks: 'کارهای محول',
+  devices: 'وسایل IT',
+  systems: 'سیستم‌ها',
+  departments: 'بخش‌ها',
+  report: 'گزارش ماهانه'
+};
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.onclick = () => {
+    const page = btn.dataset.page;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('pageTitle').innerHTML = PAGE_TITLES[page] + '<small id="todayDate"></small>';
+    updateDate();
+    if (page === 'dashboard') renderDashboard();
+    if (page === 'systems') renderSystems();
+    if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+  };
+});
+function updateDate() {
+  const [jy,jm,jd] = todayJalali();
+  const dayName = faDaysFull[jWeekDay(jy,jm,jd)];
+  const el = document.getElementById('todayDate');
+  if (el) el.textContent = `${dayName}، ${faNum(jd)} ${faMonths[jm-1]} ${faNum(jy)}`;
+}
+
+/* ============ Pagination Helper ============ */
+function paginate(list, page, perPage) {
+  const total = list.length;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  if (page > totalPages) page = totalPages;
+  const start = (page - 1) * perPage;
+  return {
+    pageList: list.slice(start, start + perPage),
+    start,
+    total,
+    totalPages
+  };
+}
+function renderPages(containerId, currentPage, totalPages, onPageFn) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  let html = `<button class="page-btn" onclick="${onPageFn}(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for (let p = 1; p <= totalPages; p++) {
+    if (totalPages > 7 && p > 3 && p < totalPages - 1 && Math.abs(p - currentPage) > 1) {
+      if (p === 4) html += `<span style="padding:0 4px;color:var(--text-muted)">...</span>`;
+      continue;
+    }
+    html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="${onPageFn}(${p})">${faNum(p)}</button>`;
+  }
+  html += `<button class="page-btn" onclick="${onPageFn}(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  cont.innerHTML = html;
+}
+function getMonthOptions() {
+  const months = new Set();
+  ['attendance','home','tasks','mywork','devices'].forEach(k => {
+    DB.get(k).forEach(r => {
+      if (r.date && /^\d{4}\/\d{2}/.test(r.date)) {
+        months.add(r.date.slice(0,7));
+      }
+    });
+  });
+  return Array.from(months).sort().reverse();
+}
+function fillMonthFilter(selectId) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+  const cur = sel.value;
+  const months = getMonthOptions();
+  sel.innerHTML = '<option value="">همه ماه‌ها</option>' + months.map(m => {
+    const [y,mo] = m.split('/');
+    return `<option value="${m}">${faMonths[+mo-1]} ${faNum(y)}</option>`;
+  }).join('');
+  sel.value = cur;
+}
+
+/* ============ MY WORK ============ */
+let mwFilter = 'all';
+let mwPage = 1;
+const MW_PER = 10;
+let editingMyWork = null;
+
+function openMyWorkForm() {
+  editingMyWork = null;
+  document.getElementById('mwFormTitle').textContent = 'افزودن کار جدید';
+  document.getElementById('mwTitle').value = '';
+  document.getElementById('mwPriority').value = 'med';
+  document.getElementById('mwStatus').value = 'pending';
+  const [jy,jm,jd] = todayJalali();
+  document.getElementById('mwDeadline').value = `${jy}/${pad(jm)}/${pad(jd)}`;
+  document.getElementById('mwDesc').value = '';
+  document.getElementById('mwFormModal').classList.add('show');
+}
+function closeMyWorkForm() {
+  document.getElementById('mwFormModal').classList.remove('show');
+  editingMyWork = null;
+}
+function saveMyWork() {
+  const title = document.getElementById('mwTitle').value.trim();
+  const priority = document.getElementById('mwPriority').value;
+  const status = document.getElementById('mwStatus').value;
+  const deadline = document.getElementById('mwDeadline').value;
+  const desc = document.getElementById('mwDesc').value;
+  if (!title) return toast('عنوان کار لازم است', 'error');
+  const list = DB.get('mywork');
+  if (editingMyWork) {
+    const idx = list.findIndex(r => r.id === editingMyWork);
+    if (idx >= 0) list[idx] = {...list[idx], title, priority, status, deadline, desc};
+    toast('کار ویرایش شد', 'success');
+  } else {
+    list.push({id: Date.now(), title, priority, status, deadline, desc, createdAt: new Date().toISOString()});
+    toast('کار اضافه شد', 'success');
+  }
+  DB.set('mywork', list);
+  closeMyWorkForm();
+  renderMyWork();
+  updateBadge();
+}
+function editMyWork(id) {
+  const list = DB.get('mywork');
+  const item = list.find(r => r.id === id);
+  if (!item) return;
+  editingMyWork = id;
+  document.getElementById('mwFormTitle').textContent = 'ویرایش کار';
+  document.getElementById('mwTitle').value = item.title || '';
+  document.getElementById('mwPriority').value = item.priority || 'med';
+  document.getElementById('mwStatus').value = item.status || 'pending';
+  document.getElementById('mwDeadline').value = item.deadline || '';
+  document.getElementById('mwDesc').value = item.desc || '';
+  document.getElementById('mwFormModal').classList.add('show');
+}
+function renderMyWork() {
+  const search = (document.getElementById('mwSearch').value || '').trim();
+  const prioFilter = document.getElementById('mwPrioFilter').value;
+  let list = DB.get('mywork').sort((a,b) => {
+    const prio = { high: 0, med: 1, low: 2 };
+    if (a.status === 'done' && b.status !== 'done') return 1;
+    if (b.status === 'done' && a.status !== 'done') return -1;
+    return prio[a.priority] - prio[b.priority];
+  });
+  if (mwFilter !== 'all') list = list.filter(r => r.status === mwFilter);
+  if (prioFilter) list = list.filter(r => r.priority === prioFilter);
+  if (search) list = list.filter(r => r.title.includes(search) || (r.desc||'').includes(search));
+
+  const content = document.getElementById('myWorkContent');
+  const pagWrap = document.getElementById('mwPaginationWrap');
+
+  if (!list.length) {
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.star}</div>
+      <h3>کاری یافت نشد</h3>
+      <p>هنوز کار شخصی‌ای ثبت نکرده‌اید یا نتیجه‌ای با فیلترهای فعلی مطابقت ندارد.</p>
+      <button class="btn btn-primary btn-lg" onclick="openMyWorkForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        افزودن اولین کار
+      </button>
+    </div>`;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  pagWrap.style.display = 'flex';
+  const { pageList, start, total, totalPages } = paginate(list, mwPage, MW_PER);
+
+  content.innerHTML = `<div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:50px;">ردیف</th>
+        <th>وضعیت</th><th>عنوان</th><th>اولویت</th><th>مهلت</th><th>توضیحات</th><th>عملیات</th>
+      </tr></thead>
+      <tbody>
+        ${pageList.map((r, i) => {
+          const prioClass = r.priority === 'high' ? 'prio-high' : r.priority === 'med' ? 'prio-med' : 'prio-low';
+          const prioLabel = r.priority === 'high' ? 'بالا' : r.priority === 'med' ? 'متوسط' : 'پایین';
+          return `<tr>
+            <td class="row-num">${faNum(start + i + 1)}</td>
+            <td>
+              <select class="status-select ${r.status}" onchange="updateStatus(${r.id}, this.value)">
+                <option value="pending" ${r.status==='pending'?'selected':''}>در انتظار</option>
+                <option value="inprogress" ${r.status==='inprogress'?'selected':''}>در حال انجام</option>
+                <option value="done" ${r.status==='done'?'selected':''}>انجام شده</option>
+              </select>
+            </td>
+            <td><strong style="${r.status==='done'?'text-decoration:line-through;opacity:.6;':''}">${r.title}</strong></td>
+            <td><span class="prio-dot ${prioClass}"></span>${prioLabel}</td>
+            <td>${r.deadline || '<span style="color:var(--text-muted)">—</span>'}</td>
+            <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.desc || '<span style="color:var(--text-muted)">—</span>'}</td>
+            <td>
+              <div style="display:flex;gap:4px;">
+                <button class="btn btn-warning btn-sm" onclick="editMyWork(${r.id})" title="ویرایش">${ICONS.edit}</button>
+                <button class="btn btn-danger btn-sm" onclick="del('mywork',${r.id},renderMyWork)" title="حذف">${ICONS.trash}</button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.getElementById('mwTotal').textContent = faNum(total);
+  renderPages('mwPagination', mwPage, totalPages, 'gotoMwPage');
+  updateBadge();
+}
+function gotoMwPage(p) { mwPage = p; renderMyWork(); }
+function updateStatus(id, status) {
+  const list = DB.get('mywork');
+  const item = list.find(r => r.id === id);
+  if (item) { item.status = status; DB.set('mywork', list); toast('وضعیت به‌روز شد', 'success'); renderMyWork(); }
+}
+function updateBadge() {
+  const count = DB.get('mywork').filter(r => r.status !== 'done').length;
+  const badge = document.getElementById('myWorkBadge');
+  if (badge) badge.textContent = faNum(count);
+}
+document.getElementById('mwSearch').addEventListener('input', () => { mwPage = 1; renderMyWork(); });
+
+/* ============ ATTENDANCE ============ */
+let attPage = 1;
+function openAttendanceForm() {
+  const [jy,jm,jd] = todayJalali();
+  document.getElementById('attDate').value = `${jy}/${pad(jm)}/${pad(jd)}`;
+  document.getElementById('attIn').value = '';
+  document.getElementById('attOut').value = '';
+  document.getElementById('attFormModal').classList.add('show');
+}
+function saveAttendance() {
+  const date = document.getElementById('attDate').value;
+  const start = document.getElementById('attIn').value;
+  const end = document.getElementById('attOut').value;
+  if (!date || !start || !end) return toast('لطفاً همه فیلدها را پر کنید', 'error');
+  const list = DB.get('attendance');
+  list.push({id: Date.now(), date, start, end, hours: diffHours(start, end)});
+  DB.set('attendance', list);
+  document.getElementById('attFormModal').classList.remove('show');
+  toast('ورود/خروج ثبت شد', 'success');
+  fillMonthFilter('attMonthFilter');
+  renderAttendance();
+}
+function renderAttendance() {
+  fillMonthFilter('attMonthFilter');
+  const search = (document.getElementById('attSearch').value || '').trim();
+  const monthF = document.getElementById('attMonthFilter').value;
+  let list = DB.get('attendance').sort((a,b)=> b.date.localeCompare(a.date));
+  if (monthF) list = list.filter(r => r.date.startsWith(monthF));
+  if (search) list = list.filter(r => r.date.includes(search));
+
+  const content = document.getElementById('attContent');
+  const pagWrap = document.getElementById('attPaginationWrap');
+
+  if (!list.length) {
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.clock}</div>
+      <h3>ورود/خروجی ثبت نشده</h3>
+      <p>اولین ورود و خروج خود را ثبت کنید تا در اینجا نمایش داده شود.</p>
+      <button class="btn btn-primary btn-lg" onclick="openAttendanceForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        ثبت ورود/خروج
+      </button>
+    </div>`;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  pagWrap.style.display = 'flex';
+  const { pageList, start, total, totalPages } = paginate(list, attPage, 10);
+
+  content.innerHTML = `<div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:50px;">ردیف</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th>
+      </tr></thead>
+      <tbody>
+        ${pageList.map((r, i) => `<tr>
+          <td class="row-num">${faNum(start + i + 1)}</td>
+          <td><strong>${r.date}</strong></td>
+          <td><span class="badge badge-green">${r.start}</span></td>
+          <td><span class="badge badge-red">${r.end}</span></td>
+          <td><strong>${formatHours(r.hours)}</strong></td>
+          <td><button class="btn btn-danger btn-sm" onclick="del('attendance',${r.id},renderAttendance)">${ICONS.trash}حذف</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.getElementById('attTotal').textContent = faNum(total);
+  renderPages('attPagination', attPage, totalPages, 'gotoAttPage');
+}
+function gotoAttPage(p) { attPage = p; renderAttendance(); }
+document.getElementById('attSearch').addEventListener('input', () => { attPage = 1; renderAttendance(); });
+document.getElementById('attMonthFilter').addEventListener('change', () => { attPage = 1; });
+
+/* ============ HOME ============ */
+let homePage = 1;
+function openHomeForm() {
+  const [jy,jm,jd] = todayJalali();
+  document.getElementById('homeDate').value = `${jy}/${pad(jm)}/${pad(jd)}`;
+  document.getElementById('homeStart').value = '';
+  document.getElementById('homeEnd').value = '';
+  document.getElementById('homeDesc').value = '';
+  document.getElementById('homeFormModal').classList.add('show');
+}
+function saveHome() {
+  const date = document.getElementById('homeDate').value;
+  const start = document.getElementById('homeStart').value;
+  const end = document.getElementById('homeEnd').value;
+  const desc = document.getElementById('homeDesc').value;
+  if (!date || !start || !end) return toast('لطفاً تاریخ و ساعت‌ها را پر کنید', 'error');
+  const list = DB.get('home');
+  list.push({id: Date.now(), date, start, end, desc, hours: diffHours(start, end)});
+  DB.set('home', list);
+  document.getElementById('homeFormModal').classList.remove('show');
+  toast('کار در خانه ثبت شد', 'success');
+  fillMonthFilter('homeMonthFilter');
+  renderHome();
+}
+function renderHome() {
+  fillMonthFilter('homeMonthFilter');
+  const search = (document.getElementById('homeSearch').value || '').trim();
+  const monthF = document.getElementById('homeMonthFilter').value;
+  let list = DB.get('home').sort((a,b)=> b.date.localeCompare(a.date));
+  if (monthF) list = list.filter(r => r.date.startsWith(monthF));
+  if (search) list = list.filter(r => r.date.includes(search) || (r.desc||'').includes(search));
+
+  const content = document.getElementById('homeContent');
+  const pagWrap = document.getElementById('homePaginationWrap');
+
+  if (!list.length) {
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.home}</div>
+      <h3>کار در خانه ثبت نشده</h3>
+      <p>ساعات دورکاری خود را ثبت کنید تا در محاسبه ماهانه لحاظ شود.</p>
+      <button class="btn btn-primary btn-lg" onclick="openHomeForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        ثبت کار در خانه
+      </button>
+    </div>`;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  pagWrap.style.display = 'flex';
+  const { pageList, start, total, totalPages } = paginate(list, homePage, 10);
+
+  content.innerHTML = `<div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:50px;">ردیف</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th>
+      </tr></thead>
+      <tbody>
+        ${pageList.map((r, i) => `<tr>
+          <td class="row-num">${faNum(start + i + 1)}</td>
+          <td><strong>${r.date}</strong></td>
+          <td><span class="badge badge-green">${r.start}</span></td>
+          <td><span class="badge badge-red">${r.end}</span></td>
+          <td><strong>${formatHours(r.hours)}</strong></td>
+          <td>${r.desc || '<span style="color:var(--text-muted)">—</span>'}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="del('home',${r.id},renderHome)">${ICONS.trash}حذف</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.getElementById('homeTotal').textContent = faNum(total);
+  renderPages('homePagination', homePage, totalPages, 'gotoHomePage');
+}
+function gotoHomePage(p) { homePage = p; renderHome(); }
+document.getElementById('homeSearch').addEventListener('input', () => { homePage = 1; renderHome(); });
+document.getElementById('homeMonthFilter').addEventListener('change', () => { homePage = 1; });
+
+/* ============ TASKS ============ */
+let taskPage = 1;
+const TASK_COLORS = {
+  'کارهای آی تی': 'badge-blue',
+  'پشتیبانی سایت': 'badge-green',
+  'بروشورها': 'badge-orange',
+  'طراحی‌ها': 'badge-purple',
+  'موارد متفرقه': 'badge-red'
+};
+function openTaskForm() {
+  const [jy,jm,jd] = todayJalali();
+  document.getElementById('taskType').value = 'کارهای آی تی';
+  document.getElementById('taskTitle').value = '';
+  document.getElementById('taskDate').value = `${jy}/${pad(jm)}/${pad(jd)}`;
+  document.getElementById('taskStart').value = '';
+  document.getElementById('taskEnd').value = '';
+  document.getElementById('taskFormModal').classList.add('show');
+}
+function saveTask() {
+  const type = document.getElementById('taskType').value;
+  const title = document.getElementById('taskTitle').value;
+  const date = document.getElementById('taskDate').value;
+  const start = document.getElementById('taskStart').value;
+  const end = document.getElementById('taskEnd').value;
+  if (!title || !date || !start || !end) return toast('همه فیلدها لازم است', 'error');
+  const list = DB.get('tasks');
+  list.push({id: Date.now(), type, title, date, start, end, hours: diffHours(start, end)});
+  DB.set('tasks', list);
+  document.getElementById('taskFormModal').classList.remove('show');
+  toast('کار ثبت شد', 'success');
+  fillMonthFilter('taskMonthFilter');
+  renderTasks();
+}
+function renderTasks() {
+  fillMonthFilter('taskMonthFilter');
+  const search = (document.getElementById('taskSearch').value || '').trim();
+  const typeF = document.getElementById('taskTypeFilter').value;
+  const monthF = document.getElementById('taskMonthFilter').value;
+  let list = DB.get('tasks').sort((a,b)=> b.date.localeCompare(a.date));
+  if (typeF) list = list.filter(r => r.type === typeF);
+  if (monthF) list = list.filter(r => r.date.startsWith(monthF));
+  if (search) list = list.filter(r => r.title.includes(search) || r.type.includes(search));
+
+  const content = document.getElementById('taskContent');
+  const pagWrap = document.getElementById('taskPaginationWrap');
+
+  if (!list.length) {
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.check}</div>
+      <h3>کاری ثبت نشده</h3>
+      <p>کارهای محول شده خود را با نوع، عنوان و ساعات ثبت کنید.</p>
+      <button class="btn btn-primary btn-lg" onclick="openTaskForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        ثبت کار جدید
+      </button>
+    </div>`;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  pagWrap.style.display = 'flex';
+  const { pageList, start, total, totalPages } = paginate(list, taskPage, 10);
+
+  content.innerHTML = `<div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:50px;">ردیف</th><th>نوع</th><th>عنوان</th><th>تاریخ</th>
+        <th>شروع</th><th>پایان</th><th>مدت</th><th>عملیات</th>
+      </tr></thead>
+      <tbody>
+        ${pageList.map((r, i) => `<tr>
+          <td class="row-num">${faNum(start + i + 1)}</td>
+          <td><span class="badge ${TASK_COLORS[r.type]||'badge-blue'}">${r.type}</span></td>
+          <td><strong>${r.title}</strong></td>
+          <td>${r.date}</td>
+          <td>${r.start}</td>
+          <td>${r.end}</td>
+          <td><strong>${formatHours(r.hours)}</strong></td>
+          <td><button class="btn btn-danger btn-sm" onclick="del('tasks',${r.id},renderTasks)">${ICONS.trash}حذف</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.getElementById('taskTotal').textContent = faNum(total);
+  renderPages('taskPagination', taskPage, totalPages, 'gotoTaskPage');
+}
+function gotoTaskPage(p) { taskPage = p; renderTasks(); }
+document.getElementById('taskSearch').addEventListener('input', () => { taskPage = 1; renderTasks(); });
+document.getElementById('taskTypeFilter').addEventListener('change', () => { taskPage = 1; });
+document.getElementById('taskMonthFilter').addEventListener('change', () => { taskPage = 1; });
+
+/* ============ DEVICES ============ */
+let devPage = 1;
+function openDeviceForm() {
+  const [jy,jm,jd] = todayJalali();
+  document.getElementById('devName').value = '';
+  document.getElementById('devQty').value = 1;
+  document.getElementById('devDate').value = `${jy}/${pad(jm)}/${pad(jd)}`;
+  document.getElementById('devNote').value = '';
+  document.getElementById('deviceFormModal').classList.add('show');
+}
+function saveDevice() {
+  const name = document.getElementById('devName').value.trim();
+  const qty = document.getElementById('devQty').value;
+  const date = document.getElementById('devDate').value;
+  const note = document.getElementById('devNote').value;
+  if (!name || !date) return toast('نام و تاریخ بررسی الزامی است', 'error');
+  const list = DB.get('devices');
+  list.push({id: Date.now(), name, qty, date, note});
+  DB.set('devices', list);
+  document.getElementById('deviceFormModal').classList.remove('show');
+  toast('وسیله اضافه شد', 'success');
+  renderDevices();
+}
+function renderDevices() {
+  const search = (document.getElementById('devSearch').value || '').trim();
+  let list = DB.get('devices').sort((a,b)=> b.date.localeCompare(a.date));
+  if (search) list = list.filter(r => r.name.includes(search) || (r.note||'').includes(search));
+
+  const content = document.getElementById('devContent');
+  const pagWrap = document.getElementById('devPaginationWrap');
+
+  if (!list.length) {
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.monitor}</div>
+      <h3>وسیله‌ای ثبت نشده</h3>
+      <p>موجودی انبار IT خود را با نام، تعداد و تاریخ بررسی ثبت کنید.</p>
+      <button class="btn btn-primary btn-lg" onclick="openDeviceForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        افزودن وسیله
+      </button>
+    </div>`;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  pagWrap.style.display = 'flex';
+  const { pageList, start, total, totalPages } = paginate(list, devPage, 10);
+
+  content.innerHTML = `<div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th style="width:50px;">ردیف</th><th>نام</th><th>تعداد</th><th>تاریخ بررسی</th><th>توضیحات</th><th>عملیات</th>
+      </tr></thead>
+      <tbody>
+        ${pageList.map((r, i) => `<tr>
+          <td class="row-num">${faNum(start + i + 1)}</td>
+          <td><strong>${r.name}</strong></td>
+          <td><span class="badge badge-blue">${faNum(r.qty)} عدد</span></td>
+          <td>${r.date}</td>
+          <td>${r.note || '<span style="color:var(--text-muted)">—</span>'}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="del('devices',${r.id},renderDevices)">${ICONS.trash}حذف</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.getElementById('devTotal').textContent = faNum(total);
+  renderPages('devPagination', devPage, totalPages, 'gotoDevPage');
+}
+function gotoDevPage(p) { devPage = p; renderDevices(); }
+document.getElementById('devSearch').addEventListener('input', () => { devPage = 1; renderDevices(); });
+
+/* ============ SYSTEMS ============ */
+let sysPage = 1;
+const SYS_PER_PAGE = 10;
+
+function getAllSystems() {
+  const depts = DB.get('departments');
+  const all = [];
+  depts.forEach(d => {
+    (d.systems || []).forEach(s => all.push({...s, deptId: d.id, deptName: d.name}));
+  });
+  return all;
+}
+
+function renderSystems() {
+  const depts = DB.get('departments');
+  const allSys = getAllSystems();
+
+  const deptFilter = document.getElementById('sysFilterDept');
+  const curFilter = deptFilter.value;
+  deptFilter.innerHTML = '<option value="">همه بخش‌ها</option>' + depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  deptFilter.value = curFilter;
+
+  const content = document.getElementById('sysContent');
+  const pagWrap = document.getElementById('sysPaginationWrap');
+
+  if (!depts.length) {
+    content.innerHTML = `
+      <div class="empty-guide">
+        <div class="icon">${ICONS.empty}</div>
+        <h3>هنوز بخشی ثبت نشده است</h3>
+        <p>برای شروع، ابتدا یک «بخش» (مانند صندوق ۱، دفتر مدیر، واحد فروش) ایجاد کنید. سپس می‌توانید سیستم‌ها را به آن اضافه کنید.</p>
+        <button class="btn btn-primary btn-lg" onclick="quickAddDept()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          افزودن بخش جدید
+        </button>
+      </div>
+    `;
+    pagWrap.style.display = 'none';
+    document.getElementById('sysTotal').textContent = '۰';
+    return;
+  }
+
+  const filterDept = deptFilter.value;
+  const filterType = document.getElementById('sysFilterType').value;
+  const search = (document.getElementById('sysSearch').value || '').trim();
+
+  let filtered = allSys;
+  if (filterDept) filtered = filtered.filter(s => s.deptId == filterDept);
+  if (filterType) filtered = filtered.filter(s => s.type === filterType);
+  if (search) filtered = filtered.filter(s => (s.title||s.name||'').includes(search));
+
+  if (!allSys.length) {
+    content.innerHTML = `
+      <div class="empty-guide">
+        <div class="icon">${ICONS.cpu}</div>
+        <h3>هنوز سیستمی ثبت نشده است</h3>
+        <p>شما ${faNum(depts.length)} بخش دارید. حالا می‌توانید اولین سیستم را با مشخصات کامل سخت‌افزاری اضافه کنید.</p>
+        <button class="btn btn-primary btn-lg" onclick="openSystemForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          افزودن اولین سیستم
+        </button>
+      </div>
+    `;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  if (!filtered.length) {
+    content.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.empty}</div>
+      <h3>نتیجه‌ای یافت نشد</h3>
+      <p>هیچ سیستمی با فیلترهای فعلی مطابقت ندارد.</p>
+      <button class="btn btn-primary" onclick="openSystemForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        افزودن سیستم
+      </button>
+    </div>`;
+    pagWrap.style.display = 'none';
+    return;
+  }
+
+  pagWrap.style.display = 'flex';
+  const { pageList, start, total, totalPages } = paginate(filtered, sysPage, SYS_PER_PAGE);
+
+  content.innerHTML = `<div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:50px;">ردیف</th>
+          <th>عنوان</th>
+          <th>گروه / بخش</th>
+          <th>نوع سیستم</th>
+          <th>CPU</th>
+          <th>RAM</th>
+          <th>حافظه</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${pageList.map((s, i) => {
+          const hw = s.hardware || {};
+          const cpuTxt = hw.cpu && hw.cpu.model ? (hw.cpu.brand ? hw.cpu.brand + ' ' : '') + hw.cpu.model : '—';
+          const ramTxt = hw.ram && hw.ram.size ? (hw.ram.type ? hw.ram.type + ' ' : '') + hw.ram.size : '—';
+          const diskTxt = hw.disk && hw.disk.size ? hw.disk.size : '—';
+          return `<tr>
+            <td class="row-num">${faNum(start + i + 1)}</td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">${ICONS.cpu}</div>
+                <div>
+                  <div class="prod-name">${s.title || s.name || '—'}</div>
+                  <div class="prod-meta">${s.shortDesc || ''}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-purple">${s.deptName}</span></td>
+            <td><span class="badge badge-blue">${s.type || '—'}</span></td>
+            <td style="font-size:12px;">${cpuTxt}</td>
+            <td style="font-size:12px;">${ramTxt}</td>
+            <td style="font-size:12px;">${diskTxt}</td>
+            <td>
+              <div style="display:flex;gap:4px;">
+                <button class="btn btn-info btn-sm" onclick="showSysDetail(${s.deptId}, ${s.id})" title="مشاهده">${ICONS.view}</button>
+                <button class="btn btn-warning btn-sm" onclick="editSystem(${s.deptId}, ${s.id})" title="ویرایش">${ICONS.edit}</button>
+                <button class="btn btn-danger btn-sm" onclick="delSystem(${s.deptId},${s.id})" title="حذف">${ICONS.trash}</button>
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  document.getElementById('sysTotal').textContent = faNum(total);
+  renderPages('sysPagination', sysPage, totalPages, 'gotoSysPage');
+}
+function gotoSysPage(p) { sysPage = p; renderSystems(); }
+document.getElementById('sysSearch').addEventListener('input', () => { sysPage = 1; renderSystems(); });
+
+/* ============ SYSTEM FORM ============ */
+let editingSystem = null;
+
+function openSystemForm() {
+  const depts = DB.get('departments');
+  if (!depts.length) {
+    toast('ابتدا یک بخش ایجاد کنید', 'error');
+    quickAddDept();
+    return;
+  }
+  editingSystem = null;
+  document.getElementById('sysFormTitle').textContent = 'تعریف سیستم جدید';
+  resetSystemForm();
+  updateDeptSelects();
+  document.getElementById('sysFormModal').classList.add('show');
+}
+function editSystem(deptId, sysId) {
+  const dept = DB.get('departments').find(d => d.id === deptId);
+  if (!dept) return;
+  const sys = dept.systems.find(s => s.id === sysId);
+  if (!sys) return;
+  editingSystem = {deptId, sysId};
+  document.getElementById('sysFormTitle').textContent = 'ویرایش سیستم';
+  updateDeptSelects();
+  resetSystemForm();
+  document.getElementById('sfDeptId').value = deptId;
+  fillSystemForm(sys);
+  document.getElementById('sysFormModal').classList.add('show');
+}
+function closeSystemForm() {
+  document.getElementById('sysFormModal').classList.remove('show');
+  editingSystem = null;
+}
+function resetSystemForm() {
+  const fields = ['sfTitle','sfCpuModel','sfCpuGen','sfCpuFreq','sfCpuCores','sfRamSize','sfRamFreq','sfRamSlots',
+    'sfDiskBrand','sfDiskSize','sfGpuModel','sfGpuMem','sfMbBrand','sfMbModel','sfMbChip',
+    'sfPsuBrand','sfPsuWatt','sfMonBrand','sfMonModel','sfMonSize','sfMonRes',
+    'sfMouse','sfKeyboard','sfNetwork','sfOptical','sfNotes'];
+  fields.forEach(f => { const el = document.getElementById(f); if (el) el.value = ''; });
+  ['sfCpuBrand','sfRamType','sfDiskType','sfGpuBrand'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('sfDeptId').value = '';
+  document.getElementById('sfSysType').value = 'کیس';
+}
+function fillSystemForm(sys) {
+  document.getElementById('sfTitle').value = sys.title || sys.name || '';
+  document.getElementById('sfSysType').value = sys.type || 'کیس';
+  const hw = sys.hardware || {};
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+  if (hw.cpu) { set('sfCpuBrand', hw.cpu.brand); set('sfCpuModel', hw.cpu.model); set('sfCpuGen', hw.cpu.gen); set('sfCpuFreq', hw.cpu.freq); set('sfCpuCores', hw.cpu.cores); }
+  if (hw.ram) { set('sfRamType', hw.ram.type); set('sfRamSize', hw.ram.size); set('sfRamFreq', hw.ram.freq); set('sfRamSlots', hw.ram.slots); }
+  if (hw.disk) { set('sfDiskType', hw.disk.type); set('sfDiskBrand', hw.disk.brand); set('sfDiskSize', hw.disk.size); }
+  if (hw.gpu) { set('sfGpuBrand', hw.gpu.brand); set('sfGpuModel', hw.gpu.model); set('sfGpuMem', hw.gpu.mem); }
+  if (hw.mb) { set('sfMbBrand', hw.mb.brand); set('sfMbModel', hw.mb.model); set('sfMbChip', hw.mb.chip); }
+  if (hw.psu) { set('sfPsuBrand', hw.psu.brand); set('sfPsuWatt', hw.psu.watt); }
+  if (hw.monitor) { set('sfMonBrand', hw.monitor.brand); set('sfMonModel', hw.monitor.model); set('sfMonSize', hw.monitor.size); set('sfMonRes', hw.monitor.res); }
+  if (hw.peripherals) { set('sfMouse', hw.peripherals.mouse); set('sfKeyboard', hw.peripherals.keyboard); set('sfNetwork', hw.peripherals.network); set('sfOptical', hw.peripherals.optical); }
+  document.getElementById('sfNotes').value = sys.notes || '';
+}
+function saveSystem() {
+  const deptId = +document.getElementById('sfDeptId').value;
+  if (!deptId) return toast('لطفاً یک بخش انتخاب کنید', 'error');
+  const title = document.getElementById('sfTitle').value.trim();
+  if (!title) return toast('عنوان سیستم را وارد کنید', 'error');
+  const dept = DB.get('departments').find(d => d.id === deptId);
+  if (!dept) return toast('بخش انتخاب شده یافت نشد', 'error');
+  const g = id => (document.getElementById(id).value || '').trim();
+  const sys = {
+    id: editingSystem ? editingSystem.sysId : Date.now(),
+    title: g('sfTitle'), name: g('sfTitle'),
+    type: document.getElementById('sfSysType').value,
+    date: (() => { const [jy,jm,jd] = todayJalali(); return `${jy}/${pad(jm)}/${pad(jd)}`; })(),
+    hardware: {
+      cpu: { brand: g('sfCpuBrand'), model: g('sfCpuModel'), gen: g('sfCpuGen'), freq: g('sfCpuFreq'), cores: g('sfCpuCores') },
+      ram: { type: g('sfRamType'), size: g('sfRamSize'), freq: g('sfRamFreq'), slots: g('sfRamSlots') },
+      disk: { type: g('sfDiskType'), brand: g('sfDiskBrand'), size: g('sfDiskSize') },
+      gpu: { brand: g('sfGpuBrand'), model: g('sfGpuModel'), mem: g('sfGpuMem') },
+      mb: { brand: g('sfMbBrand'), model: g('sfMbModel'), chip: g('sfMbChip') },
+      psu: { brand: g('sfPsuBrand'), watt: g('sfPsuWatt') },
+      monitor: { brand: g('sfMonBrand'), model: g('sfMonModel'), size: g('sfMonSize'), res: g('sfMonRes') },
+      peripherals: { mouse: g('sfMouse'), keyboard: g('sfKeyboard'), network: g('sfNetwork'), optical: g('sfOptical') }
+    },
+    notes: g('sfNotes')
+  };
+  const list = DB.get('departments');
+  const deptObj = list.find(d => d.id === deptId);
+  if (!deptObj.systems) deptObj.systems = [];
+  if (editingSystem && editingSystem.deptId === deptId) {
+    const idx = deptObj.systems.findIndex(s => s.id === editingSystem.sysId);
+    if (idx >= 0) deptObj.systems[idx] = sys;
+    else deptObj.systems.push(sys);
+  } else {
+    if (editingSystem) {
+      const oldDept = list.find(d => d.id === editingSystem.deptId);
+      if (oldDept) oldDept.systems = oldDept.systems.filter(s => s.id !== editingSystem.sysId);
+    }
+    deptObj.systems.push(sys);
+  }
+  DB.set('departments', list);
+  closeSystemForm();
+  toast(editingSystem ? 'سیستم ویرایش شد' : 'سیستم ذخیره شد', 'success');
+  renderSystems();
+  renderDepts();
+}
+
+function showSysDetail(deptId, sysId) {
+  const dept = DB.get('departments').find(d => d.id === deptId);
+  if (!dept) return;
+  const sys = dept.systems.find(s => s.id === sysId);
+  if (!sys) return;
+  const hw = sys.hardware || {};
+  const row = (lbl, val) => val ? `<div class="hw-detail-row"><div class="lbl">${lbl}</div><div class="val">${val}</div></div>` : '';
+  let html = `<h3>🖥️ ${sys.title || sys.name}</h3><p>${dept.name} — ${sys.type || ''} — تاریخ: ${sys.date || '—'}</p>`;
+  if (hw.cpu && (hw.cpu.brand || hw.cpu.model)) {
+    html += `<div class="hw-subsection"><h4>🖥️ پردازنده</h4>`;
+    html += row('برند', hw.cpu.brand); html += row('مدل', hw.cpu.model);
+    html += row('نسل', hw.cpu.gen); html += row('فرکانس', hw.cpu.freq ? hw.cpu.freq + ' GHz' : '');
+    html += row('هسته', hw.cpu.cores); html += `</div>`;
+  }
+  if (hw.ram && (hw.ram.type || hw.ram.size)) {
+    html += `<div class="hw-subsection"><h4>🧠 رم</h4>`;
+    html += row('نوع', hw.ram.type); html += row('حجم', hw.ram.size);
+    html += row('فرکانس', hw.ram.freq ? hw.ram.freq + ' MHz' : ''); html += row('اسلات', hw.ram.slots);
+    html += `</div>`;
+  }
+  if (hw.disk && (hw.disk.type || hw.disk.size)) {
+    html += `<div class="hw-subsection"><h4>💾 ذخیره‌سازی</h4>`;
+    html += row('نوع', hw.disk.type); html += row('برند', hw.disk.brand); html += row('حجم', hw.disk.size);
+    html += `</div>`;
+  }
+  if (hw.gpu && (hw.gpu.brand || hw.gpu.model)) {
+    html += `<div class="hw-subsection"><h4>🎮 کارت گرافیک</h4>`;
+    html += row('برند', hw.gpu.brand); html += row('مدل', hw.gpu.model); html += row('حافظه', hw.gpu.mem);
+    html += `</div>`;
+  }
+  if (hw.mb && (hw.mb.brand || hw.mb.model)) {
+    html += `<div class="hw-subsection"><h4>⚡ مادربرد</h4>`;
+    html += row('برند', hw.mb.brand); html += row('مدل', hw.mb.model); html += row('چیپست', hw.mb.chip);
+    html += `</div>`;
+  }
+  if (hw.psu && (hw.psu.brand || hw.psu.watt)) {
+    html += `<div class="hw-subsection"><h4>🔌 پاور</h4>`;
+    html += row('برند', hw.psu.brand); html += row('توان', hw.psu.watt ? hw.psu.watt + 'W' : '');
+    html += `</div>`;
+  }
+  if (hw.monitor && (hw.monitor.brand || hw.monitor.model)) {
+    html += `<div class="hw-subsection"><h4>🖥️ مانیتور</h4>`;
+    html += row('برند', hw.monitor.brand); html += row('مدل', hw.monitor.model);
+    html += row('سایز', hw.monitor.size ? hw.monitor.size + ' اینچ' : ''); html += row('رزولوشن', hw.monitor.res);
+    html += `</div>`;
+  }
+  if (hw.peripherals && (hw.peripherals.mouse || hw.peripherals.keyboard || hw.peripherals.network || hw.peripherals.optical)) {
+    html += `<div class="hw-subsection"><h4>📡 جانبی و شبکه</h4>`;
+    html += row('ماوس', hw.peripherals.mouse); html += row('کیبورد', hw.peripherals.keyboard);
+    html += row('شبکه', hw.peripherals.network); html += row('درایو نوری', hw.peripherals.optical);
+    html += `</div>`;
+  }
+  if (sys.notes) {
+    html += `<div class="hw-subsection"><h4>📝 توضیحات</h4><p style="font-size:12.5px;line-height:1.8;">${sys.notes}</p></div>`;
+  }
+  document.getElementById('sysDetailContent').innerHTML = html;
+  document.getElementById('sysDetailModal').classList.add('show');
+}
+
+/* ============ DEPARTMENTS ============ */
+function openDeptForm() {
+  document.getElementById('quickDeptName').value = '';
+  document.getElementById('quickDeptModal').classList.add('show');
+  setTimeout(() => document.getElementById('quickDeptName').focus(), 100);
+  quickDeptCallback = 'fromPage';
+}
+function renderDepts() {
+  const search = (document.getElementById('deptSearch').value || '').trim();
+  let list = DB.get('departments');
+  if (search) list = list.filter(d => d.name.includes(search));
+  const cont = document.getElementById('deptList');
+  if (!list.length) {
+    cont.innerHTML = `<div class="empty-guide">
+      <div class="icon">${ICONS.empty}</div>
+      <h3>بخشی ثبت نشده است</h3>
+      <p>بخش‌ها برای دسته‌بندی سیستم‌ها استفاده می‌شوند. یک بخش جدید ایجاد کنید.</p>
+      <button class="btn btn-primary btn-lg" onclick="openDeptForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:16px;height:16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        افزودن بخش جدید
+      </button>
+    </div>`;
+    return;
+  }
+  cont.innerHTML = list.map(d => {
+    const sysHtml = (d.systems && d.systems.length)
+      ? d.systems.map(s => `<div class="sys-item" onclick="showSysDetail(${d.id}, ${s.id})">
+          <span class="badge badge-purple">${s.type || 'سیستم'}</span>
+          <span style="flex:1;font-weight:600;">${s.title || s.name}</span>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delSystem(${d.id},${s.id})">${ICONS.trash}</button>
+        </div>`).join('')
+      : `<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12.5px;">سیستمی برای این بخش ثبت نشده</div>`;
+    return `<div class="dept-card">
+      <div class="dept-head">
+        <div class="dept-icon">${ICONS.box}</div>
+        <h3>${d.name}</h3>
+        <span class="badge badge-blue">${faNum((d.systems||[]).length)} سیستم</span>
+        <button class="btn btn-danger btn-sm" onclick="delDept(${d.id})">${ICONS.trash}حذف بخش</button>
+      </div>
+      ${sysHtml}
+    </div>`;
+  }).join('');
+}
+
+/* ============ DELETE ============ */
+function del(key, id, renderFn) {
+  confirmAction('حذف مورد', 'آیا از حذف این مورد مطمئن هستید؟', () => {
+    DB.set(key, DB.get(key).filter(r => r.id !== id));
+    if (renderFn) renderFn();
+    toast('با موفقیت حذف شد', 'success');
+  });
+}
+function delDept(id) {
+  confirmAction('حذف بخش', 'تمام سیستم‌های این بخش نیز حذف خواهند شد. مطمئن هستید؟', () => {
+    DB.set('departments', DB.get('departments').filter(d => d.id !== id));
+    updateDeptSelects();
+    renderDepts();
+    renderSystems();
+    toast('بخش حذف شد', 'success');
+  });
+}
+function delSystem(deptId, sysId) {
+  confirmAction('حذف سیستم', 'این سیستم و تمام مشخصات سخت‌افزاری آن حذف می‌شود.', () => {
+    const list = DB.get('departments');
+    const dept = list.find(d => d.id === deptId);
+    if (dept) dept.systems = dept.systems.filter(s => s.id !== sysId);
+    DB.set('departments', list);
+    renderDepts();
+    renderSystems();
+    toast('سیستم حذف شد', 'success');
+  });
+}
+
+/* ============ DASHBOARD ============ */
+function renderDashboard() {
+  const [jy, jm] = todayJalali();
+  const ym = `${jy}/${pad(jm)}`;
+  const att = DB.get('attendance').filter(r => r.date.startsWith(ym));
+  const home = DB.get('home').filter(r => r.date.startsWith(ym));
+  const tasks = DB.get('tasks').filter(r => r.date.startsWith(ym));
+  const mywork = DB.get('mywork').filter(r => r.status !== 'done');
+
+  const sumAtt = att.reduce((s,r)=>s+r.hours, 0);
+  const sumHome = home.reduce((s,r)=>s+r.hours, 0);
+  const totalHours = sumAtt + sumHome;
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">${ICONS.clock}</div></div>
+      <div class="stat-value">${faNum(sumAtt.toFixed(1))}</div>
+      <div class="stat-label">ساعت کار در محل (این ماه)</div>
+    </div>
+    <div class="stat success">
+      <div class="stat-top"><div class="stat-icon">${ICONS.home}</div></div>
+      <div class="stat-value">${faNum(sumHome.toFixed(1))}</div>
+      <div class="stat-label">ساعت کار در خانه (این ماه)</div>
+    </div>
+    <div class="stat warning">
+      <div class="stat-top"><div class="stat-icon">${ICONS.check}</div></div>
+      <div class="stat-value">${faNum(tasks.length)}</div>
+      <div class="stat-label">کارهای محول (این ماه)</div>
+    </div>
+    <div class="stat info">
+      <div class="stat-top"><div class="stat-icon">${ICONS.star}</div></div>
+      <div class="stat-value">${faNum(mywork.length)}</div>
+      <div class="stat-label">کارهای در جریان من</div>
+    </div>
+    <div class="stat danger">
+      <div class="stat-top"><div class="stat-icon">${ICONS.box}</div></div>
+      <div class="stat-value">${faNum(totalHours.toFixed(1))}</div>
+      <div class="stat-label">جمع کل ساعات این ماه</div>
+    </div>
+  `;
+  drawBarChart('dashChart', [
+    { label: 'محل کار', value: sumAtt, color: '#6c47c9' },
+    { label: 'خانه', value: sumHome, color: '#10b981' }
+  ]);
+  updateBadge();
+}
+
+/* ============ CHART ============ */
+function drawBarChart(id, data) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const W = rect.width, H = 280;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const styles = getComputedStyle(document.body);
+  const textColor = styles.getPropertyValue('--text-muted').trim() || '#6b7692';
+  const borderColor = styles.getPropertyValue('--border').trim() || '#e5e9f2';
+
+  const maxVal = Math.max(...data.map(d => d.value), 1) * 1.2;
+  const padL = 50, padR = 30, padT = 30, padB = 50;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  ctx.strokeStyle = borderColor;
+  ctx.lineWidth = 1;
+  ctx.font = '11px Vazirmatn';
+  ctx.fillStyle = textColor;
+  ctx.textAlign = 'left';
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (chartH / 4) * i;
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(W - padR, y);
+    ctx.stroke();
+    ctx.fillText(faNum((maxVal * (4 - i) / 4).toFixed(1)), 8, y + 4);
+  }
+
+  const barW = Math.min(80, chartW / (data.length * 2));
+  const gap = (chartW - barW * data.length) / (data.length + 1);
+
+  data.forEach((d, i) => {
+    const x = padL + gap * (i + 1) + barW * i;
+    const h = (d.value / maxVal) * chartH;
+    const y = padT + chartH - h;
+    const grad = ctx.createLinearGradient(x, y, x, padT + chartH);
+    grad.addColorStop(0, d.color);
+    grad.addColorStop(1, d.color + '70');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    const r = 8;
+    ctx.moveTo(x, padT + chartH);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.lineTo(x + barW - r, y);
+    ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+    ctx.lineTo(x + barW, padT + chartH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = textColor;
+    ctx.font = 'bold 13px Vazirmatn';
+    ctx.textAlign = 'center';
+    ctx.fillText(faNum(d.value.toFixed(1)), x + barW / 2, y - 8);
+    ctx.font = '12px Vazirmatn';
+    ctx.fillText(d.label, x + barW / 2, padT + chartH + 22);
+  });
+}
+
+/* ============ REPORT ============ */
+function calcReport() {
+  const monthStr = document.getElementById('reportMonth').value;
+  if (!monthStr) return toast('ماه را انتخاب کنید', 'error');
+  const ym = monthStr.split('/').slice(0,2).join('/');
+  const att = DB.get('attendance').filter(r => r.date.startsWith(ym));
+  const home = DB.get('home').filter(r => r.date.startsWith(ym));
+  const tasks = DB.get('tasks').filter(r => r.date.startsWith(ym));
+  const sumOffice = att.reduce((s,r)=>s+r.hours, 0);
+  const sumHome = home.reduce((s,r)=>s+r.hours, 0);
+  const total = sumOffice + sumHome;
+
+  document.getElementById('reportStats').innerHTML = `
+    <div class="stat">
+      <div class="stat-top"><div class="stat-icon">${ICONS.clock}</div></div>
+      <div class="stat-value">${faNum(sumOffice.toFixed(1))}</div>
+      <div class="stat-label">جمع ساعت محل کار</div>
+    </div>
+    <div class="stat success">
+      <div class="stat-top"><div class="stat-icon">${ICONS.home}</div></div>
+      <div class="stat-value">${faNum(sumHome.toFixed(1))}</div>
+      <div class="stat-label">جمع ساعت کار در خانه</div>
+    </div>
+    <div class="stat warning">
+      <div class="stat-top"><div class="stat-icon">${ICONS.check}</div></div>
+      <div class="stat-value">${faNum(total.toFixed(1))}</div>
+      <div class="stat-label">جمع کل ساعات</div>
+    </div>
+    <div class="stat danger">
+      <div class="stat-top"><div class="stat-icon">${ICONS.monitor}</div></div>
+      <div class="stat-value">${faNum(tasks.length)}</div>
+      <div class="stat-label">کارهای ثبت‌شده</div>
+    </div>
+  `;
+  drawBarChart('reportChart', [
+    { label: 'محل کار', value: sumOffice, color: '#6c47c9' },
+    { label: 'کار در خانه', value: sumHome, color: '#10b981' },
+    { label: 'جمع کل', value: total, color: '#f59e0b' }
+  ]);
+
+  const types = {};
+  tasks.forEach(t => {
+    if (!types[t.type]) types[t.type] = {count:0, hours:0};
+    types[t.type].count++;
+    types[t.type].hours += t.hours;
+  });
+  const cont = document.getElementById('taskReportContent');
+  const keys = Object.keys(types);
+  if (!keys.length) {
+    cont.innerHTML = `<div class="empty-state">${ICONS.empty}<p>کاری در این ماه ثبت نشده</p></div>`;
+    return;
+  }
+  const totalTaskHours = keys.reduce((s,k)=>s+types[k].hours,0) || 1;
+  cont.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>نوع کار</th><th>تعداد</th><th>جمع ساعت</th><th>سهم</th></tr></thead>
+    <tbody>
+      ${keys.map(k => {
+        const pct = ((types[k].hours / totalTaskHours) * 100).toFixed(1);
+        return `<tr>
+          <td><span class="badge ${TASK_COLORS[k]||'badge-blue'}">${k}</span></td>
+          <td>${faNum(types[k].count)}</td>
+          <td><strong>${formatHours(types[k].hours)}</strong></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="progress-bar" style="flex:1;"><div style="width:${pct}%"></div></div>
+              <span style="font-size:11.5px;color:var(--text-muted);min-width:38px;">${faNum(pct)}٪</span>
+            </div>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+/* ============ EXPORT ============ */
+function exportData() {
+  const data = {
+    attendance: DB.get('attendance'),
+    home: DB.get('home'),
+    tasks: DB.get('tasks'),
+    mywork: DB.get('mywork'),
+    devices: DB.get('devices'),
+    departments: DB.get('departments'),
+    exportedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('فایل پشتیبان دانلود شد', 'success');
+}
+
+/* ============ THEME ============ */
+const themeBtn = document.getElementById('themeBtn');
+const themeIcon = document.getElementById('themeIcon');
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  themeIcon.innerHTML = t === 'dark'
+    ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+    : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  setTimeout(() => {
+    if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+    if (document.getElementById('page-report').classList.contains('active')) calcReport();
+    if (document.getElementById('page-systems').classList.contains('active')) renderSystems();
+  }, 50);
+}
+themeBtn.onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  setTheme(cur === 'dark' ? 'light' : 'dark');
+};
+setTheme(localStorage.getItem('theme') || 'light');
+
+/* ============ INIT ============ */
+function initApp() {
+  document.getElementById('attSearch').addEventListener('input', () => { attPage = 1; renderAttendance(); });
+  document.getElementById('homeSearch').addEventListener('input', () => { homePage = 1; renderHome(); });
+  document.getElementById('taskSearch').addEventListener('input', () => { taskPage = 1; renderTasks(); });
+  document.getElementById('devSearch').addEventListener('input', () => { devPage = 1; renderDevices(); });
+  document.getElementById('sysSearch').addEventListener('input', () => { sysPage = 1; renderSystems(); });
+  document.getElementById('mwSearch').addEventListener('input', () => { mwPage = 1; renderMyWork(); });
+
+  renderAttendance();
+  renderHome();
+  renderTasks();
+  renderMyWork();
+  renderDevices();
+  renderDepts();
+  updateDeptSelects();
+  renderSystems();
+  renderDashboard();
+  updateDate();
+}
+
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('savedUser');
+  if (saved) document.getElementById('loginUser').value = saved;
+  if (localStorage.getItem('loggedIn') === '1') {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('app').classList.add('show');
+    initApp();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+  if (document.getElementById('page-report').classList.contains('active')) calcReport();
+});
+</script>
+</body>
+</html>
