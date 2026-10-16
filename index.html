@@ -1785,10 +1785,13 @@ const ICONS = {
 const DEFAULT_USER = '09900153578', DEFAULT_PASS = '35783578';
 function getUsers(){
   let users=DB.get('users');
-  if(!users.length){ users=[{id:'admin',name:'مهندس نجف‌زاده',phone:DEFAULT_USER,password:DEFAULT_PASS,avatar:''}]; DB.set('users',users); }
+  if(!users.length){ users=[{id:'admin',name:'مهندس نجف‌زاده',phone:DEFAULT_USER,password:DEFAULT_PASS,avatar:'',role:'admin'}]; DB.set('users',users); }
   return users;
 }
 function getCurrentUser(){ const id=localStorage.getItem('currentUserId')||'admin'; return getUsers().find(u=>String(u.id)===String(id))||getUsers()[0]; }
+function isAdmin(){ const u=getCurrentUser(); return !!u && (u.role==='admin' || String(u.id)==='admin'); }
+function syncUserRoles(){ const users=getUsers(); let changed=false; users.forEach(u=>{ if(!u.role){u.role=String(u.id)==='admin'?'admin':'user'; changed=true;} }); if(changed) DB.set('users',users); return users; }
+syncUserRoles();
 
 function doLogin() {
   const u = document.getElementById('loginUser').value.trim();
@@ -1806,6 +1809,8 @@ function doLogin() {
       if (document.getElementById('rememberMe').checked) localStorage.setItem('savedUser', u);
       document.getElementById('loginWrap').style.display = 'none';
       document.getElementById('app').classList.add('show');
+      syncUserRoles();
+      updateCurrentUserUI();
       initApp();
       toast('دسترسی تأیید شد 👋', 'success');
     } else {
@@ -2063,7 +2068,7 @@ const PAGE_TITLES = {
 };
 function closeMobileSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarBackdrop').classList.remove('show');}
 function toggleMobileSidebar(){const s=document.getElementById('sidebar'),b=document.getElementById('sidebarBackdrop');const open=!s.classList.contains('open');s.classList.toggle('open',open);b.classList.toggle('show',open);}
-document.querySelectorAll('.nav-item').forEach(btn=>{btn.onclick=()=>{if(btn.dataset.action==='new-task'){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));closeMobileSidebar();openTaskForm();return;} const page=btn.dataset.page;if(!page)return;document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').innerHTML=PAGE_TITLES[page]+'<small id="todayDate"></small>';updateDate();if(page==='dashboard')renderDashboard();if(page==='systems')renderSystems();if(page==='tasks')renderTasks();if(page==='users')renderUsers();closeMobileSidebar();};});
+document.querySelectorAll('.nav-item').forEach(btn=>{btn.onclick=()=>{if(btn.dataset.action==='new-task'){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));closeMobileSidebar();openTaskForm();return;} const page=btn.dataset.page;if(!page)return;if(page==='users'&&!isAdmin()){closeMobileSidebar();toast('این بخش فقط برای مدیر سیستم است','error');return;}document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').innerHTML=PAGE_TITLES[page]+'<small id="todayDate"></small>';updateDate();if(page==='dashboard')renderDashboard();if(page==='systems')renderSystems();if(page==='tasks')renderTasks();if(page==='users')renderUsers();closeMobileSidebar();};});
 function updateDate() {
   const [jy,jm,jd] = todayJalali();
   const dayName = faDaysFull[jWeekDay(jy,jm,jd)];
@@ -2341,7 +2346,7 @@ const TASK_STATUS_LABELS = {pending:'انجام نشده', inprogress:'در حا
 function taskStatusHtml(status){ const s=status||'pending'; const icon=s==='done'?ICONS.view:s==='inprogress'?ICONS.clock:ICONS.check; return `<span class="task-status ${s}">${icon}<span>${TASK_STATUS_LABELS[s]||'انجام نشده'}</span></span>`; }
 function refreshTaskAssignees(selected=''){
   const el=document.getElementById('taskAssignee'); if(!el) return;
-  const users=DB.get('users');
+  const users=DB.get('users').filter(u=>isAdmin() || String(u.id)!=='admin');
   el.innerHTML='<option value="">خودم</option>'+users.map(u=>`<option value="${u.id}" ${String(u.id)===String(selected)?'selected':''}>${u.name} — ${u.phone}</option>`).join('');
 }
 function openTaskForm(id=null){
@@ -2726,10 +2731,12 @@ function renderDepts() {
 /* ============ USERS / PROFILE ============ */
 let editingUser=null;
 function renderUsers(){
+  if(!isAdmin()){ toast('دسترسی به مدیریت کاربران ندارید','error'); return; }
   const list=getUsers(); const cont=document.getElementById('usersContent');
   cont.innerHTML=`<div class="table-wrap"><table><thead><tr><th>ردیف</th><th>نام نمایشی</th><th>نام کاربری</th><th>رمز</th><th>عملیات</th></tr></thead><tbody>${list.map((u,i)=>`<tr><td class="row-num">${faNum(i+1)}</td><td><div class="prod-cell"><div class="prod-thumb">${u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`:ICONS.user}</div><div><div class="prod-name">${u.name}</div><div class="prod-meta">کاربر پنل</div></div></div></td><td dir="ltr">${u.phone}</td><td>••••••••</td><td><div style="display:flex;gap:4px;flex-wrap:wrap;"><button class="btn btn-warning btn-sm" onclick="openUserForm('${u.id}')">${ICONS.edit}ویرایش</button>${String(u.id)!=='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">${ICONS.trash}حذف</button>`:''}</div></td></tr>`).join('')}</tbody></table></div>`;
 }
 function openUserForm(id=null){
+  if(!isAdmin()) return toast('دسترسی به مدیریت کاربران ندارید','error');
   editingUser=id;const u=id?getUsers().find(x=>String(x.id)===String(id)):null;
   document.getElementById('userFormTitle').textContent=u?'ویرایش کاربر':'افزودن کاربر';
   document.getElementById('userName').value=u?.name||'';document.getElementById('userPhone').value=u?.phone||'';document.getElementById('userPassword').value=u?.password||'';document.getElementById('userPassword2').value=u?.password||'';
@@ -2737,14 +2744,15 @@ function openUserForm(id=null){
 }
 function closeUserForm(){document.getElementById('userFormModal').classList.remove('show');editingUser=null;}
 function saveUser(){
+  if(!isAdmin()) return toast('دسترسی به مدیریت کاربران ندارید','error');
   const name=document.getElementById('userName').value.trim(),phone=document.getElementById('userPhone').value.trim(),pass=document.getElementById('userPassword').value,pass2=document.getElementById('userPassword2').value;
   if(!name||!phone||!pass) return toast('نام، شماره موبایل و رمز عبور الزامی است','error');if(pass!==pass2)return toast('تکرار رمز عبور یکسان نیست','error');
   const users=getUsers();if(users.some(u=>u.phone===phone&&String(u.id)!==String(editingUser)))return toast('این شماره موبایل قبلاً ثبت شده است','error');
   if(editingUser){const idx=users.findIndex(u=>String(u.id)===String(editingUser));if(idx>=0)users[idx]={...users[idx],name,phone,password:pass};toast('کاربر ویرایش شد','success');}
-  else users.push({id:'u_'+Date.now(),name,phone,password:pass,avatar:''});DB.set('users',users);closeUserForm();renderUsers();refreshTaskAssignees();updateCurrentUserUI();
+  else users.push({id:'u_'+Date.now(),name,phone,password:pass,avatar:'',role:'user'});DB.set('users',users);closeUserForm();renderUsers();refreshTaskAssignees();updateCurrentUserUI();
 }
-function deleteUser(id){confirmAction('حذف کاربر','این کاربر حذف شود؟',()=>{DB.set('users',getUsers().filter(u=>String(u.id)!==String(id)));renderUsers();refreshTaskAssignees();toast('کاربر حذف شد','success');},'حذف','btn-danger');}
-function updateCurrentUserUI(){const u=getCurrentUser();if(!u)return;document.getElementById('sidebarUserName').textContent=u.name;document.getElementById('sidebarUserPhone').textContent=u.phone;const av=document.getElementById('sidebarAvatar');av.innerHTML=u.avatar?`<img src="${u.avatar}">`:(u.name?.charAt(0)||'م');}
+function deleteUser(id){ if(!isAdmin()) return toast('دسترسی به مدیریت کاربران ندارید','error'); confirmAction('حذف کاربر','این کاربر حذف شود؟',()=>{DB.set('users',getUsers().filter(u=>String(u.id)!==String(id)));renderUsers();refreshTaskAssignees();toast('کاربر حذف شد','success');},'حذف','btn-danger');}
+function updateCurrentUserUI(){const u=getCurrentUser();if(!u)return;const ub=document.querySelector('.nav-item[data-page="users"]');if(ub)ub.style.display=isAdmin()?'':'none';document.getElementById('sidebarUserName').textContent=u.name;document.getElementById('sidebarUserPhone').textContent=u.phone;const av=document.getElementById('sidebarAvatar');av.innerHTML=u.avatar?`<img src="${u.avatar}">`:(u.name?.charAt(0)||'م');}
 function openProfileModal(){const u=getCurrentUser();if(!u)return;document.getElementById('profileName').textContent=u.name;document.getElementById('profilePhone').textContent=u.phone;document.getElementById('profileAvatar').innerHTML=u.avatar?`<img src="${u.avatar}">`:(u.name?.charAt(0)||'م');document.getElementById('currentPassword').value='';document.getElementById('newPassword').value='';document.getElementById('newPassword2').value='';document.getElementById('profileModal').classList.add('show');}
 function closeProfileModal(){document.getElementById('profileModal').classList.remove('show');}
 function changeOwnPassword(){const u=getCurrentUser(),cur=document.getElementById('currentPassword').value,np=document.getElementById('newPassword').value,np2=document.getElementById('newPassword2').value;if(cur!==u.password)return toast('رمز فعلی اشتباه است','error');if(!np||np.length<4)return toast('رمز جدید حداقل ۴ کاراکتر باشد','error');if(np!==np2)return toast('تکرار رمز جدید یکسان نیست','error');const users=getUsers();const i=users.findIndex(x=>String(x.id)===String(u.id));users[i].password=np;DB.set('users',users);toast('رمز عبور تغییر کرد','success');closeProfileModal();}
