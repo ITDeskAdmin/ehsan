@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>پنل مدیریت IT Pro 5.8</title>
+<title>پنل مدیریت IT Pro 5.9</title>
 <link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -421,16 +421,23 @@ tbody tr:hover td{background:var(--bg);}
 .copy-field:hover{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);}
 .copy-field svg{width:12px!important;height:12px!important;}
 
-/* ============ USERS ============ */
+/* ============ USERS & ONLINE USERS ============ */
 .users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
 .user-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:center;transition:all .22s;}
 .user-card:hover{border-color:var(--primary);box-shadow:var(--shadow);}
-.user-card-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex-shrink:0;overflow:hidden;}
+.user-card-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex-shrink:0;overflow:hidden;position:relative;}
 .user-card-avatar img{width:100%;height:100%;object-fit:cover;}
 .user-card-info{flex:1;min-width:0;}
 .user-card-info h4{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .user-card-info .un{font-size:11.5px;color:var(--text-muted);direction:ltr;text-align:right;margin-top:2px;}
 .user-card-actions{display:flex;gap:4px;flex-direction:column;}
+
+/* Online specific */
+.online-dot{position:absolute;bottom:0px;left:0px;width:14px;height:14px;border-radius:50%;background:var(--success);border:3px solid var(--bg-card);box-shadow:0 0 10px rgba(16,185,129,.8);z-index:2;}
+.online-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.online-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:center;position:relative;box-shadow:var(--shadow-sm);}
+.online-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--success);border-radius:0 4px 4px 0;}
+.online-time{font-size:10.5px;color:var(--text-muted);margin-top:4px;}
 
 /* ============ ROLE RADIO ============ */
 .role-radio-group{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
@@ -679,7 +686,7 @@ tbody tr:hover td{background:var(--bg);}
   .panel-card{padding:14px;}
   .login-card{padding:30px 22px;}
   .session-timer{bottom:10px;left:10px;font-size:11px;}
-  .jobs-grid,.users-grid,.widgets-grid{grid-template-columns:1fr;}
+  .jobs-grid,.users-grid,.widgets-grid,.online-grid{grid-template-columns:1fr;}
   .job-card-head{padding-left:0;}
   .job-card-status{position:static;margin-bottom:8px;display:inline-block;}
   .kanban-board{grid-template-columns:1fr;}
@@ -713,14 +720,14 @@ tbody tr:hover td{background:var(--bg);}
   <div class="login-card">
     <div class="login-brand">
       <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.8</p></div>
+      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.9</p></div>
     </div>
     <div class="login-error" id="loginError"></div>
     <div class="login-field"><label>نام کاربری</label><input type="text" id="loginUser" inputmode="numeric" placeholder="09900153578"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div></div>
     <div class="login-field"><label>رمز عبور</label><input type="password" id="loginPass" placeholder="••••••••"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div>
     <div class="login-options"><label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label></div>
     <button class="login-btn" onclick="doLogin()" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ورود امن</button>
-    <div class="login-footer">// SECURE_v5.8 // ALL_FEATURES</div>
+    <div class="login-footer">// SECURE_v5.9 // ALL_FEATURES</div>
   </div>
 </div>
 
@@ -767,6 +774,10 @@ tbody tr:hover td{background:var(--bg);}
       <button class="nav-item" data-page="user-report" data-perm="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg><span>گزارش عملکرد</span></button>
       <button class="nav-item" data-page="activity" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><span>لاگ فعالیت</span></button>
       <button class="nav-item" data-page="users" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>کاربران</span></button>
+      
+      <!-- دکمه جدید کاربران آنلاین (فقط برای ادمین اصلی) -->
+      <button class="nav-item" id="nav-online-users" style="display:none;" data-page="online-users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/></svg><span>کاربران آنلاین</span><span class="badge-num" id="onlineUsersBadge" style="background:var(--success);color:#fff;">۰</span></button>
+      
       <button class="nav-item" data-page="settings" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>تنظیمات</span></button>
     </div>
     <div class="sidebar-footer">
@@ -791,6 +802,17 @@ tbody tr:hover td{background:var(--bg);}
 
     <div class="content">
       
+      <!-- Online Users Page -->
+      <div class="page" id="page-online-users">
+        <div class="panel-card">
+          <div class="card-head">
+            <div class="card-icon" style="background:var(--success-soft);color:var(--success);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div><h2>کاربران آنلاین (Real-time)</h2><div class="sub">لیست افرادی که در حال حاضر سایت را باز کرده‌اند</div></div>
+          </div>
+          <div id="onlineUsersContent"></div>
+        </div>
+      </div>
+
       <!-- Chat Page -->
       <div class="page" id="page-chat">
         <div class="panel-card" style="padding:0;">
@@ -1204,35 +1226,26 @@ const DB = {
   }
 };
 
-/* ============ REALTIME SYNC ============ */
+/* ============ REALTIME SYNC & PRESENCE ============ */
+let onlineUsersMap = new Map();
+let presenceChannel = null;
+
 function setupRealtimeSubscriptions() {
   if (!window.supabaseClient) return;
 
-  // 1. گوش دادن به تغییرات جدول panel_data (برای سیستم‌ها، بخش‌ها، تیکت‌ها، چت و...)
+  // 1. Database Changes
   window.supabaseClient.channel('panel_data_channel')
-    .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'panel_data' 
-      }, (payload) => {
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'panel_data' }, (payload) => {
         window.supabaseClient.from('panel_data').select('*').then(({ data }) => {
           if (data) {
-            data.forEach(row => {
-              localStorage.setItem(row.key, JSON.stringify(row.value));
-            });
+            data.forEach(row => { localStorage.setItem(row.key, JSON.stringify(row.value)); });
             refreshCurrentPageData();
           }
         });
-    })
-    .subscribe();
+    }).subscribe();
 
-  // 2. گوش دادن به تغییرات جدول panel_users (برای کاربران و پروفایل‌ها)
   window.supabaseClient.channel('panel_users_channel')
-    .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'panel_users' 
-      }, (payload) => {
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'panel_users' }, (payload) => {
         window.supabaseClient.from('panel_users').select('*').then(({ data }) => {
           if (data) {
             const users = data.map(r => ({
@@ -1244,8 +1257,79 @@ function setupRealtimeSubscriptions() {
             updateSidebarUser();
           }
         });
-    })
-    .subscribe();
+    }).subscribe();
+
+  // 2. Presence Tracking
+  const me = getCurrentUser();
+  if(me && me.username === '09900153578') {
+      // Admin sees the menu
+      document.getElementById('nav-online-users').style.display = 'flex';
+  }
+
+  presenceChannel = window.supabaseClient.channel('online_users_room', {
+    config: { presence: { key: me.id } }
+  });
+
+  presenceChannel.on('presence', { event: 'sync' }, () => {
+    const state = presenceChannel.presenceState();
+    onlineUsersMap.clear();
+    Object.keys(state).forEach(userId => {
+      const userInfo = state[userId][0];
+      onlineUsersMap.set(userInfo.user_id, userInfo);
+    });
+    updateOnlineBadge();
+    renderOnlineUsers();
+  }).subscribe(async (status) => {
+    if (status === 'SUBSCRIBED' && me) {
+      await presenceChannel.track({
+        user_id: me.id,
+        display_name: me.displayName,
+        username: me.username,
+        role: me.role,
+        avatar: me.avatar,
+        online_at: new Date().toISOString()
+      });
+    }
+  });
+}
+
+function updateOnlineBadge() {
+  const badge = document.getElementById('onlineUsersBadge');
+  if(badge) badge.textContent = faNum(onlineUsersMap.size);
+}
+
+function renderOnlineUsers() {
+  const container = document.getElementById('onlineUsersContent');
+  if(!container) return;
+  
+  if(onlineUsersMap.size === 0) {
+    container.innerHTML = '<div class="empty-state">در حال حاضر هیچ کاربری آنلاین نیست</div>';
+    return;
+  }
+  
+  let html = '<div class="online-grid">';
+  onlineUsersMap.forEach(u => {
+    const avatarHtml = u.avatar ? `<img src="${u.avatar}">` : (u.display_name || 'ک').charAt(0);
+    const rl = {admin:'مدیر',manager:'سرپرست',user:'کاربر',viewer:'مشاهده‌گر'};
+    const timeStr = new Date(u.online_at).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+    
+    html += `
+      <div class="online-card">
+        <div class="user-card-avatar">
+          ${avatarHtml}
+          <div class="online-dot"></div>
+        </div>
+        <div class="user-card-info">
+          <h4>${escapeHtml(u.display_name)}</h4>
+          <div class="un">${escapeHtml(u.username)}</div>
+          <span class="role-badge ${u.role}">${rl[u.role]||'کاربر'}</span>
+          <div class="online-time">متصل از ساعت: ${timeStr}</div>
+        </div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  container.innerHTML = html;
 }
 
 function refreshCurrentPageData() {
@@ -1269,6 +1353,7 @@ function refreshCurrentPageData() {
   if (pageId === 'tasks') renderTasks();
   if (pageId === 'kanban') renderKanban();
   if (pageId === 'chat') renderChat();
+  if (pageId === 'online-users') renderOnlineUsers();
   if (pageId === 'dashboard') { renderDashboard(); renderWidgets(); }
 }
 
@@ -1315,7 +1400,7 @@ async function doLogin(){
   }
 }
 
-function doLogout(){confirmAction('خروج','خارج شوید؟',()=>{logActivity('login','خروج');clearTimeout(sessionTimerId);clearTimeout(sessionWarnId);clearInterval(sessionCountdownId);localStorage.removeItem('loggedIn');localStorage.removeItem('currentUserId');location.reload();},'خروج','btn-danger');}
+function doLogout(){confirmAction('خروج','خارج شوید؟',()=>{logActivity('login','خروج');clearTimeout(sessionTimerId);clearTimeout(sessionWarnId);clearInterval(sessionCountdownId);if(presenceChannel)presenceChannel.untrack();localStorage.removeItem('loggedIn');localStorage.removeItem('currentUserId');location.reload();},'خروج','btn-danger');}
 document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('loginUser').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
 (function(){const box=document.getElementById('particles');if(!box)return;for(let i=0;i<25;i++){const s=document.createElement('span');s.style.left=Math.random()*100+'%';s.style.animationDuration=(10+Math.random()*15)+'s';s.style.animationDelay=Math.random()*10+'s';const size=1+Math.random()*2.5;s.style.width=size+'px';s.style.height=size+'px';s.style.opacity=.3+Math.random()*.5;box.appendChild(s);}})();
@@ -1360,7 +1445,6 @@ function updateSidebarUser(){
   const av=document.getElementById('sidebarAvatar');
   const initial=(user.displayName||'م').charAt(0);
   
-  // FIX: این بخش تضمین می‌کند عکس در سایدبار به درستی رندر شود
   if(user.avatar && user.avatar.startsWith('data:image')){
     av.innerHTML = `<img src="${user.avatar}" alt="avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;" onerror="this.onerror=null; this.parentElement.innerHTML='${initial}';">`;
   }else{
@@ -1445,7 +1529,7 @@ const STATUS_LABELS={pending:'انجام نشده',inprogress:'در حال ان�
 function statusBadge(status){const label=STATUS_LABELS[status]||status;const cls=status||'pending';return '<span class="status-badge '+cls+'"><span class="eye-icon">'+ICONS.eye+'</span><span>'+label+'</span></span>';}
 
 /* ============ TABS ============ */
-const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد','chat':'گفتگوی تیمی'};
+const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد','chat':'گفتگوی تیمی','online-users':'کاربران آنلاین'};
 
 document.querySelectorAll('.nav-item').forEach(btn=>{
   btn.onclick=async()=>{
@@ -1474,6 +1558,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>{
     if(page==='devices')renderDevices();
     if(page==='user-report')renderUserReport();
     if(page==='chat')renderChat();
+    if(page==='online-users')renderOnlineUsers();
     if(page==='settings')highlightColor();
     if(window.innerWidth<=900)closeSidebar();
   };
