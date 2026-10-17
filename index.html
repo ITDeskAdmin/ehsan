@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>پنل مدیریت IT Pro 5.2</title>
+<title>پنل مدیریت IT Pro 5.3</title>
 <link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -682,7 +682,6 @@ tbody tr:hover td{background:var(--bg);}
   .sys-detail-header .header-info h3{font-size:15px;}
   .sys-detail-body{padding:14px;}
   .detail-section{padding:14px;}
-  /* ✅ اصلاح کارت کاربر در موبایل */
   .user-card{flex-wrap:wrap;}
   .user-card-avatar{width:44px;height:44px;font-size:16px;}
   .user-card-info{min-width:0;flex-basis:calc(100% - 60px);}
@@ -704,14 +703,14 @@ tbody tr:hover td{background:var(--bg);}
   <div class="login-card">
     <div class="login-brand">
       <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.2</p></div>
+      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.3</p></div>
     </div>
     <div class="login-error" id="loginError"></div>
     <div class="login-field"><label>نام کاربری</label><input type="text" id="loginUser" inputmode="numeric" placeholder="09900153578"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div></div>
     <div class="login-field"><label>رمز عبور</label><input type="password" id="loginPass" placeholder="••••••••"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div>
     <div class="login-options"><label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label></div>
     <button class="login-btn" onclick="doLogin()" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ورود امن</button>
-    <div class="login-footer">// SECURE_v5.2 // ALL_FEATURES</div>
+    <div class="login-footer">// SECURE_v5.3 // ALL_FEATURES</div>
   </div>
 </div>
 
@@ -753,6 +752,10 @@ tbody tr:hover td{background:var(--bg);}
       <div class="nav-section-title">سیستم</div>
       <button class="nav-item" data-page="dashboard" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span>داشبورد</span></button>
       <button class="nav-item" data-page="report" data-perm="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>گزارش ماهانه</span></button>
+      
+      <!-- دکمه گزارش عملکرد اضافه شد -->
+      <button class="nav-item" data-page="user-report" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg><span>گزارش عملکرد</span></button>
+      
       <button class="nav-item" data-page="activity" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><span>لاگ فعالیت</span></button>
       <button class="nav-item" data-page="users" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>کاربران</span></button>
       <button class="nav-item" data-page="settings" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>تنظیمات</span></button>
@@ -921,6 +924,26 @@ tbody tr:hover td{background:var(--bg);}
         <div class="panel-card">
           <div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="usersSearch" placeholder="جستجو..." oninput="renderUsers()"></div><div class="action-btns"><button class="round-btn primary" onclick="openUserForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></button></div></div>
           <div id="usersContent"></div>
+        </div>
+      </div>
+
+      <!-- صفحه گزارش عملکرد جدید -->
+      <div class="page" id="page-user-report">
+        <div class="panel-card">
+          <div class="card-head">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg></div>
+            <div><h2>گزارش عملکرد و کارهای کاربران</h2><div class="sub">آمار دقیق وظایف محول شده</div></div>
+          </div>
+          <div id="userReportSummary"></div>
+        </div>
+        
+        <div class="panel-card" id="userTasksDetailPanel" style="display:none;">
+          <div class="card-head">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div><h2 id="userTasksDetailTitle">جزئیات کارها</h2></div>
+            <div class="actions"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('userTasksDetailPanel').style.display='none'">بستن ✖</button></div>
+          </div>
+          <div id="userTasksDetailTable"></div>
         </div>
       </div>
 
@@ -1264,7 +1287,7 @@ const STATUS_LABELS={pending:'انجام نشده',inprogress:'در حال ان�
 function statusBadge(status){const label=STATUS_LABELS[status]||status;const cls=status||'pending';return '<span class="status-badge '+cls+'"><span class="eye-icon">'+ICONS.eye+'</span><span>'+label+'</span></span>';}
 
 /* ============ TABS ============ */
-const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من'};
+const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد'};
 
 document.querySelectorAll('.nav-item').forEach(btn=>{
   btn.onclick=async()=>{
@@ -1291,6 +1314,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>{
     if(page==='home')renderHome();
     if(page==='tasks')renderTasks();
     if(page==='devices')renderDevices();
+    if(page==='user-report')renderUserReport();
     if(page==='settings')highlightColor();
     if(window.innerWidth<=900)closeSidebar();
   };
@@ -1670,6 +1694,124 @@ async function saveProfile(){const u=getCurrentUser();if(!u)return;const name=do
 /* ============ DASHBOARD ============ */
 function renderDashboard(){const me=getCurrentUser();const[jy,jm]=todayJalali();const ym=jy+'/'+pad(jm);const att=DB.get('attendance').filter(r=>r.date.startsWith(ym)&&(me.role!=='user'||r.userId===me.id||!r.userId));const home=DB.get('home').filter(r=>r.date.startsWith(ym)&&(me.role!=='user'||r.userId===me.id||!r.userId));const tasks=DB.get('tasks').filter(r=>r.date.startsWith(ym));const mywork=DB.get('mywork').filter(r=>r.status!=='done');const tickets=DB.get('tickets').filter(t=>t.status!=='closed');const sumAtt=att.reduce((s,r)=>s+r.hours,0);const sumHome=home.reduce((s,r)=>s+r.hours,0);const total=sumAtt+sumHome;const[py,pm]=jm===1?[jy-1,12]:[jy,jm-1];const prevYm=py+'/'+pad(pm);const prevAtt=DB.get('attendance').filter(r=>r.date.startsWith(prevYm));const prevHome=DB.get('home').filter(r=>r.date.startsWith(prevYm));const prevTotal=prevAtt.reduce((s,r)=>s+r.hours,0)+prevHome.reduce((s,r)=>s+r.hours,0);const trend=prevTotal>0?((total-prevTotal)/prevTotal*100).toFixed(0):0;document.getElementById('dashStats').innerHTML='<div class="stat"><div class="stat-top"><div class="stat-icon">'+ICONS.clock+'</div></div><div class="stat-value">'+faNum(sumAtt.toFixed(1))+'</div><div class="stat-label">ساعت محل کار</div></div><div class="stat success"><div class="stat-top"><div class="stat-icon">'+ICONS.home+'</div></div><div class="stat-value">'+faNum(sumHome.toFixed(1))+'</div><div class="stat-label">ساعت خانه</div></div><div class="stat warning"><div class="stat-top"><div class="stat-icon">'+ICONS.ticket+'</div></div><div class="stat-value">'+faNum(tickets.length)+'</div><div class="stat-label">تیکت باز</div></div><div class="stat info"><div class="stat-top"><div class="stat-icon">'+ICONS.star+'</div></div><div class="stat-value">'+faNum(mywork.length)+'</div><div class="stat-label">کارهای روزانه</div></div><div class="stat danger"><div class="stat-top"><div class="stat-icon">'+ICONS.box+'</div></div><div class="stat-value">'+faNum(total.toFixed(1))+'</div><div class="stat-label">جمع ساعات</div><div class="stat-trend '+(trend>=0?'up':'down')+'">'+(trend>=0?'↑':'↓')+' '+faNum(Math.abs(trend))+'٪</div></div>';updateNotifBadge();}
 function renderWidgets(){const me=getCurrentUser();const[jy,jm,jd]=todayJalali();const ym=jy+'/'+pad(jm);const att=DB.get('attendance').filter(r=>r.date.startsWith(ym));const home=DB.get('home').filter(r=>r.date.startsWith(ym));const sumAtt=att.reduce((s,r)=>s+r.hours,0);const sumHome=home.reduce((s,r)=>s+r.hours,0);const mywork=DB.get('mywork');const recentLogs=DB.get('activityLog').slice(0,6);const grid=document.getElementById('widgetsGrid');if(!grid)return;grid.innerHTML='<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.activity+'</div><h3>فعالیت‌های اخیر</h3></div>'+recentLogs.map(l=>'<div class="feed-item"><div class="feed-dot '+l.type+'"></div><div class="feed-text"><strong>'+escapeHtml(l.userName)+'</strong> — '+escapeHtml(l.text)+'<div class="feed-time">'+l.timestamp+'</div></div></div>').join('')+'</div>'+'<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.check+'</div><h3>وضعیت کارهای من</h3></div><div style="display:flex;justify-content:space-around;padding:20px 0;"><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--danger);">'+faNum(mywork.filter(m=>m.status==='pending').length)+'</div><div style="font-size:11px;color:var(--text-muted);">انجام نشده</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--warning);">'+faNum(mywork.filter(m=>m.status==='inprogress').length)+'</div><div style="font-size:11px;color:var(--text-muted);">در حال انجام</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--success);">'+faNum(mywork.filter(m=>m.status==='done').length)+'</div><div style="font-size:11px;color:var(--text-muted);">انجام شده</div></div></div></div>'+'<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.clock+'</div><h3>ساعات این ماه</h3></div><div style="display:flex;justify-content:space-around;padding:20px 0;"><div style="text-align:center;"><div style="font-size:24px;font-weight:800;">'+faNum(sumAtt.toFixed(1))+'</div><div style="font-size:11px;color:var(--text-muted);">محل کار</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;">'+faNum(sumHome.toFixed(1))+'</div><div style="font-size:11px;color:var(--text-muted);">خانه</div></div></div></div>';}
+
+/* ============ USER REPORT ============ */
+function renderUserReport() {
+  const users = DB.get('users');
+  const tasks = DB.get('tasks');
+  const container = document.getElementById('userReportSummary');
+  
+  document.getElementById('userTasksDetailPanel').style.display = 'none';
+
+  if (!users.length) {
+    container.innerHTML = '<div class="empty-state">کاربری در سیستم ثبت نشده است</div>';
+    return;
+  }
+
+  let html = '<div class="users-grid">';
+  users.forEach(u => {
+    const userTasks = tasks.filter(t => t.assignedToId === u.id);
+    const total = userTasks.length;
+    const done = userTasks.filter(t => (t.status || 'pending') === 'done').length;
+    const inprogress = userTasks.filter(t => (t.status || 'pending') === 'inprogress').length;
+    const pending = userTasks.filter(t => (t.status || 'pending') === 'pending').length;
+    
+    const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+    let barColor = 'var(--primary)';
+    if (percent === 100) barColor = 'var(--success)';
+    else if (percent > 50) barColor = 'var(--info)';
+    else if (percent > 0) barColor = 'var(--warning)';
+
+    html += `
+      <div class="user-card" style="flex-direction:column; align-items:stretch; cursor:pointer;" onclick="showUserTasksDetail(${u.id})">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div class="user-card-avatar">${u.avatar ? `<img src="${u.avatar}">` : (u.displayName || 'ک').charAt(0)}</div>
+          <div class="user-card-info">
+            <h4>${escapeHtml(u.displayName)}</h4>
+            <div class="un">${escapeHtml(u.username)}</div>
+          </div>
+          <span class="badge badge-purple">${faNum(percent)}٪ پیشرفت</span>
+        </div>
+        
+        <div style="margin-bottom:12px;">
+          <div class="progress-bar" style="height:8px; background:var(--border);">
+            <div style="width:${percent}%; background:${barColor}; height:100%; border-radius:4px;"></div>
+          </div>
+        </div>
+        
+        <div style="display:flex; justify-content:space-between; font-size:11.5px; background:var(--bg-card); padding:10px; border-radius:10px; border:1px solid var(--border);">
+          <div style="text-align:center;">
+            <div style="color:var(--text-muted); font-size:10px;">کل کارها</div>
+            <div style="font-weight:800; font-size:14px;">${faNum(total)}</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:var(--success); font-size:10px;">انجام شده</div>
+            <div style="font-weight:800; font-size:14px; color:var(--success);">${faNum(done)}</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:var(--warning); font-size:10px;">در جریان</div>
+            <div style="font-weight:800; font-size:14px; color:var(--warning);">${faNum(inprogress)}</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:var(--danger); font-size:10px;">انجام نشده</div>
+            <div style="font-weight:800; font-size:14px; color:var(--danger);">${faNum(pending)}</div>
+          </div>
+        </div>
+        
+        <div style="text-align:center; margin-top:12px;">
+          <span class="btn btn-ghost btn-sm" style="width:100%;">مشاهده جزئیات کارها 👁️</span>
+        </div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function showUserTasksDetail(userId) {
+  const user = DB.get('users').find(u => u.id === userId);
+  const tasks = DB.get('tasks').filter(t => t.assignedToId === userId);
+  
+  if (!user) return;
+
+  document.getElementById('userTasksDetailTitle').textContent = `لیست کارهای ${user.displayName}`;
+  document.getElementById('userTasksDetailPanel').style.display = 'block';
+
+  const container = document.getElementById('userTasksDetailTable');
+  if (!tasks.length) {
+    container.innerHTML = '<div class="empty-state">هیچ کاری به این کاربر محول نشده است</div>';
+    document.getElementById('userTasksDetailPanel').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  tasks.sort((a,b) => {
+    const o = {pending:0, inprogress:1, done:2};
+    return o[a.status||'pending'] - o[b.status||'pending'];
+  });
+
+  let html = `<div class="table-wrap"><table><thead><tr>
+    <th>عنوان کار</th>
+    <th>نوع</th>
+    <th>تاریخ</th>
+    <th>وضعیت</th>
+    <th>توضیحات</th>
+  </tr></thead><tbody>`;
+  
+  tasks.forEach(t => {
+    html += `<tr>
+      <td><strong>${escapeHtml(t.title)}</strong></td>
+      <td><span class="badge badge-blue">${escapeHtml(t.type)}</span></td>
+      <td>${t.date}</td>
+      <td>${statusBadge(t.status || 'pending')}</td>
+      <td style="max-width:250px; font-size:11.5px; color:var(--text-muted);">${escapeHtml(t.notes || '—')}</td>
+    </tr>`;
+  });
+  
+  html += `</tbody></table></div>`;
+  container.innerHTML = html;
+  document.getElementById('userTasksDetailPanel').scrollIntoView({ behavior: 'smooth' });
+}
+
 function renderActivity(){const f=document.getElementById('activityFilter').value;let list=DB.get('activityLog');if(f)list=list.filter(l=>l.type===f);const c=document.getElementById('activityList');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.activity+'</div><h3>فعالیتی نیست</h3></div>';return;}const ti={create:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',update:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/></svg>',delete:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>',login:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>',assign:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'};c.innerHTML=list.map(l=>'<div class="activity-item"><div class="activity-icon '+l.type+'">'+(ti[l.type]||ti.update)+'</div><div class="activity-body"><div class="activity-text"><strong>'+escapeHtml(l.userName)+'</strong> — '+escapeHtml(l.text)+'</div><div class="activity-meta"><span>'+l.timestamp+'</span></div></div></div>').join('');}
 function clearActivity(){confirmAction('پاک کردن','مطمئن؟',()=>{DB.set('activityLog',[]);renderActivity();toast('پاک شد','success');});}
 function calcReport(){const m=document.getElementById('reportMonth').value;if(!m)return toast('ماه را انتخاب کنید','error');const ym=m.split('/').slice(0,2).join('/');const me=getCurrentUser();let att=DB.get('attendance').filter(r=>r.date.startsWith(ym));let home=DB.get('home').filter(r=>r.date.startsWith(ym));if(me.role!=='admin'&&me.role!=='manager'){att=att.filter(r=>r.userId===me.id||!r.userId);home=home.filter(r=>r.userId===me.id||!r.userId);}const tasks=DB.get('tasks').filter(r=>r.date.startsWith(ym));const so=att.reduce((s,r)=>s+r.hours,0);const sh=home.reduce((s,r)=>s+r.hours,0);const t=so+sh;document.getElementById('reportStats').innerHTML='<div class="stat"><div class="stat-top"><div class="stat-icon">'+ICONS.clock+'</div></div><div class="stat-value">'+faNum(so.toFixed(1))+'</div><div class="stat-label">محل کار</div></div><div class="stat success"><div class="stat-top"><div class="stat-icon">'+ICONS.home+'</div></div><div class="stat-value">'+faNum(sh.toFixed(1))+'</div><div class="stat-label">خانه</div></div><div class="stat warning"><div class="stat-top"><div class="stat-icon">'+ICONS.check+'</div></div><div class="stat-value">'+faNum(t.toFixed(1))+'</div><div class="stat-label">جمع</div></div><div class="stat danger"><div class="stat-top"><div class="stat-icon">'+ICONS.monitor+'</div></div><div class="stat-value">'+faNum(tasks.length)+'</div><div class="stat-label">کارها</div></div>';drawBarChart('reportChart',[{label:'محل کار',value:so,color:'#6c47c9'},{label:'خانه',value:sh,color:'#10b981'},{label:'جمع',value:t,color:'#f59e0b'}]);const types={};tasks.forEach(t=>{if(!types[t.type])types[t.type]={count:0,hours:0};types[t.type].count++;types[t.type].hours+=t.hours;});const cont=document.getElementById('taskReportContent');const keys=Object.keys(types);if(!keys.length){cont.innerHTML='<div class="empty-state">کاری نیست</div>';return;}const th=keys.reduce((s,k)=>s+types[k].hours,0)||1;cont.innerHTML='<div class="table-wrap"><table><thead><tr><th>نوع</th><th>تعداد</th><th>جمع</th><th>سهم</th></tr></thead><tbody>'+keys.map(k=>{const p=((types[k].hours/th)*100).toFixed(1);return '<tr><td><span class="badge '+(TASK_COLORS[k]||'badge-blue')+'">'+k+'</span></td><td>'+faNum(types[k].count)+'</td><td><strong>'+formatHours(types[k].hours)+'</strong></td><td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-bar" style="flex:1;"><div style="width:'+p+'%"></div></div><span>'+faNum(p)+'٪</span></div></td></tr>';}).join('')+'</tbody></table></div>';}
@@ -1737,6 +1879,7 @@ async function initApp(){
   await renderUsers();
   renderDashboard();renderWidgets();renderKanban();
   renderActivity();renderTickets();renderLicenses();renderLeave();updateDate();
+  renderUserReport(); // لود بخش گزارش عملکرد در استارتاپ
   highlightColor();updateNotifBadge();
   initSessionTimeout();
 }
