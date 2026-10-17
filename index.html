@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>پنل مدیریت IT Pro 5.5</title>
+<title>پنل مدیریت IT Pro 5.6</title>
 <link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -703,14 +703,14 @@ tbody tr:hover td{background:var(--bg);}
   <div class="login-card">
     <div class="login-brand">
       <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.5</p></div>
+      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.6</p></div>
     </div>
     <div class="login-error" id="loginError"></div>
     <div class="login-field"><label>نام کاربری</label><input type="text" id="loginUser" inputmode="numeric" placeholder="09900153578"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div></div>
     <div class="login-field"><label>رمز عبور</label><input type="password" id="loginPass" placeholder="••••••••"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div>
     <div class="login-options"><label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label></div>
     <button class="login-btn" onclick="doLogin()" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ورود امن</button>
-    <div class="login-footer">// SECURE_v5.5 // ALL_FEATURES</div>
+    <div class="login-footer">// SECURE_v5.6 // ALL_FEATURES</div>
   </div>
 </div>
 
@@ -1161,6 +1161,73 @@ const DB = {
     }
   }
 };
+
+/* ============ REALTIME SYNC ============ */
+function setupRealtimeSubscriptions() {
+  if (!window.supabaseClient) return;
+
+  // 1. گوش دادن به تغییرات جدول panel_data (برای سیستم‌ها، بخش‌ها، تیکت‌ها و...)
+  window.supabaseClient.channel('panel_data_channel')
+    .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'panel_data' 
+      }, (payload) => {
+        window.supabaseClient.from('panel_data').select('*').then(({ data }) => {
+          if (data) {
+            data.forEach(row => {
+              localStorage.setItem(row.key, JSON.stringify(row.value));
+            });
+            refreshCurrentPageData();
+          }
+        });
+    })
+    .subscribe();
+
+  // 2. گوش دادن به تغییرات جدول panel_users (برای کاربران و پروفایل‌ها)
+  window.supabaseClient.channel('panel_users_channel')
+    .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'panel_users' 
+      }, (payload) => {
+        window.supabaseClient.from('panel_users').select('*').then(({ data }) => {
+          if (data) {
+            const users = data.map(r => ({
+              id: r.id, username: r.username, password: r.password, displayName: r.display_name,
+              role: r.role, permissions: r.permissions, avatar: r.avatar, leaveBalance: r.leave_balance
+            }));
+            localStorage.setItem('users', JSON.stringify(users)); 
+            refreshCurrentPageData();
+            updateSidebarUser();
+          }
+        });
+    })
+    .subscribe();
+}
+
+function refreshCurrentPageData() {
+  const activePage = document.querySelector('.page.active');
+  if (!activePage) return;
+  const pageId = activePage.id.replace('page-', '');
+  
+  if (pageId === 'devices') renderDevices();
+  if (pageId === 'systems') renderSystems();
+  if (pageId === 'departments') renderDepts();
+  if (pageId === 'tickets') renderTickets();
+  if (pageId === 'jobs') renderJobs();
+  if (pageId === 'users') renderUsers();
+  if (pageId === 'activity') renderActivity();
+  if (pageId === 'user-report') renderUserReport();
+  if (pageId === 'leave') renderLeave();
+  if (pageId === 'licenses') renderLicenses();
+  if (pageId === 'mywork') renderMyWork();
+  if (pageId === 'attendance') renderAttendance();
+  if (pageId === 'home') renderHome();
+  if (pageId === 'tasks') renderTasks();
+  if (pageId === 'kanban') renderKanban();
+  if (pageId === 'dashboard') { renderDashboard(); renderWidgets(); }
+}
 
 /* ============ ADMIN ============ */
 const ADMIN_PHONE='09900153578', ADMIN_DEFAULT_PASS='35783578';
@@ -1956,6 +2023,9 @@ async function initApp(){
   renderUserReport(); 
   highlightColor();updateNotifBadge();
   initSessionTimeout();
+  
+  // راه اندازی همگام‌سازی لحظه‌ای
+  setupRealtimeSubscriptions();
 }
 window.addEventListener('load',async()=>{
   await ensureAdminUser();
