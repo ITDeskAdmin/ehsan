@@ -749,7 +749,7 @@ tbody tr:hover td{background:var(--bg);}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>جستجو در پنل...</span><span class="kbd-hint">⌘K</span>
       </div>
-      <div class="nav-section-title">شخصی</div>
+      <div class="nav-section-title">بخش‌های خصوصی هر کاربر</div>
       <button class="nav-item" data-page="mywork" data-perm="mywork"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>کارهای روزانه</span><span class="badge-num" id="myWorkBadge">۰</span></button>
       <button class="nav-item" data-page="assigned" data-perm="assigned"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>کارهای محول به من</span><span class="badge-num" id="assignedBadge" style="display:none;">۰</span></button>
       <button class="nav-item" data-page="attendance" data-perm="attendance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>ورود / خروج</span></button>
@@ -763,7 +763,7 @@ tbody tr:hover td{background:var(--bg);}
       <button class="nav-item" data-page="tasks" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>کارهای محول</span></button>
       <button class="nav-item" data-page="kanban" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="12" rx="1"/></svg><span>کانبان</span></button>
       <button class="nav-item" data-page="jobs" data-perm="jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM10 5h4v2h-4V5z"/></svg><span>کارها</span><span class="badge-num" id="jobsBadge">۰</span></button>
-      <div class="nav-section-title">دارایی‌ها</div>
+      <div class="nav-section-title">بخش‌های عمومی و مشترک</div>
       <button class="nav-item" data-page="devices" data-perm="devices"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span>وسایل IT</span></button>
       <button class="nav-item" data-page="systems" data-perm="systems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg><span>سیستم‌ها</span></button>
       <button class="nav-item" data-page="licenses" data-perm="systems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>لایسنس‌ها</span><span class="badge-num" id="licBadge" style="display:none;">۰</span></button>
@@ -819,8 +819,11 @@ tbody tr:hover td{background:var(--bg);}
           <div class="chat-container">
             <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input-area">
+              <input type="file" id="chatImageInput" accept="image/*" hidden onchange="previewChatImage(event)">
+              <button type="button" class="btn btn-ghost" title="افزودن عکس" onclick="document.getElementById('chatImageInput').click()">📷 عکس</button>
               <button class="btn btn-primary" onclick="sendChatMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
               <input type="text" id="chatInput" placeholder="پیامی بنویسید..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+              <div id="chatImagePreview" style="display:none;position:absolute;bottom:64px;right:12px;background:var(--bg-card);padding:8px;border:1px solid var(--border);border-radius:10px;z-index:3"><img id="chatImagePreviewImg" style="max-width:120px;max-height:90px;display:block;border-radius:6px"><button type="button" class="btn btn-danger btn-sm" onclick="clearChatImage()">حذف عکس</button></div>
             </div>
           </div>
         </div>
@@ -1162,7 +1165,7 @@ tbody tr:hover td{background:var(--bg);}
 <script>
 /* ============ PERMISSIONS ============ */
 const PERMISSIONS={mywork:{label:'کارهای روزانه',desc:'کارهای شخصی'},assigned:{label:'کارهای محول به من',desc:'پاسخ به کارها'},attendance:{label:'ورود / خروج',desc:'ثبت ساعات'},home:{label:'کار در خانه',desc:'دورکاری'},tasks:{label:'کارهای محول',desc:'محول کردن'},jobs:{label:'کارها',desc:'نمای کلی'},devices:{label:'وسایل IT',desc:'موجودی'},systems:{label:'سیستم‌ها',desc:'سیستم‌های سازمان'},departments:{label:'بخش‌ها',desc:'مدیریت بخش'},dashboard:{label:'داشبورد',desc:'نمودارها'},report:{label:'گزارش ماهانه',desc:'گزارش'},users:{label:'کاربران',desc:'مدیریت کاربر (فقط مدیر)'}};
-const ROLE_DEFAULTS={admin:Object.keys(PERMISSIONS),manager:['mywork','assigned','attendance','home','tasks','jobs','devices','systems','departments','dashboard','report'],user:['mywork','assigned','attendance','home','report'],viewer:['mywork','attendance','home','devices','systems','departments','dashboard','report']};
+const ROLE_DEFAULTS={admin:Object.keys(PERMISSIONS),manager:['mywork','assigned','attendance','home','tasks','jobs','devices','systems','departments','dashboard','report'],user:['mywork','assigned','attendance','home','systems','departments','report'],viewer:['mywork','attendance','home','devices','systems','departments','dashboard','report']};
 
 /* ============ HOLIDAYS ============ */
 const OFFICIAL_HOLIDAYS={'01/01':'نوروز','01/02':'نوروز','01/03':'نوروز','01/04':'نوروز','01/12':'روز جمهوری اسلامی','01/13':'روز طبیعت','03/14':'رحلت امام','03/15':'قیام ۱۵ خرداد','11/22':'پیروزی انقلاب','12/29':'ملی شدن نفت'};
@@ -1381,9 +1384,16 @@ async function doLogin(){
   
   btn.disabled=true; btn.innerHTML='در حال احراز هویت...';
   
-  const users = await DB.getUsers();
-  const user = users.find(x=>x.username===u && x.password===p);
-  
+  // احراز هویت ابتدا از کش محلی؛ درخواست شبکه نباید ورود را معطل کند
+  let users = DB.get('users');
+  let user = users.find(x=>x.username===u && x.password===p);
+  if(!user && navigator.onLine && window.supabaseClient){
+    try {
+      users = await Promise.race([DB.getUsers(), new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),3500))]);
+      user = users.find(x=>x.username===u && x.password===p);
+    } catch(e) { console.warn('ورود آفلاین/کند:',e); }
+  }
+
   if(user){
     err.style.display='none';
     localStorage.setItem('loggedIn','1');
@@ -1604,7 +1614,8 @@ function renderChat() {
     return `
       <div class="chat-bubble ${isMe ? 'me' : 'other'}">
         ${!isMe ? `<div class="bubble-info" style="margin-bottom:4px;margin-left:6px;">${avatar}<span style="font-weight:700;">${escapeHtml(name)}</span></div>` : ''}
-        <div class="bubble-text">${escapeHtml(msg.text)}</div>
+        ${msg.text ? `<div class="bubble-text">${escapeHtml(msg.text)}</div>` : ''}
+        ${typeof msg.image === 'string' && msg.image.startsWith('data:image/') ? `<a href="${msg.image}" target="_blank" rel="noopener"><img src="${msg.image}" alt="تصویر پیوست گفتگو" loading="lazy" style="display:block;width:auto;max-width:min(280px,70vw);max-height:260px;object-fit:contain;border-radius:10px;margin-top:8px;cursor:pointer" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div style=&quot;font-size:12px;color:var(--text-muted);padding:6px&quot;>نمایش عکس ناموفق بود</div>')"></a>` : (msg.image ? '<div style="font-size:12px;color:var(--text-muted);padding:6px">فرمت عکس ذخیره‌شده معتبر نیست</div>' : '')}
         <div class="bubble-info"><span>${msg.time}</span> ${isMe ? '<span>✓✓</span>' : ''}</div>
       </div>
     `;
@@ -1615,28 +1626,70 @@ function renderChat() {
   }, 50);
 }
 
+let pendingChatImage = '';
+function previewChatImage(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type || !file.type.startsWith('image/')) {
+    toast('فقط فایل تصویری مجاز است', 'error'); event.target.value = ''; return;
+  }
+  // Compress images before storing/syncing them, so they can be saved in localStorage/Supabase.
+  if (file.size > 12 * 1024 * 1024) {
+    toast('حجم عکس اصلی باید کمتر از ۱۲ مگابایت باشد', 'error'); event.target.value = ''; return;
+  }
+  const reader = new FileReader();
+  reader.onerror = () => { toast('خواندن عکس ناموفق بود؛ دوباره انتخاب کنید', 'error'); event.target.value = ''; };
+  reader.onload = () => {
+    const source = new Image();
+    source.onerror = () => { toast('باز کردن عکس ممکن نیست؛ فایل دیگری امتحان کنید', 'error'); event.target.value = ''; };
+    source.onload = () => {
+      try {
+        const maxSide = 1200;
+        const scale = Math.min(1, maxSide / Math.max(source.naturalWidth || source.width, source.naturalHeight || source.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round((source.naturalWidth || source.width) * scale));
+        canvas.height = Math.max(1, Math.round((source.naturalHeight || source.height) * scale));
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('canvas unavailable');
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
+        pendingChatImage = canvas.toDataURL('image/jpeg', 0.72);
+        const previewImg = document.getElementById('chatImagePreviewImg');
+        const preview = document.getElementById('chatImagePreview');
+        if (previewImg) previewImg.src = pendingChatImage;
+        if (preview) preview.style.display = 'block';
+        toast('عکس آماده ارسال است', 'success');
+      } catch (err) {
+        pendingChatImage = '';
+        toast('فشرده‌سازی عکس انجام نشد؛ عکس دیگری امتحان کنید', 'error');
+      }
+    };
+    source.src = String(reader.result || '');
+  };
+  reader.readAsDataURL(file);
+}
+function clearChatImage() {
+  pendingChatImage = '';
+  const input = document.getElementById('chatImageInput');
+  if (input) input.value = '';
+  const preview = document.getElementById('chatImagePreview');
+  if (preview) preview.style.display = 'none';
+}
 function sendChatMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
-  if (!text) return;
-  
+  if (!text && !pendingChatImage) return;
   const me = getCurrentUser();
-  const msg = {
-    id: Date.now(),
-    userId: me.id,
-    text: text,
-    time: nowTime(),
-    timestamp: new Date().toISOString()
-  };
-  
+  if (!me) return;
+  const msg = { id: Date.now(), userId: me.id, text, image: pendingChatImage || null,
+    time: nowTime(), timestamp: new Date().toISOString() };
   const messages = DB.get('internal_messages') || [];
   messages.push(msg);
-  
   input.value = '';
+  clearChatImage();
   DB.set('internal_messages', messages);
   renderChat();
 }
-
 /* ============ ASSIGNED ============ */
 function renderAssigned(){const user=getCurrentUser();if(!user)return;const list=DB.get('tasks').filter(t=>t.assignedToId===user.id);list.sort((a,b)=>{const o={pending:0,inprogress:1,done:2};if(o[a.status||'pending']!==o[b.status||'pending'])return o[a.status||'pending']-o[b.status||'pending'];return(b.createdAt||'').localeCompare(a.createdAt||'');});const content=document.getElementById('assignedContent');if(!list.length){content.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.mail+'</div><h3>کار محولی ندارید</h3></div>';return;}content.innerHTML='<div class="jobs-grid">'+list.map(t=>{const st=t.status||'pending';const f=DB.get('users').find(u=>u.id===t.assignedFromId);const fn=f?f.displayName:'نامشخص';const fa=f&&f.avatar?'<img src="'+f.avatar+'">':fn.charAt(0);const rc=(t.replies||[]).length;return '<div class="job-card '+st+'"><div class="job-card-head" style="padding-left:0;"><div style="display:flex;gap:10px;align-items:center;width:100%;"><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-weight:700;overflow:hidden;">'+fa+'</div><div style="flex:1;"><div style="font-size:12.5px;font-weight:700;">از: '+escapeHtml(fn)+'</div><div style="font-size:11px;color:var(--text-muted);">'+(t.createdAt||'')+'</div></div><div>'+statusBadge(st)+'</div></div></div><div style="font-size:14px;font-weight:700;margin:12px 0;">'+escapeHtml(t.title)+'</div><div class="job-card-meta"><span class="badge badge-blue">'+escapeHtml(t.type)+'</span><span>📅 '+t.date+'</span><span>⏰ '+t.start+' - '+t.end+'</span></div>'+(t.notes?'<div style="font-size:12px;color:var(--text-muted);padding:8px 10px;background:var(--bg);border-radius:8px;margin-bottom:12px;">'+escapeHtml(t.notes)+'</div>':'')+'<div class="job-card-actions">'+(rc>0?'<span class="badge badge-blue">💬 '+faNum(rc)+'</span>':'')+'<button class="btn btn-primary btn-sm" onclick="openChatModal('+t.id+')">'+ICONS.send+'پاسخ</button></div></div>';}).join('')+'</div>';}
 
@@ -1675,9 +1728,9 @@ function delLeave(id){confirmAction('حذف','حذف شود؟',()=>{DB.set('leav
 let mwFilter='all',mwPage=1,editingMyWork=null;
 function openMyWorkForm(){editingMyWork=null;document.getElementById('mwFormTitle').textContent='کار';document.getElementById('mwTitle').value='';document.getElementById('mwPriority').value='med';document.getElementById('mwStatus').value='pending';const[jy,jm,jd]=todayJalali();document.getElementById('mwDeadline').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('mwDesc').value='';document.getElementById('mwFormModal').classList.add('show');}
 function closeMyWorkForm(){document.getElementById('mwFormModal').classList.remove('show');editingMyWork=null;}
-function saveMyWork(){const title=document.getElementById('mwTitle').value.trim();const priority=document.getElementById('mwPriority').value;const status=document.getElementById('mwStatus').value;const deadline=document.getElementById('mwDeadline').value;const desc=document.getElementById('mwDesc').value;if(!title)return toast('عنوان لازم','error');const list=DB.get('mywork');if(editingMyWork){const idx=list.findIndex(r=>r.id===editingMyWork);if(idx>=0)list[idx]={...list[idx],title,priority,status,deadline,desc};toast('ویرایش شد','success');}else{list.push({id:Date.now(),title,priority,status,deadline,desc,createdAt:new Date().toISOString()});toast('اضافه شد','success');}DB.set('mywork',list);closeMyWorkForm();renderMyWork();updateNotifBadge();}
-function editMyWork(id){const item=DB.get('mywork').find(r=>r.id===id);if(!item)return;editingMyWork=id;document.getElementById('mwFormTitle').textContent='ویرایش';document.getElementById('mwTitle').value=item.title||'';document.getElementById('mwPriority').value=item.priority||'med';document.getElementById('mwStatus').value=item.status||'pending';document.getElementById('mwDeadline').value=item.deadline||'';document.getElementById('mwDesc').value=item.desc||'';document.getElementById('mwFormModal').classList.add('show');}
-function renderMyWork(){const s=(document.getElementById('mwSearch').value||'').trim();let list=DB.get('mywork').sort((a,b)=>{const p={high:0,med:1,low:2};if(a.status==='done'&&b.status!=='done')return 1;if(b.status==='done'&&a.status!=='done')return -1;return p[a.priority]-p[b.priority];});if(mwFilter!=='all')list=list.filter(r=>r.status===mwFilter);if(s)list=list.filter(r=>r.title.includes(s));const c=document.getElementById('myWorkContent');const pw=document.getElementById('mwPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.star+'</div><h3>کاری نیست</h3><button class="btn btn-primary btn-lg" onclick="openMyWorkForm()">افزودن</button></div>';pw.style.display='none';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,mwPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>عنوان</th><th>وضعیت</th><th>اولویت</th><th>مهلت</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>{const pc=r.priority==='high'?'prio-high':r.priority==='med'?'prio-med':'prio-low';const pl=r.priority==='high'?'بالا':r.priority==='med'?'متوسط':'پایین';return '<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+escapeHtml(r.title)+'</strong></td><td>'+statusBadge(r.status)+'</td><td><span class="prio-dot '+pc+'"></span>'+pl+'</td><td>'+(r.deadline||'—')+'</td><td><div style="display:flex;gap:4px;"><button class="btn btn-warning btn-sm" onclick="editMyWork('+r.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="del(\'mywork\','+r.id+',renderMyWork)">'+ICONS.trash+'</button></div></td></tr>';}).join('')+'</tbody></table></div>';document.getElementById('mwTotal').textContent=faNum(total);renderPages('mwPagination',mwPage,totalPages,'gotoMwPage');updateNotifBadge();}
+function saveMyWork(){const title=document.getElementById('mwTitle').value.trim();const priority=document.getElementById('mwPriority').value;const status=document.getElementById('mwStatus').value;const deadline=document.getElementById('mwDeadline').value;const desc=document.getElementById('mwDesc').value;if(!title)return toast('عنوان لازم','error');const list=DB.get('mywork');if(editingMyWork){const idx=list.findIndex(r=>r.id===editingMyWork);if(idx>=0)list[idx]={...list[idx],title,priority,status,deadline,desc};toast('ویرایش شد','success');}else{list.push({id:Date.now(),userId:getCurrentUser().id,title,priority,status,deadline,desc,createdAt:new Date().toISOString()});toast('اضافه شد','success');}DB.set('mywork',list);closeMyWorkForm();renderMyWork();updateNotifBadge();}
+function editMyWork(id){const item=DB.get('mywork').find(r=>r.id===id&&r.userId===getCurrentUser()?.id);if(!item)return;editingMyWork=id;document.getElementById('mwFormTitle').textContent='ویرایش';document.getElementById('mwTitle').value=item.title||'';document.getElementById('mwPriority').value=item.priority||'med';document.getElementById('mwStatus').value=item.status||'pending';document.getElementById('mwDeadline').value=item.deadline||'';document.getElementById('mwDesc').value=item.desc||'';document.getElementById('mwFormModal').classList.add('show');}
+function renderMyWork(){const s=(document.getElementById('mwSearch').value||'').trim();let list=DB.get('mywork').filter(r=>r.userId===getCurrentUser()?.id).sort((a,b)=>{const p={high:0,med:1,low:2};if(a.status==='done'&&b.status!=='done')return 1;if(b.status==='done'&&a.status!=='done')return -1;return p[a.priority]-p[b.priority];});if(mwFilter!=='all')list=list.filter(r=>r.status===mwFilter);if(s)list=list.filter(r=>r.title.includes(s));const c=document.getElementById('myWorkContent');const pw=document.getElementById('mwPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.star+'</div><h3>کاری نیست</h3><button class="btn btn-primary btn-lg" onclick="openMyWorkForm()">افزودن</button></div>';pw.style.display='none';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,mwPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>عنوان</th><th>وضعیت</th><th>اولویت</th><th>مهلت</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>{const pc=r.priority==='high'?'prio-high':r.priority==='med'?'prio-med':'prio-low';const pl=r.priority==='high'?'بالا':r.priority==='med'?'متوسط':'پایین';return '<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+escapeHtml(r.title)+'</strong></td><td>'+statusBadge(r.status)+'</td><td><span class="prio-dot '+pc+'"></span>'+pl+'</td><td>'+(r.deadline||'—')+'</td><td><div style="display:flex;gap:4px;"><button class="btn btn-warning btn-sm" onclick="editMyWork('+r.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="del(\'mywork\','+r.id+',renderMyWork)">'+ICONS.trash+'</button></div></td></tr>';}).join('')+'</tbody></table></div>';document.getElementById('mwTotal').textContent=faNum(total);renderPages('mwPagination',mwPage,totalPages,'gotoMwPage');updateNotifBadge();}
 function gotoMwPage(p){mwPage=p;renderMyWork();}
 
 /* ============ ATTENDANCE ============ */
@@ -2220,13 +2273,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Da
 
 /* ============ INIT ============ */
 async function initApp(){
-  await ensureAdminUser();
-  
-  if(window.supabaseClient){
-    toast('در حال همگام‌سازی با سرور...', 'warning');
-    await DB.syncAllFromServer();
-  }
-  
+  // رابط کاربری از داده‌های محلی فوراً بالا می‌آید؛ همگام‌سازی در پس‌زمینه انجام می‌شود.
   updateSidebarUser();
   applyPermissions();
   const bindInput=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('input',fn);};
@@ -2247,9 +2294,18 @@ async function initApp(){
   initSessionTimeout();
   
   setupRealtimeSubscriptions();
+  if(window.supabaseClient){
+    Promise.allSettled([DB.syncAllFromServer(), DB.getUsers()]).then(()=>{
+      updateSidebarUser();
+      applyPermissions();
+      renderMyWork(); renderAttendance(); renderHome(); renderTasks(); renderAssigned();
+      renderChat(); renderDashboard();
+    });
+  }
 }
 window.addEventListener('load',async()=>{
-  await ensureAdminUser();
+  // از شبکه برای نمایش صفحه ورود انتظار نمی‌کشیم
+  ensureAdminUser().catch(console.error);
   const s=localStorage.getItem('savedUser');
   if(s)document.getElementById('loginUser').value=s;
   const reason=sessionStorage.getItem('logoutReason');
