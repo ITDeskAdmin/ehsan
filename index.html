@@ -3,11 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پنل مدیریت IT Pro 5.1</title>
+<title>پنل مدیریت IT Pro 5.2</title>
 <link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- شروع بخش اتصال به Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://apxgjwrqmvrtjdagjuvp.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_NOHyjNzQewYZ7h7V0hfQog_wmb3eoN9';
+  window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+<!-- پایان بخش اتصال به Supabase -->
+
 <style>
 :root{--primary:#6c47c9;--primary-hover:#5838a8;--primary-soft:#efe9fb;--bg:#f5f7fb;--bg-card:#fff;--border:#e5e9f2;--text:#1a2233;--text-muted:#6b7692;--success:#10b981;--success-soft:#e7f8f2;--danger:#ef4444;--danger-soft:#feefef;--warning:#f59e0b;--warning-soft:#fef3e2;--info:#3b82f6;--info-soft:#e6f0fe;--pink:#ec4899;--cyan:#06b6d4;--shadow-sm:0 1px 2px rgba(16,24,40,.04);--shadow:0 4px 16px rgba(16,24,40,.06);--shadow-lg:0 12px 32px rgba(16,24,40,.10);--radius:14px;--radius-sm:9px;--transition:.22s cubic-bezier(.4,0,.2,1);}
 [data-theme="dark"]{--bg:#0b1120;--bg-card:#131a2c;--border:#26304a;--text:#e8ecf5;--text-muted:#93a0bd;--primary-soft:#2a1f4a;--success-soft:#113027;--danger-soft:#3a1c1c;--warning-soft:#3a2a10;--info-soft:#16294a;--shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow:0 4px 16px rgba(0,0,0,.35);--shadow-lg:0 12px 32px rgba(0,0,0,.5);}
@@ -27,18 +37,8 @@ body{font-family:'Vazirmatn',system-ui,sans-serif;background:var(--bg);color:var
 svg{max-width:100%;max-height:100%;}
 .nav-item svg,.btn svg,.icon-btn svg,.card-icon svg,.stat-icon svg,.toast svg,.search-box svg,.menu-btn svg,.round-btn svg,.status-badge svg,.user-avatar svg,.session-timer svg,.login-logo svg,.empty-state svg,.empty-guide .icon svg,.modal h3 svg,.fp-header h2 svg,.cal-nav button svg{width:100%!important;height:100%!important;display:block;}
 
-/* ============ BEAUTIFUL SELECT (فقط ظاهر) ============ */
-select{
-  appearance:none!important;
-  -webkit-appearance:none!important;
-  -moz-appearance:none!important;
-  background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236c47c9' stroke-width='3' stroke-linecap='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")!important;
-  background-repeat:no-repeat!important;
-  background-position:left 12px center!important;
-  padding-left:36px!important;
-  cursor:pointer!important;
-  transition:all .22s!important;
-}
+/* ============ BEAUTIFUL SELECT ============ */
+select{appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236c47c9' stroke-width='3' stroke-linecap='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")!important;background-repeat:no-repeat!important;background-position:left 12px center!important;padding-left:36px!important;cursor:pointer!important;transition:all .22s!important;}
 select:hover{border-color:var(--primary)!important;background-color:var(--primary-soft)!important;}
 select:focus{border-color:var(--primary)!important;box-shadow:0 0 0 3px rgba(108,71,201,.15)!important;outline:none!important;}
 [data-theme="dark"] select{background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238a5cf6' stroke-width='3' stroke-linecap='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")!important;}
@@ -681,6 +681,13 @@ tbody tr:hover td{background:var(--bg);}
   .sys-detail-header .header-info h3{font-size:15px;}
   .sys-detail-body{padding:14px;}
   .detail-section{padding:14px;}
+  /* ✅ اصلاح کارت کاربر در موبایل */
+  .user-card{flex-wrap:wrap;}
+  .user-card-avatar{width:44px;height:44px;font-size:16px;}
+  .user-card-info{min-width:0;flex-basis:calc(100% - 60px);}
+  .user-card-info h4{font-size:13px;}
+  .user-card-actions{flex-direction:row;width:100%;justify-content:flex-end;gap:6px;margin-top:8px;padding-top:10px;border-top:1px dashed var(--border);}
+  .toolbar .filter-select{min-width:0;flex:1;}
 }
 </style>
 </head>
@@ -696,14 +703,14 @@ tbody tr:hover td{background:var(--bg);}
   <div class="login-card">
     <div class="login-brand">
       <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.1</p></div>
+      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.2</p></div>
     </div>
     <div class="login-error" id="loginError"></div>
     <div class="login-field"><label>نام کاربری</label><input type="text" id="loginUser" inputmode="numeric" placeholder="09900153578"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div></div>
     <div class="login-field"><label>رمز عبور</label><input type="password" id="loginPass" placeholder="••••••••"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div>
     <div class="login-options"><label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label></div>
     <button class="login-btn" onclick="doLogin()" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ورود امن</button>
-    <div class="login-footer">// SECURE_v5.1 // ALL_FEATURES</div>
+    <div class="login-footer">// SECURE_v5.2 // ALL_FEATURES</div>
   </div>
 </div>
 
@@ -866,9 +873,26 @@ tbody tr:hover td{background:var(--bg);}
         </div>
       </div>
 
+      <!-- ✅ صفحه وسایل IT بازسازی شده -->
       <div class="page" id="page-devices">
+        <div class="stats-grid" id="devStats"></div>
         <div class="panel-card">
-          <div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="devSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openDeviceForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div></div>
+          <div class="toolbar">
+            <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="devSearch" placeholder="جستجو نام / سریال / برند..." oninput="devPage=1;renderDevices()"></div>
+            <select class="filter-select" id="devCatFilter" onchange="devPage=1;renderDevices()">
+              <option value="">همه دسته‌ها</option>
+              <option>لپ‌تاپ</option><option>کیس</option><option>مانیتور</option><option>پرینتر</option>
+              <option>اسکنر</option><option>روتر</option><option>سوئیچ</option><option>ماوس</option>
+              <option>کیبورد</option><option>هارد</option><option>فلش</option><option>سایر</option>
+            </select>
+            <select class="filter-select" id="devStatusFilter" onchange="devPage=1;renderDevices()">
+              <option value="">همه وضعیت‌ها</option>
+              <option value="active">فعال</option>
+              <option value="repair">در تعمیر</option>
+              <option value="retired">اسقاط</option>
+            </select>
+            <div class="action-btns"><button class="btn btn-primary btn-sm" onclick="openDeviceForm()">+ وسیله جدید</button></div>
+          </div>
           <div id="devContent"></div>
           <div class="pagination" id="devPaginationWrap"><div class="total">تعداد: <span id="devTotal">۰</span></div><div class="pages" id="devPagination"></div></div>
         </div>
@@ -987,8 +1011,53 @@ tbody tr:hover td{background:var(--bg);}
 <!-- HOME FORM -->
 <div class="fullpage-modal" id="homeFormModal"><div class="fp-header"><button class="save-btn" onclick="saveHome()">ذخیره</button><h2><span>کار در خانه</span></h2><button class="close-btn" onclick="document.getElementById('homeFormModal').classList.remove('show')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-3"><div class="form-group"><label>تاریخ</label><input type="text" id="homeDate" readonly onclick="openCal('homeDate', this)"></div><div class="form-group"><label>شروع</label><input type="time" id="homeStart"></div><div class="form-group"><label>پایان</label><input type="time" id="homeEnd"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><input type="text" id="homeDesc"></div></div></div></div></div>
 
-<!-- DEVICE FORM -->
-<div class="fullpage-modal" id="deviceFormModal"><div class="fp-header"><button class="save-btn" onclick="saveDevice()">ذخیره</button><h2><span>وسیله</span></h2><button class="close-btn" onclick="document.getElementById('deviceFormModal').classList.remove('show')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>نام</label><input type="text" id="devName"></div><div class="form-group"><label>تعداد</label><input type="number" id="devQty" value="1" min="1"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>تاریخ</label><input type="text" id="devDate" readonly onclick="openCal('devDate', this)"></div><div class="form-group"><label>توضیحات</label><input type="text" id="devNote"></div></div></div></div></div>
+<!-- ✅ DEVICE FORM کامل بازسازی شده -->
+<div class="fullpage-modal" id="deviceFormModal">
+  <div class="fp-header">
+    <button class="save-btn" onclick="saveDevice()">ذخیره</button>
+    <h2><span id="deviceFormTitle">وسیله IT</span></h2>
+    <button class="close-btn" onclick="closeDeviceForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="fp-body">
+    <div class="form-section">
+      <div class="form-section-title">📦 اطلاعات پایه</div>
+      <div class="form-rows form-row-3">
+        <div class="form-group"><label>نام <span class="req">*</span></label><input type="text" id="devName"></div>
+        <div class="form-group"><label>دسته</label><select id="devCategory">
+          <option>لپ‌تاپ</option><option>کیس</option><option>مانیتور</option><option>پرینتر</option>
+          <option>اسکنر</option><option>روتر</option><option>سوئیچ</option><option>ماوس</option>
+          <option>کیبورد</option><option>هارد</option><option>فلش</option><option>سایر</option>
+        </select></div>
+        <div class="form-group"><label>برند / مدل</label><input type="text" id="devBrand"></div>
+      </div>
+      <div class="form-rows form-row-3" style="margin-top:14px;">
+        <div class="form-group"><label>سریال</label><input type="text" id="devSerial" style="direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;"></div>
+        <div class="form-group"><label>تعداد</label><input type="number" id="devQty" value="1" min="1"></div>
+        <div class="form-group"><label>وضعیت</label><select id="devStatus">
+          <option value="active">فعال</option>
+          <option value="repair">در تعمیر</option>
+          <option value="retired">اسقاط</option>
+        </select></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">📍 محل و تحویل</div>
+      <div class="form-rows form-row-3">
+        <div class="form-group"><label>محل</label><input type="text" id="devLocation"></div>
+        <div class="form-group"><label>تحویل به</label><select id="devAssignedTo"><option value="">— انتخاب —</option></select></div>
+        <div class="form-group"><label>تاریخ خرید</label><input type="text" id="devDate" readonly onclick="openCal('devDate', this)"></div>
+      </div>
+      <div class="form-rows form-row-2" style="margin-top:14px;">
+        <div class="form-group"><label>پایان گارانتی</label><input type="text" id="devWarranty" readonly onclick="openCal('devWarranty', this)"></div>
+        <div class="form-group"><label>قیمت (تومان)</label><input type="number" id="devPrice"></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">توضیحات</div>
+      <div class="form-group"><textarea id="devNote"></textarea></div>
+    </div>
+  </div>
+</div>
 
 <!-- QUICK DEPT -->
 <div class="modal-overlay" id="quickDeptModal"><div class="modal"><h3>➕ بخش جدید</h3><div class="form-group"><label>نام بخش</label><input type="text" id="quickDeptName" autofocus></div><div class="modal-actions"><button class="btn btn-primary" onclick="confirmQuickDept()">افزودن</button><button class="btn btn-ghost" onclick="closeQuickDept()">انصراف</button></div></div></div>
@@ -1008,9 +1077,6 @@ tbody tr:hover td{background:var(--bg);}
 <div class="toast-container" id="toastBox"></div>
 
 <script>
-/* ============ DB ============ */
-const DB={get:k=>JSON.parse(localStorage.getItem(k)||'[]'),set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
-
 /* ============ PERMISSIONS ============ */
 const PERMISSIONS={mywork:{label:'کارهای روزانه',desc:'کارهای شخصی'},assigned:{label:'کارهای محول به من',desc:'پاسخ به کارها'},attendance:{label:'ورود / خروج',desc:'ثبت ساعات'},home:{label:'کار در خانه',desc:'دورکاری'},tasks:{label:'کارهای محول',desc:'محول کردن'},jobs:{label:'کارها',desc:'نمای کلی'},devices:{label:'وسایل IT',desc:'موجودی'},systems:{label:'سیستم‌ها',desc:'سیستم‌های سازمان'},departments:{label:'بخش‌ها',desc:'مدیریت بخش'},dashboard:{label:'داشبورد',desc:'نمودارها'},report:{label:'گزارش ماهانه',desc:'گزارش'},users:{label:'کاربران',desc:'مدیریت کاربر (فقط مدیر)'}};
 const ROLE_DEFAULTS={admin:Object.keys(PERMISSIONS),manager:['mywork','assigned','attendance','home','tasks','jobs','devices','systems','departments','dashboard','report'],user:['mywork','assigned','attendance','home','report'],viewer:['mywork','attendance','home','devices','systems','departments','dashboard','report']};
@@ -1021,15 +1087,81 @@ const OFFICIAL_HOLIDAYS={'01/01':'نوروز','01/02':'نوروز','01/03':'نو
 /* ============ ICONS ============ */
 const ICONS={eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',monitor:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>',edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',empty:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',briefcase:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',activity:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',ticket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>',key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'};
 
+/* ============ SUPABASE SYNC ============ */
+const DB = {
+  get: k => JSON.parse(localStorage.getItem(k) || '[]'),
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  async getUsers() {
+    try {
+      const { data, error } = await window.supabaseClient.from('panel_users').select('*');
+      if (error) throw error;
+      if (data) {
+        const users = data.map(r => ({
+          id: r.id, username: r.username, password: r.password, displayName: r.display_name,
+          role: r.role, permissions: r.permissions, avatar: r.avatar, leaveBalance: r.leave_balance
+        }));
+        localStorage.setItem('users', JSON.stringify(users)); 
+        return users;
+      }
+    } catch (e) { console.error('خطا در خواندن کاربران از سرور:', e); }
+    return JSON.parse(localStorage.getItem('users') || '[]');
+  },
+  async saveUser(user) {
+    try {
+      const { error } = await window.supabaseClient.from('panel_users').upsert({
+        id: user.id, username: user.username, password: user.password,
+        display_name: user.displayName, role: user.role,
+        permissions: user.permissions || [], avatar: user.avatar || null,
+        leave_balance: user.leaveBalance ?? 26
+      }, { onConflict: 'id' });
+      if (error) console.error('خطا در ذخیره کاربر در سرور:', error);
+    } catch(e) { console.error(e); }
+  }
+};
+
 /* ============ ADMIN ============ */
-const ADMIN_PHONE='09900153578',ADMIN_DEFAULT_PASS='35783578';
-function ensureAdminUser(){const users=DB.get('users');if(!users.find(u=>u.username===ADMIN_PHONE)){users.push({id:Date.now(),username:ADMIN_PHONE,displayName:'مهندس نجف‌زاده',password:ADMIN_DEFAULT_PASS,role:'admin',avatar:null,permissions:ROLE_DEFAULTS.admin,leaveBalance:26});DB.set('users',users);}else{const u=users.find(u=>u.username===ADMIN_PHONE);if(!u.permissions)u.permissions=ROLE_DEFAULTS.admin;u.role='admin';if(u.leaveBalance===undefined)u.leaveBalance=26;DB.set('users',users);}}
+const ADMIN_PHONE='09900153578', ADMIN_DEFAULT_PASS='35783578';
+async function ensureAdminUser(){
+  const users = await DB.getUsers();
+  if(!users.find(u=>u.username===ADMIN_PHONE)){
+    const admin = {id:Date.now(),username:ADMIN_PHONE,displayName:'مهندس نجف‌زاده',password:ADMIN_DEFAULT_PASS,role:'admin',avatar:null,permissions:ROLE_DEFAULTS.admin,leaveBalance:26};
+    users.push(admin);
+    DB.set('users', users);
+    await DB.saveUser(admin);
+  }
+}
 
 /* ============ ACTIVITY ============ */
 function logActivity(type,text){const me=getCurrentUser();const logs=DB.get('activityLog');logs.unshift({id:Date.now()+Math.random(),type,text,userId:me?me.id:null,userName:me?me.displayName:'سیستم',userAvatar:me?me.avatar:null,timestamp:nowTimestamp()});if(logs.length>300)logs.length=300;DB.set('activityLog',logs);}
 
 /* ============ LOGIN ============ */
-function doLogin(){const u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value,btn=document.getElementById('loginBtn'),err=document.getElementById('loginError');btn.disabled=true;btn.innerHTML='در حال احراز...';setTimeout(()=>{const users=DB.get('users');const user=users.find(x=>x.username===u&&x.password===p);if(user){err.style.display='none';localStorage.setItem('loggedIn','1');localStorage.setItem('currentUserId',user.id);if(document.getElementById('rememberMe').checked)localStorage.setItem('savedUser',u);document.getElementById('loginWrap').style.display='none';document.getElementById('app').classList.add('show');initApp();logActivity('login','ورود به سیستم');toast('خوش آمدید '+user.displayName,'success');}else{err.style.display='block';err.textContent='⛔ نام کاربری یا رمز نادرست';btn.disabled=false;btn.innerHTML='ورود امن';}},500);}
+async function doLogin(){
+  const u=document.getElementById('loginUser').value.trim(),
+        p=document.getElementById('loginPass').value,
+        btn=document.getElementById('loginBtn'),
+        err=document.getElementById('loginError');
+  
+  btn.disabled=true; btn.innerHTML='در حال احراز هویت...';
+  
+  const users = await DB.getUsers();
+  const user = users.find(x=>x.username===u && x.password===p);
+  
+  if(user){
+    err.style.display='none';
+    localStorage.setItem('loggedIn','1');
+    localStorage.setItem('currentUserId',user.id);
+    if(document.getElementById('rememberMe').checked)localStorage.setItem('savedUser',u);
+    document.getElementById('loginWrap').style.display='none';
+    document.getElementById('app').classList.add('show');
+    initApp();
+    logActivity('login','ورود به سیستم');
+    toast('خوش آمدید '+user.displayName,'success');
+  }else{
+    err.style.display='block'; err.textContent='⛔ نام کاربری یا رمز نادرست';
+    btn.disabled=false; btn.innerHTML='ورود امن';
+  }
+}
+
 function doLogout(){confirmAction('خروج','خارج شوید؟',()=>{logActivity('login','خروج');clearTimeout(sessionTimerId);clearTimeout(sessionWarnId);clearInterval(sessionCountdownId);localStorage.removeItem('loggedIn');localStorage.removeItem('currentUserId');location.reload();},'خروج','btn-danger');}
 document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('loginUser').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
@@ -1051,14 +1183,23 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 window.addEventListener('resize',()=>{if(window.innerWidth>900)closeSidebar();});
 
 /* ============ CURRENT USER ============ */
-function getCurrentUser(){const id=+localStorage.getItem('currentUserId');const users=DB.get('users');return users.find(u=>u.id===id)||users[0];}
+function getCurrentUser(){
+  const id=+localStorage.getItem('currentUserId');
+  const users=DB.get('users');
+  const found=users.find(u=>u.id===id);
+  if(found) return found;
+  if(users.length){
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('currentUserId');
+  }
+  return users[0];
+}
 function updateSidebarUser(){const user=getCurrentUser();if(!user)return;document.getElementById('sidebarUserName').textContent=user.displayName;document.getElementById('sidebarUserPhone').textContent=user.username;const rb=document.getElementById('sidebarUserRole');const rl={admin:'مدیر کل',manager:'سرپرست',user:'کاربر عادی',viewer:'مشاهده‌گر'};rb.textContent=rl[user.role]||'کاربر';rb.className='role-badge '+user.role;const av=document.getElementById('sidebarAvatar');if(user.avatar){av.innerHTML='<img src="'+user.avatar+'" alt="">';}else{av.textContent=(user.displayName||'م').charAt(0);}}
 function applyPermissions(){const user=getCurrentUser();if(!user)return;const perms=user.role==='admin'?ROLE_DEFAULTS.admin:(user.permissions||ROLE_DEFAULTS[user.role]||[]);document.querySelectorAll('.nav-item').forEach(item=>{const perm=item.dataset.perm;if(!perm)return;if(perms.includes(perm))item.classList.remove('hidden');else item.classList.add('hidden');});const nb=document.getElementById('notifBtn');if(user.role==='admin'||user.role==='manager')nb.style.display='grid';else nb.style.display='none';const fv=document.querySelector('.nav-item:not(.hidden)');if(fv){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));fv.classList.add('active');const page=fv.dataset.page;document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').innerHTML=PAGE_TITLES[page]+'<small id="todayDate"></small>';updateDate();}}
 
 /* ============ QUICK DEPT ============ */
-function openDeptForm(){quickAddDept();}
 function quickAddDept(){document.getElementById('quickDeptName').value='';document.getElementById('quickDeptModal').classList.add('show');setTimeout(()=>document.getElementById('quickDeptName').focus(),100);}
-function confirmQuickDept(){const input=document.getElementById('quickDeptName');if(!input)return;const name=input.value.trim();if(!name)return toast('نام بخش لازم','error');const list=DB.get('departments');if(list.some(d=>(d.name||'').trim()===name))return toast('این بخش قبلاً ثبت شده است','error');const id=Date.now()+Math.floor(Math.random()*1000);list.push({id,name,systems:[]});DB.set('departments',list);logActivity('create','بخش «'+name+'» ایجاد شد');closeQuickDept();toast('بخش با موفقیت اضافه شد','success');updateDeptSelects();renderDepts();renderSystems();}
+function confirmQuickDept(){const name=document.getElementById('quickDeptName').value.trim();if(!name)return toast('نام بخش لازم','error');const list=DB.get('departments');if(list.find(d=>d.name===name))return toast('تکراری','error');list.push({id:Date.now(),name,systems:[]});DB.set('departments',list);logActivity('create','بخش «'+name+'» ایجاد شد');closeQuickDept();toast('اضافه شد','success');updateDeptSelects();renderDepts();renderSystems();}
 function closeQuickDept(){document.getElementById('quickDeptModal').classList.remove('show');}
 document.getElementById('quickDeptName').addEventListener('keypress',e=>{if(e.key==='Enter')confirmQuickDept();});
 document.getElementById('quickDeptModal').onclick=e=>{if(e.target.id==='quickDeptModal')closeQuickDept();};
@@ -1100,7 +1241,36 @@ function statusBadge(status){const label=STATUS_LABELS[status]||status;const cls
 
 /* ============ TABS ============ */
 const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من'};
-document.querySelectorAll('.nav-item').forEach(btn=>{btn.onclick=()=>{const page=btn.dataset.page;document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('page-'+page).classList.add('active');document.getElementById('pageTitle').innerHTML=PAGE_TITLES[page]+'<small id="todayDate"></small>';updateDate();if(page==='dashboard'){renderDashboard();renderWidgets();}if(page==='systems')renderSystems();if(page==='jobs')renderJobs();if(page==='users')renderUsers();if(page==='assigned')renderAssigned();if(page==='activity')renderActivity();if(page==='kanban')renderKanban();if(page==='tickets')renderTickets();if(page==='licenses')renderLicenses();if(page==='leave')renderLeave();if(page==='settings')highlightColor();if(window.innerWidth<=900)closeSidebar();};});
+
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  btn.onclick=async()=>{
+    const page=btn.dataset.page;
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+page).classList.add('active');
+    document.getElementById('pageTitle').innerHTML=PAGE_TITLES[page]+'<small id="todayDate"></small>';
+    updateDate();
+    if(page==='dashboard'){renderDashboard();renderWidgets();}
+    if(page==='systems')renderSystems();
+    if(page==='jobs')renderJobs();
+    if(page==='users')await renderUsers();
+    if(page==='assigned')renderAssigned();
+    if(page==='activity')renderActivity();
+    if(page==='kanban')renderKanban();
+    if(page==='tickets')renderTickets();
+    if(page==='licenses')renderLicenses();
+    if(page==='leave')renderLeave();
+    if(page==='departments')renderDepts();
+    if(page==='mywork')renderMyWork();
+    if(page==='attendance')renderAttendance();
+    if(page==='home')renderHome();
+    if(page==='tasks')renderTasks();
+    if(page==='devices')renderDevices();
+    if(page==='settings')highlightColor();
+    if(window.innerWidth<=900)closeSidebar();
+  };
+});
 function updateDate(){const[jy,jm,jd]=todayJalali();const dn=faDaysFull[jWeekDay(jy,jm,jd)];const el=document.getElementById('todayDate');if(el)el.textContent=dn+'، '+faNum(jd)+' '+faMonths[jm-1]+' '+faNum(jy);}
 
 /* ============ PAGINATION ============ */
@@ -1145,7 +1315,7 @@ function delLicense(id){confirmAction('حذف','لایسنس حذف شود؟',()
 /* ============ LEAVE ============ */
 function openLeaveForm(){const[jy,jm,jd]=todayJalali();document.getElementById('lvFrom').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('lvTo').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('lvDays').value=1;document.getElementById('lvReason').value='';document.getElementById('leaveFormModal').classList.add('show');}
 function saveLeave(){const type=document.getElementById('lvType').value;const days=+document.getElementById('lvDays').value||1;const from=document.getElementById('lvFrom').value;const to=document.getElementById('lvTo').value;const reason=document.getElementById('lvReason').value;if(!from||!to)return toast('تاریخ لازم','error');const me=getCurrentUser();const list=DB.get('leaves');list.push({id:Date.now(),userId:me.id,type,days,from,to,reason,status:'pending',createdAt:nowTimestamp()});DB.set('leaves',list);logActivity('create','درخواست مرخصی ثبت شد');document.getElementById('leaveFormModal').classList.remove('show');toast('ارسال شد','success');renderLeave();updateNotifBadge();}
-function renderLeave(){const me=getCurrentUser();const users=DB.get('users');const user=me;const myLeaves=DB.get('leaves').filter(l=>l.userId===me.id&&l.status==='approved');const usedDays=myLeaves.reduce((s,l)=>s+l.days,0);const balance=(user.leaveBalance||26)-usedDays;document.getElementById('leaveBalance').textContent=faNum(Math.max(0,balance));document.getElementById('approvedLeaves').textContent=faNum(myLeaves.length);let list=DB.get('leaves');if(me.role!=='admin'&&me.role!=='manager')list=list.filter(l=>l.userId===me.id);list.sort((a,b)=>(b.id-a.id));const tb=document.getElementById('leaveTbody');if(!list.length){tb.innerHTML='<tr><td colspan="7"><div class="empty-state">موردی نیست</div></td></tr>';}else{tb.innerHTML=list.map(l=>{const u=DB.get('users').find(x=>x.id===l.userId);const canApprove=(me.role==='admin'||me.role==='manager')&&l.status==='pending'&&u&&u.id!==me.id;return '<tr><td>'+(u?u.displayName:'?')+'</td><td><span class="badge badge-blue">'+l.type+'</span></td><td>'+l.from+'</td><td>'+l.to+'</td><td><strong>'+faNum(l.days)+' روز</strong></td><td><span class="badge '+(l.status==='approved'?'badge-green':l.status==='rejected'?'badge-red':'badge-orange')+'">'+(l.status==='approved'?'تایید':l.status==='rejected'?'رد':'در انتظار')+'</span></td><td>'+(canApprove?'<button class="btn btn-success btn-sm" onclick="approveLeave('+l.id+')">تایید</button> <button class="btn btn-danger btn-sm" onclick="rejectLeave('+l.id+')">رد</button>':'<button class="btn btn-danger btn-sm" onclick="delLeave('+l.id+')">'+ICONS.trash+'</button>')+'</td></tr>';}).join('');}
+function renderLeave(){const me=getCurrentUser();const user=me;const myLeaves=DB.get('leaves').filter(l=>l.userId===me.id&&l.status==='approved');const usedDays=myLeaves.reduce((s,l)=>s+l.days,0);const balance=(user.leaveBalance||26)-usedDays;document.getElementById('leaveBalance').textContent=faNum(Math.max(0,balance));document.getElementById('approvedLeaves').textContent=faNum(myLeaves.length);let list=DB.get('leaves');if(me.role!=='admin'&&me.role!=='manager')list=list.filter(l=>l.userId===me.id);list.sort((a,b)=>(b.id-a.id));const tb=document.getElementById('leaveTbody');if(!list.length){tb.innerHTML='<tr><td colspan="7"><div class="empty-state">موردی نیست</div></td></tr>';}else{tb.innerHTML=list.map(l=>{const u=DB.get('users').find(x=>x.id===l.userId);const canApprove=(me.role==='admin'||me.role==='manager')&&l.status==='pending'&&u&&u.id!==me.id;return '<tr><td>'+(u?u.displayName:'?')+'</td><td><span class="badge badge-blue">'+l.type+'</span></td><td>'+l.from+'</td><td>'+l.to+'</td><td><strong>'+faNum(l.days)+' روز</strong></td><td><span class="badge '+(l.status==='approved'?'badge-green':l.status==='rejected'?'badge-red':'badge-orange')+'">'+(l.status==='approved'?'تایید':l.status==='rejected'?'رد':'در انتظار')+'</span></td><td>'+(canApprove?'<button class="btn btn-success btn-sm" onclick="approveLeave('+l.id+')">تایید</button> <button class="btn btn-danger btn-sm" onclick="rejectLeave('+l.id+')">رد</button>':'<button class="btn btn-danger btn-sm" onclick="delLeave('+l.id+')">'+ICONS.trash+'</button>')+'</td></tr>';}).join('');}
 const[jy,jm]=todayJalali();const days=jMonthDays(jy,jm);const firstDay=jWeekDay(jy,jm,1);const cal=document.getElementById('teamCalendar');let h='';faDaysShort.forEach(d=>h+='<div style="text-align:center;font-size:10.5px;font-weight:700;color:var(--text-muted);padding:7px 0;">'+d+'</div>');for(let i=0;i<firstDay;i++)h+='<div></div>';const[ty,tm,td]=todayJalali();const approvedLeaves=DB.get('leaves').filter(l=>l.status==='approved');const pendingLeaves=DB.get('leaves').filter(l=>l.status==='pending');for(let d=1;d<=days;d++){const isToday=ty===jy&&tm===jm&&td===d;let chips='';approvedLeaves.forEach(l=>{if(d>=l.from&&d<=l.to){const u=DB.get('users').find(x=>x.id===l.userId);if(u)chips+='<div class="leave-chip approved">'+u.displayName.substring(0,10)+'</div>';}});pendingLeaves.forEach(l=>{if(d>=l.from&&d<=l.to){const u=DB.get('users').find(x=>x.id===l.userId);if(u)chips+='<div class="leave-chip pending">'+u.displayName.substring(0,10)+'</div>';}});h+='<div class="team-cal-day '+(isToday?'today':'')+'"><div class="day-num">'+faNum(d)+'</div>'+chips+'</div>';}
 cal.innerHTML=h;}
 function approveLeave(id){const list=DB.get('leaves');const idx=list.findIndex(l=>l.id===id);if(idx>=0){list[idx].status='approved';DB.set('leaves',list);toast('تایید شد','success');renderLeave();updateNotifBadge();}}
@@ -1161,23 +1331,31 @@ function editMyWork(id){const item=DB.get('mywork').find(r=>r.id===id);if(!item)
 function renderMyWork(){const s=(document.getElementById('mwSearch').value||'').trim();let list=DB.get('mywork').sort((a,b)=>{const p={high:0,med:1,low:2};if(a.status==='done'&&b.status!=='done')return 1;if(b.status==='done'&&a.status!=='done')return -1;return p[a.priority]-p[b.priority];});if(mwFilter!=='all')list=list.filter(r=>r.status===mwFilter);if(s)list=list.filter(r=>r.title.includes(s));const c=document.getElementById('myWorkContent');const pw=document.getElementById('mwPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.star+'</div><h3>کاری نیست</h3><button class="btn btn-primary btn-lg" onclick="openMyWorkForm()">افزودن</button></div>';pw.style.display='none';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,mwPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>عنوان</th><th>وضعیت</th><th>اولویت</th><th>مهلت</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>{const pc=r.priority==='high'?'prio-high':r.priority==='med'?'prio-med':'prio-low';const pl=r.priority==='high'?'بالا':r.priority==='med'?'متوسط':'پایین';return '<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+escapeHtml(r.title)+'</strong></td><td>'+statusBadge(r.status)+'</td><td><span class="prio-dot '+pc+'"></span>'+pl+'</td><td>'+(r.deadline||'—')+'</td><td><div style="display:flex;gap:4px;"><button class="btn btn-warning btn-sm" onclick="editMyWork('+r.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="del(\'mywork\','+r.id+',renderMyWork)">'+ICONS.trash+'</button></div></td></tr>';}).join('')+'</tbody></table></div>';document.getElementById('mwTotal').textContent=faNum(total);renderPages('mwPagination',mwPage,totalPages,'gotoMwPage');updateNotifBadge();}
 function gotoMwPage(p){mwPage=p;renderMyWork();}
 
-/* ============ ATTENDANCE / HOME / TASKS / JOBS / KANBAN / DEVICES / SYSTEMS / DEPARTMENTS / USERS / ACTIVITY / REPORT / DASHBOARD ============ */
-let attPage=1,homePage=1,taskPage=1,devPage=1,sysPage=1,editingTask=null,editingSystem=null;
-const TASK_COLORS={'کارهای آی تی':'badge-blue','پشتیبانی سایت':'badge-green','بروشورها':'badge-orange','طراحی‌ها':'badge-purple','موارد متفرقه':'badge-red'};
+/* ============ ATTENDANCE ============ */
+let attPage=1;
 function openAttendanceForm(){const[jy,jm,jd]=todayJalali();document.getElementById('attDate').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('attIn').value='';document.getElementById('attOut').value='';document.getElementById('attFormModal').classList.add('show');}
 function saveAttendance(){const date=document.getElementById('attDate').value;const start=document.getElementById('attIn').value;const end=document.getElementById('attOut').value;if(!date||!start||!end)return toast('همه لازم','error');const me=getCurrentUser();const list=DB.get('attendance');list.push({id:Date.now(),userId:me.id,date,start,end,hours:diffHours(start,end)});DB.set('attendance',list);logActivity('create','ورود/خروج ثبت شد');document.getElementById('attFormModal').classList.remove('show');toast('ثبت شد','success');renderAttendance();}
 function renderAttendance(){const me=getCurrentUser();const s=(document.getElementById('attSearch').value||'').trim();let list=DB.get('attendance').filter(r=>me.role==='admin'||me.role==='manager'||r.userId===me.id||!r.userId).sort((a,b)=>b.date.localeCompare(a.date));if(s)list=list.filter(r=>r.date.includes(s));const c=document.getElementById('attContent');const pw=document.getElementById('attPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.clock+'</div><h3>ثبت نشده</h3><button class="btn btn-primary btn-lg" onclick="openAttendanceForm()">ثبت</button></div>';pw.style.display='none';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,attPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+r.date+'</strong></td><td><span class="badge badge-green">'+r.start+'</span></td><td><span class="badge badge-red">'+r.end+'</span></td><td><strong>'+formatHours(r.hours)+'</strong></td><td><button class="btn btn-danger btn-sm" onclick="del(\'attendance\','+r.id+',renderAttendance)">'+ICONS.trash+'</button></td></tr>').join('')+'</tbody></table></div>';document.getElementById('attTotal').textContent=faNum(total);renderPages('attPagination',attPage,totalPages,'gotoAttPage');}
 function gotoAttPage(p){attPage=p;renderAttendance();}
+
+/* ============ HOME ============ */
+let homePage=1;
 function openHomeForm(){const[jy,jm,jd]=todayJalali();document.getElementById('homeDate').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('homeStart').value='';document.getElementById('homeEnd').value='';document.getElementById('homeDesc').value='';document.getElementById('homeFormModal').classList.add('show');}
 function saveHome(){const date=document.getElementById('homeDate').value;const start=document.getElementById('homeStart').value;const end=document.getElementById('homeEnd').value;const desc=document.getElementById('homeDesc').value;if(!date||!start||!end)return toast('همه لازم','error');const me=getCurrentUser();const list=DB.get('home');list.push({id:Date.now(),userId:me.id,date,start,end,desc,hours:diffHours(start,end)});DB.set('home',list);logActivity('create','کار در خانه ثبت شد');document.getElementById('homeFormModal').classList.remove('show');toast('ثبت شد','success');renderHome();}
 function renderHome(){const me=getCurrentUser();const s=(document.getElementById('homeSearch').value||'').trim();let list=DB.get('home').filter(r=>me.role==='admin'||me.role==='manager'||r.userId===me.id||!r.userId).sort((a,b)=>b.date.localeCompare(a.date));if(s)list=list.filter(r=>r.date.includes(s));const c=document.getElementById('homeContent');const pw=document.getElementById('homePaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.home+'</div><h3>ثبت نشده</h3><button class="btn btn-primary btn-lg" onclick="openHomeForm()">ثبت</button></div>';pw.style.display='none';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,homePage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+r.date+'</strong></td><td><span class="badge badge-green">'+r.start+'</span></td><td><span class="badge badge-red">'+r.end+'</span></td><td><strong>'+formatHours(r.hours)+'</strong></td><td>'+(r.desc||'—')+'</td><td><button class="btn btn-danger btn-sm" onclick="del(\'home\','+r.id+',renderHome)">'+ICONS.trash+'</button></td></tr>').join('')+'</tbody></table></div>';document.getElementById('homeTotal').textContent=faNum(total);renderPages('homePagination',homePage,totalPages,'gotoHomePage');}
 function gotoHomePage(p){homePage=p;renderHome();}
+
+/* ============ TASKS ============ */
+let taskPage=1,editingTask=null;
+const TASK_COLORS={'کارهای آی تی':'badge-blue','پشتیبانی سایت':'badge-green','بروشورها':'badge-orange','طراحی‌ها':'badge-purple','موارد متفرقه':'badge-red'};
 function openTaskForm(){editingTask=null;document.getElementById('taskFormTitle').textContent='کار محول';const[jy,jm,jd]=todayJalali();document.getElementById('taskType').value='کارهای آی تی';document.getElementById('taskTitle').value='';document.getElementById('taskDate').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('taskStart').value='';document.getElementById('taskEnd').value='';document.getElementById('taskNotes').value='';document.querySelector('input[name="taskStatus"][value="pending"]').checked=true;const users=DB.get('users');const me=getCurrentUser();document.getElementById('taskAssignedTo').innerHTML='<option value="">— انتخاب —</option>'+users.filter(u=>u.id!==me.id).map(u=>'<option value="'+u.id+'">'+u.displayName+' ('+u.username+')</option>').join('');document.getElementById('taskFormModal').classList.add('show');}
 function editTask(id){const item=DB.get('tasks').find(r=>r.id===id);if(!item)return;editingTask=id;document.getElementById('taskFormTitle').textContent='ویرایش';document.getElementById('taskType').value=item.type||'کارهای آی تی';document.getElementById('taskTitle').value=item.title||'';document.getElementById('taskDate').value=item.date||'';document.getElementById('taskStart').value=item.start||'';document.getElementById('taskEnd').value=item.end||'';document.getElementById('taskNotes').value=item.notes||'';const st=item.status||'pending';const r=document.querySelector('input[name="taskStatus"][value="'+st+'"]');if(r)r.checked=true;const users=DB.get('users');const me=getCurrentUser();document.getElementById('taskAssignedTo').innerHTML='<option value="">— انتخاب —</option>'+users.filter(u=>u.id!==me.id).map(u=>'<option value="'+u.id+'" '+(item.assignedToId===u.id?'selected':'')+'>'+u.displayName+'</option>').join('');document.getElementById('taskFormModal').classList.add('show');}
 function closeTaskForm(){document.getElementById('taskFormModal').classList.remove('show');editingTask=null;}
 function saveTask(){const type=document.getElementById('taskType').value;const title=document.getElementById('taskTitle').value.trim();const date=document.getElementById('taskDate').value;const start=document.getElementById('taskStart').value;const end=document.getElementById('taskEnd').value;const notes=document.getElementById('taskNotes').value;const assignedToId=+document.getElementById('taskAssignedTo').value;const st=document.querySelector('input[name="taskStatus"]:checked').value;if(!title||!date||!start||!end)return toast('همه لازم','error');if(!assignedToId)return toast('کاربر مقصد','error');const me=getCurrentUser();const list=DB.get('tasks');const toUser=DB.get('users').find(u=>u.id===assignedToId);if(editingTask){const idx=list.findIndex(r=>r.id===editingTask);if(idx>=0)list[idx]={...list[idx],type,title,date,start,end,notes,status:st,assignedToId,hours:diffHours(start,end)};toast('ویرایش شد','success');}else{list.push({id:Date.now(),type,title,date,start,end,notes,status:st,hours:diffHours(start,end),assignedToId,assignedFromId:me.id,replies:[],createdAt:nowTimestamp()});logActivity('assign','کار به '+(toUser?toUser.displayName:'?')+' محول شد');toast('ارسال شد','success');}DB.set('tasks',list);closeTaskForm();renderTasks();renderJobs();renderAssigned();renderKanban();updateNotifBadge();}
 function renderTasks(){const s=(document.getElementById('taskSearch').value||'').trim();const tf=document.getElementById('taskTypeFilter').value;const sf=document.getElementById('taskStatusFilter').value;const me=getCurrentUser();let list=DB.get('tasks').filter(t=>t.assignedFromId===me.id||me.role==='admin'||me.role==='manager').sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));if(tf)list=list.filter(r=>r.type===tf);if(sf)list=list.filter(r=>(r.status||'pending')===sf);if(s)list=list.filter(r=>r.title.includes(s));const c=document.getElementById('taskContent');const pw=document.getElementById('taskPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.check+'</div><h3>کاری نیست</h3><button class="btn btn-primary btn-lg" onclick="openTaskForm()">ثبت</button></div>';pw.style.display='none';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,taskPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>نوع</th><th>عنوان</th><th>محول به</th><th>وضعیت</th><th>تاریخ</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>{const st=r.status||'pending';const to=DB.get('users').find(u=>u.id===r.assignedToId);return '<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><span class="badge '+(TASK_COLORS[r.type]||'badge-blue')+'">'+escapeHtml(r.type)+'</span></td><td><strong>'+escapeHtml(r.title)+'</strong></td><td><span class="badge badge-purple">'+(to?to.displayName:'—')+'</span></td><td>'+statusBadge(st)+'</td><td>'+r.date+'</td><td><div style="display:flex;gap:4px;"><button class="btn btn-info btn-sm" onclick="openChatModal('+r.id+')">'+ICONS.mail+'</button><button class="btn btn-warning btn-sm" onclick="editTask('+r.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="del(\'tasks\','+r.id+',()=>{renderTasks();renderJobs();renderAssigned();renderKanban();updateNotifBadge();})">'+ICONS.trash+'</button></div></td></tr>';}).join('')+'</tbody></table></div>';document.getElementById('taskTotal').textContent=faNum(total);renderPages('taskPagination',taskPage,totalPages,'gotoTaskPage');}
 function gotoTaskPage(p){taskPage=p;renderTasks();}
+
+/* ============ KANBAN ============ */
 function renderKanban(){const me=getCurrentUser();const tasks=DB.get('tasks').filter(t=>t.assignedFromId===me.id||me.role==='admin'||me.role==='manager');const cols=[{key:'pending',label:'انجام نشده',items:tasks.filter(t=>(t.status||'pending')==='pending')},{key:'inprogress',label:'در حال انجام',items:tasks.filter(t=>(t.status||'pending')==='inprogress')},{key:'done',label:'انجام شده',items:tasks.filter(t=>(t.status||'pending')==='done')}];const b=document.getElementById('kanbanBoard');b.innerHTML=cols.map(col=>'<div class="kanban-col '+col.key+'" ondragover="kanbanDragOver(event)" ondragleave="kanbanDragLeave(event)" ondrop="kanbanDrop(event,\''+col.key+'\')"><div class="kanban-col-head"><h3>'+col.label+'</h3><span class="count">'+faNum(col.items.length)+'</span></div>'+col.items.map(t=>{const to=DB.get('users').find(u=>u.id===t.assignedToId);return '<div class="kanban-card" draggable="true" data-id="'+t.id+'" ondragstart="kanbanDragStart(event)" ondragend="kanbanDragEnd(event)" onclick="editTask('+t.id+')"><div class="kc-title">'+escapeHtml(t.title)+'</div><div class="kc-meta"><span>📅 '+t.date+'</span><span>👤 '+(to?to.displayName:'—')+'</span></div><span class="badge '+(TASK_COLORS[t.type]||'badge-blue')+'">'+escapeHtml(t.type)+'</span></div>';}).join('')+'<button class="kanban-add" onclick="openTaskForm()">+ افزودن</button></div>').join('');}
 let draggedTaskId=null;
 function kanbanDragStart(e){draggedTaskId=+e.target.dataset.id;e.target.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
@@ -1185,14 +1363,147 @@ function kanbanDragEnd(e){e.target.classList.remove('dragging');document.querySe
 function kanbanDragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
 function kanbanDragLeave(e){e.currentTarget.classList.remove('drag-over');}
 function kanbanDrop(e,newStatus){e.preventDefault();e.currentTarget.classList.remove('drag-over');if(!draggedTaskId)return;const tasks=DB.get('tasks');const idx=tasks.findIndex(t=>t.id===draggedTaskId);if(idx<0)return;const old=tasks[idx].status||'pending';if(old===newStatus)return;tasks[idx].status=newStatus;DB.set('tasks',tasks);toast('منتقل شد','success');renderKanban();renderTasks();renderJobs();renderAssigned();updateNotifBadge();}
-function renderJobs(){const me=getCurrentUser();const all=DB.get('tasks').filter(t=>t.assignedFromId===me.id||me.role==='admin'||me.role==='manager');const counts={all:all.length,done:all.filter(j=>(j.status||'pending')==='done').length,inprogress:all.filter(j=>(j.status||'pending')==='inprogress').length,pending:all.filter(j=>(j.status||'pending')==='pending').length};document.getElementById('jobsStats').innerHTML='<div class="job-stat all" onclick="setJobsFilter(\'all\')"><div class="js-icon">'+ICONS.layers+'</div><div><div class="js-value">'+faNum(counts.all)+'</div><div class="js-label">همه</div></div></div><div class="job-stat pending" onclick="setJobsFilter(\'pending\')"><div class="js-icon">'+ICONS.eye+'</div><div><div class="js-value">'+faNum(counts.pending)+'</div><div class="js-label">انجام نشده</div></div></div><div class="job-stat inprogress" onclick="setJobsFilter(\'inprogress\')"><div class="js-icon">'+ICONS.eye+'</div><div><div class="js-value">'+faNum(counts.inprogress)+'</div><div class="js-label">در حال انجام</div></div></div><div class="job-stat done" onclick="setJobsFilter(\'done\')"><div class="js-icon">'+ICONS.eye+'</div><div><div class="js-value">'+faNum(counts.done)+'</div><div class="js-label">انجام شده</div></div></div>';let list=[...all].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));if(jobsFilter!=='all')list=list.filter(j=>(j.status||'pending')===jobsFilter);const c=document.getElementById('jobsContent');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.briefcase+'</div><h3>کاری نیست</h3></div>';return;}c.innerHTML='<div class="jobs-grid">'+list.map(j=>{const st=j.status||'pending';const to=DB.get('users').find(u=>u.id===j.assignedToId);return '<div class="job-card '+st+'" onclick="editTask('+j.id+')"><div class="job-card-status">'+statusBadge(st)+'</div><div class="job-card-head"><div class="job-title">'+escapeHtml(j.title)+'</div></div><div style="margin-bottom:10px;"><span class="badge '+(TASK_COLORS[j.type]||'badge-blue')+'">'+escapeHtml(j.type)+'</span><span class="badge badge-purple" style="margin-right:4px;">👤 '+(to?to.displayName:'—')+'</span></div><div class="job-card-meta"><span>📅 '+j.date+'</span><span>⏰ '+j.start+' - '+j.end+'</span></div><div class="job-card-actions"><button class="btn btn-info btn-sm" onclick="event.stopPropagation();openChatModal('+j.id+')">💬</button><button class="btn btn-warning btn-sm" onclick="event.stopPropagation();editTask('+j.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();del(\'tasks\','+j.id+',()=>{renderTasks();renderJobs();renderAssigned();renderKanban();updateNotifBadge();})">'+ICONS.trash+'</button></div></div>';}).join('')+'</div>';}
-let jobsFilter='all';function setJobsFilter(f){jobsFilter=f;renderJobs();}
-function openDeviceForm(){const[jy,jm,jd]=todayJalali();document.getElementById('devName').value='';document.getElementById('devQty').value=1;document.getElementById('devDate').value=jy+'/'+pad(jm)+'/'+pad(jd);document.getElementById('devNote').value='';document.getElementById('deviceFormModal').classList.add('show');}
-function saveDevice(){const name=document.getElementById('devName').value.trim();const qty=document.getElementById('devQty').value;const date=document.getElementById('devDate').value;const note=document.getElementById('devNote').value;if(!name||!date)return toast('لازم','error');const list=DB.get('devices');list.push({id:Date.now(),name,qty,date,note});DB.set('devices',list);document.getElementById('deviceFormModal').classList.remove('show');toast('اضافه شد','success');renderDevices();}
-function renderDevices(){const s=(document.getElementById('devSearch').value||'').trim();let list=DB.get('devices').sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));if(s)list=list.filter(r=>String(r.name||'').includes(s)||String(r.note||'').includes(s));const c=document.getElementById('devContent');const pw=document.getElementById('devPaginationWrap');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.monitor+'</div><h3>وسیله‌ای ثبت نشده</h3><p>موجودی وسایل IT را ثبت کنید.</p><button class="btn btn-primary btn-lg" onclick="openDeviceForm()">'+ICONS.plus+'افزودن وسیله</button></div>';pw.style.display='none';document.getElementById('devTotal').textContent='۰';return;}pw.style.display='flex';const{pageList,start,total,totalPages}=paginate(list,devPage,10);c.innerHTML='<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>نام</th><th>تعداد</th><th>تاریخ بررسی</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+escapeHtml(r.name||'—')+'</strong></td><td><span class="badge badge-blue">'+faNum(r.qty||0)+' عدد</span></td><td>'+escapeHtml(r.date||'—')+'</td><td>'+escapeHtml(r.note||'—')+'</td><td><button class="btn btn-danger btn-sm" onclick="del(\'devices\','+r.id+',renderDevices)" title="حذف">'+ICONS.trash+'</button></td></tr>').join('')+'</tbody></table></div>';document.getElementById('devTotal').textContent=faNum(total);renderPages('devPagination',devPage,totalPages,'gotoDevPage');}
+
+/* ============ JOBS ============ */
+let jobsFilter='all';
+function setJobsFilter(f){jobsFilter=f;renderJobs();}
+function renderJobs(){const me=getCurrentUser();const all=DB.get('tasks').filter(t=>t.assignedFromId===me.id||me.role==='admin'||me.role==='manager');const counts={all:all.length,done:all.filter(j=>(j.status||'pending')==='done').length,inprogress:all.filter(j=>(j.status||'pending')==='inprogress').length,pending:all.filter(j=>(j.status||'pending')==='pending').length};document.getElementById('jobsStats').innerHTML='<div class="job-stat all" onclick="setJobsFilter(\'all\')"><div class="js-icon">'+ICONS.layers+'</div><div><div class="js-value">'+faNum(counts.all)+'</div><div class="js-label">همه</div></div></div><div class="job-stat pending" onclick="setJobsFilter(\'pending\')"><div class="js-icon">'+ICONS.eye+'</div><div><div class="js-value">'+faNum(counts.pending)+'</div><div class="js-label">انجام نشده</div></div></div><div class="job-stat inprogress" onclick="setJobsFilter(\'inprogress\')"><div class="js-icon">'+ICONS.eye+'</div><div><div class="js-value">'+faNum(counts.inprogress)+'</div><div class="js-label">در حال انجام</div></div></div><div class="job-stat done" onclick="setJobsFilter(\'done\')"><div class="js-icon">'+ICONS.eye+'</div><div><div class="js-value">'+faNum(counts.done)+'</div><div class="js-label">انجام شده</div></div></div>';let list=[...all].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));if(jobsFilter!=='all')list=list.filter(j=>(j.status||'pending')===jobsFilter);const js=(document.getElementById('jobsSearch')?.value||'').trim();if(js)list=list.filter(j=>j.title.includes(js)||(j.notes||'').includes(js)||(j.type||'').includes(js));const c=document.getElementById('jobsContent');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.briefcase+'</div><h3>کاری نیست</h3></div>';return;}c.innerHTML='<div class="jobs-grid">'+list.map(j=>{const st=j.status||'pending';const to=DB.get('users').find(u=>u.id===j.assignedToId);return '<div class="job-card '+st+'" onclick="editTask('+j.id+')"><div class="job-card-status">'+statusBadge(st)+'</div><div class="job-card-head"><div class="job-title">'+escapeHtml(j.title)+'</div></div><div style="margin-bottom:10px;"><span class="badge '+(TASK_COLORS[j.type]||'badge-blue')+'">'+escapeHtml(j.type)+'</span><span class="badge badge-purple" style="margin-right:4px;">👤 '+(to?to.displayName:'—')+'</span></div><div class="job-card-meta"><span>📅 '+j.date+'</span><span>⏰ '+j.start+' - '+j.end+'</span></div><div class="job-card-actions"><button class="btn btn-info btn-sm" onclick="event.stopPropagation();openChatModal('+j.id+')">💬</button><button class="btn btn-warning btn-sm" onclick="event.stopPropagation();editTask('+j.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();del(\'tasks\','+j.id+',()=>{renderTasks();renderJobs();renderAssigned();renderKanban();updateNotifBadge();})">'+ICONS.trash+'</button></div></div>';}).join('')+'</div>';}
+
+/* ============ DEVICES ============ */
+let devPage=1,editingDevice=null;
+function openDeviceForm(id){
+  editingDevice=id||null;
+  const d=id?DB.get('devices').find(x=>x.id===id):null;
+  document.getElementById('deviceFormTitle').textContent=d?'ویرایش وسیله':'وسیله IT جدید';
+  const[jy,jm,jd]=todayJalali();
+  document.getElementById('devName').value=d?d.name:'';
+  document.getElementById('devCategory').value=d?(d.category||'لپ‌تاپ'):'لپ‌تاپ';
+  document.getElementById('devBrand').value=d?(d.brand||''):'';
+  document.getElementById('devSerial').value=d?(d.serial||''):'';
+  document.getElementById('devQty').value=d?(d.qty||1):1;
+  document.getElementById('devStatus').value=d?(d.status||'active'):'active';
+  document.getElementById('devLocation').value=d?(d.location||''):'';
+  document.getElementById('devDate').value=d&&d.date?d.date:(jy+'/'+pad(jm)+'/'+pad(jd));
+  document.getElementById('devWarranty').value=d?(d.warranty||''):'';
+  document.getElementById('devPrice').value=d?(d.price||''):'';
+  document.getElementById('devNote').value=d?(d.note||''):'';
+  const users=DB.get('users');
+  document.getElementById('devAssignedTo').innerHTML='<option value="">— انتخاب —</option>'+users.map(u=>'<option value="'+u.id+'" '+(d&&d.assignedTo===u.id?'selected':'')+'>'+u.displayName+'</option>').join('');
+  document.getElementById('deviceFormModal').classList.add('show');
+}
+function closeDeviceForm(){document.getElementById('deviceFormModal').classList.remove('show');editingDevice=null;}
+function editDevice(id){openDeviceForm(id);}
+function saveDevice(){
+  const name=document.getElementById('devName').value.trim();
+  if(!name)return toast('نام وسیله لازم است','error');
+  const data={
+    id:editingDevice||Date.now(),
+    name,
+    category:document.getElementById('devCategory').value,
+    brand:document.getElementById('devBrand').value.trim(),
+    serial:document.getElementById('devSerial').value.trim(),
+    qty:+document.getElementById('devQty').value||1,
+    status:document.getElementById('devStatus').value,
+    location:document.getElementById('devLocation').value.trim(),
+    assignedTo:+document.getElementById('devAssignedTo').value||null,
+    date:document.getElementById('devDate').value,
+    warranty:document.getElementById('devWarranty').value,
+    price:+document.getElementById('devPrice').value||0,
+    note:document.getElementById('devNote').value.trim()
+  };
+  const list=DB.get('devices');
+  if(editingDevice){
+    const idx=list.findIndex(x=>x.id===editingDevice);
+    if(idx>=0){
+      list[idx]=data;
+      logActivity('update','وسیله «'+name+'» ویرایش شد');
+      toast('ویرایش شد','success');
+    }else{
+      list.push(data);
+      toast('اضافه شد','success');
+    }
+  }else{
+    list.push(data);
+    logActivity('create','وسیله «'+name+'» اضافه شد');
+    toast('اضافه شد','success');
+  }
+  DB.set('devices',list);
+  closeDeviceForm();
+  renderDevices();
+}
+function delDevice(id){
+  confirmAction('حذف وسیله','این وسیله حذف شود؟',()=>{
+    DB.set('devices',DB.get('devices').filter(d=>d.id!==id));
+    renderDevices();
+    toast('حذف شد','success');
+  });
+}
+function renderDevices(){
+  const s=(document.getElementById('devSearch')?.value||'').trim();
+  const cf=document.getElementById('devCatFilter')?.value||'';
+  const sf=document.getElementById('devStatusFilter')?.value||'';
+  const all=DB.get('devices');
+  const stats=document.getElementById('devStats');
+  if(stats){
+    const active=all.filter(d=>(d.status||'active')==='active').length;
+    const repair=all.filter(d=>d.status==='repair').length;
+    const retired=all.filter(d=>d.status==='retired').length;
+    stats.innerHTML=
+      '<div class="stat"><div class="stat-top"><div class="stat-icon">'+ICONS.monitor+'</div></div><div class="stat-value">'+faNum(all.length)+'</div><div class="stat-label">کل وسایل</div></div>'+
+      '<div class="stat success"><div class="stat-top"><div class="stat-icon">'+ICONS.check+'</div></div><div class="stat-value">'+faNum(active)+'</div><div class="stat-label">فعال</div></div>'+
+      '<div class="stat warning"><div class="stat-top"><div class="stat-icon">'+ICONS.edit+'</div></div><div class="stat-value">'+faNum(repair)+'</div><div class="stat-label">در تعمیر</div></div>'+
+      '<div class="stat danger"><div class="stat-top"><div class="stat-icon">'+ICONS.trash+'</div></div><div class="stat-value">'+faNum(retired)+'</div><div class="stat-label">اسقاط</div></div>';
+  }
+  let list=[...all].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(s)list=list.filter(r=>(r.name||'').includes(s)||(r.serial||'').includes(s)||(r.brand||'').includes(s));
+  if(cf)list=list.filter(r=>r.category===cf);
+  if(sf)list=list.filter(r=>(r.status||'active')===sf);
+  const c=document.getElementById('devContent');
+  const pw=document.getElementById('devPaginationWrap');
+  if(!list.length){
+    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.monitor+'</div><h3>وسیله‌ای پیدا نشد</h3><button class="btn btn-primary btn-lg" onclick="openDeviceForm()">افزودن وسیله</button></div>';
+    pw.style.display='none';return;
+  }
+  pw.style.display='flex';
+  const{pageList,start,total,totalPages}=paginate(list,devPage,12);
+  const statusMap={active:{cls:'badge-green',label:'فعال'},repair:{cls:'badge-orange',label:'در تعمیر'},retired:{cls:'badge-red',label:'اسقاط'}};
+  const icons={'لپ‌تاپ':'💻','کیس':'🖥️','مانیتور':'🖥️','پرینتر':'🖨️','اسکنر':'📠','روتر':'📡','سوئیچ':'🔀','ماوس':'🖱️','کیبورد':'⌨️','هارد':'💾','فلش':'💿'};
+  c.innerHTML='<div class="jobs-grid">'+pageList.map(r=>{
+    const st=statusMap[r.status||'active']||statusMap.active;
+    const user=DB.get('users').find(u=>u.id===r.assignedTo);
+    const ico=icons[r.category]||'📦';
+    return '<div class="job-card" style="cursor:default;">'+
+      '<div class="job-card-head" style="padding-left:0;">'+
+        '<div style="display:flex;gap:10px;align-items:flex-start;width:100%;">'+
+          '<div style="width:48px;height:48px;border-radius:12px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;font-size:22px;flex-shrink:0;">'+ico+'</div>'+
+          '<div style="flex:1;min-width:0;">'+
+            '<div style="font-size:14px;font-weight:700;">'+escapeHtml(r.name)+'</div>'+
+            '<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">'+escapeHtml(r.category||'سایر')+(r.brand?' • '+escapeHtml(r.brand):'')+'</div>'+
+          '</div>'+
+          '<span class="badge '+st.cls+'">'+st.label+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="job-card-meta">'+
+        '<span>🔢 تعداد: <strong>'+faNum(r.qty)+'</strong></span>'+
+        (r.serial?'<span style="font-family:\'JetBrains Mono\',monospace;direction:ltr;">'+escapeHtml(r.serial)+'</span>':'')+
+        (r.location?'<span>📍 '+escapeHtml(r.location)+'</span>':'')+
+        (user?'<span>👤 '+escapeHtml(user.displayName)+'</span>':'')+
+        (r.date?'<span>📅 '+r.date+'</span>':'')+
+      '</div>'+
+      (r.note?'<div style="font-size:12px;color:var(--text-muted);padding:8px 10px;background:var(--bg);border-radius:8px;margin-bottom:12px;">'+escapeHtml(r.note)+'</div>':'')+
+      '<div class="job-card-actions">'+
+        '<button class="btn btn-warning btn-sm" onclick="editDevice('+r.id+')">'+ICONS.edit+'ویرایش</button>'+
+        '<button class="btn btn-danger btn-sm" onclick="delDevice('+r.id+')">'+ICONS.trash+'حذف</button>'+
+      '</div>'+
+    '</div>';
+  }).join('')+'</div>';
+  document.getElementById('devTotal').textContent=faNum(total);
+  renderPages('devPagination',devPage,totalPages,'gotoDevPage');
+}
 function gotoDevPage(p){devPage=p;renderDevices();}
 
 /* ============ SYSTEMS ============ */
+let sysPage=1,editingSystem=null;
 function getAllSystems(){const depts=DB.get('departments');const all=[];depts.forEach(d=>{(d.systems||[]).forEach(s=>all.push({...s,deptId:d.id,deptName:d.name}));});return all;}
 function renderSystems(){
   const depts=DB.get('departments');
@@ -1227,9 +1538,9 @@ function renderSystems(){
 function gotoSysPage(p){sysPage=p;renderSystems();}
 
 /* ============ QR ============ */
-function showQR(deptId,sysId){const dept=DB.get('departments').find(d=>d.id===deptId);if(!dept)return;const sys=dept.systems.find(s=>s.id===sysId);if(!sys)return;const hw=sys.hardware||{};let data='سیستم: '+(sys.title||sys.name)+'\nبخش: '+dept.name+'\nنوع: '+(sys.type||'');if(sys.remoteType||sys.remoteCode){data+='\n'+(sys.remoteType||'Remote')+': '+sys.remoteCode;if(sys.remotePass)data+=' / '+sys.remotePass;}if(sys.ip)data+='\nIP: '+sys.ip;const url='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+encodeURIComponent(data);document.getElementById('qrImg').src=url;let info='<strong>'+escapeHtml(sys.title||sys.name)+'</strong><br>'+escapeHtml(dept.name);if(sys.remoteCode){info+='<br><br><strong>ریموت:</strong><br>'+escapeHtml(sys.remoteType||'')+': <span style="font-family:JetBrains Mono;direction:ltr;">'+escapeHtml(sys.remoteCode)+'</span>';if(sys.remotePass)info+='<br>رمز: <span style="font-family:JetBrains Mono;direction:ltr;">'+escapeHtml(sys.remotePass)+'</span>';}document.getElementById('qrInfo').innerHTML=info;document.getElementById('qrModal').classList.add('show');}
+function showQR(deptId,sysId){const dept=DB.get('departments').find(d=>d.id===deptId);if(!dept)return;const sys=dept.systems.find(s=>s.id===sysId);if(!sys)return;let data='سیستم: '+(sys.title||sys.name)+'\nبخش: '+dept.name+'\nنوع: '+(sys.type||'');if(sys.remoteType||sys.remoteCode){data+='\n'+(sys.remoteType||'Remote')+': '+sys.remoteCode;if(sys.remotePass)data+=' / '+sys.remotePass;}if(sys.ip)data+='\nIP: '+sys.ip;const url='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+encodeURIComponent(data);document.getElementById('qrImg').src=url;let info='<strong>'+escapeHtml(sys.title||sys.name)+'</strong><br>'+escapeHtml(dept.name);if(sys.remoteCode){info+='<br><br><strong>ریموت:</strong><br>'+escapeHtml(sys.remoteType||'')+': <span style="font-family:JetBrains Mono;direction:ltr;">'+escapeHtml(sys.remoteCode)+'</span>';if(sys.remotePass)info+='<br>رمز: <span style="font-family:JetBrains Mono;direction:ltr;">'+escapeHtml(sys.remotePass)+'</span>';}document.getElementById('qrInfo').innerHTML=info;document.getElementById('qrModal').classList.add('show');}
 
-/* ============ SYSTEM DETAIL MODAL ============ */
+/* ============ SYSTEM DETAIL ============ */
 let currentSystemDetail=null;
 function showSystemDetail(deptId,sysId){
   const dept=DB.get('departments').find(d=>d.id===deptId);
@@ -1241,7 +1552,6 @@ function showSystemDetail(deptId,sysId){
   document.getElementById('sdMeta').innerHTML='<span>📁 '+escapeHtml(dept.name)+'</span><span>•</span><span>🏷️ '+escapeHtml(sys.type||'—')+'</span><span>•</span><span>📅 '+(sys.date||'—')+'</span>';
   const hw=sys.hardware||{};
   let bodyHtml='';
-  // Remote
   if(sys.remoteType||sys.remoteCode||sys.remotePass){
     bodyHtml+='<div class="detail-section remote"><div class="detail-section-head"><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>دسترسی ریموت</div><div class="detail-rows">';
     if(sys.remoteType)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>نوع نرم‌افزار</div><div class="val rtl">'+escapeHtml(sys.remoteType)+'</div></div>';
@@ -1249,7 +1559,6 @@ function showSystemDetail(deptId,sysId){
     if(sys.remotePass)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>رمز عبور</div><span class="copy-field" onclick="copyToClipboard(\''+escapeHtml(sys.remotePass)+'\')">'+escapeHtml(sys.remotePass)+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span></div>';
     bodyHtml+='</div></div>';
   }
-  // Network
   if(sys.ip||sys.mac||sys.hostname){
     bodyHtml+='<div class="detail-section"><div class="detail-section-head"><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="16" y="2" width="6" height="6" rx="1"/><rect x="9" y="16" width="6" height="6" rx="1"/></svg></span>اطلاعات شبکه</div><div class="detail-rows">';
     if(sys.ip)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>IP Address</div><span class="copy-field" onclick="copyToClipboard(\''+escapeHtml(sys.ip)+'\')">'+escapeHtml(sys.ip)+' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span></div>';
@@ -1257,28 +1566,24 @@ function showSystemDetail(deptId,sysId){
     if(sys.hostname)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>نام کامپیوتر</div><div class="val">'+escapeHtml(sys.hostname)+'</div></div>';
     bodyHtml+='</div></div>';
   }
-  // CPU
   if(hw.cpu&&(hw.cpu.brand||hw.cpu.model)){
     bodyHtml+='<div class="detail-section"><div class="detail-section-head"><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg></span>پردازنده (CPU)</div><div class="detail-rows">';
     if(hw.cpu.brand)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>برند</div><div class="val">'+escapeHtml(hw.cpu.brand)+'</div></div>';
     if(hw.cpu.model)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>مدل</div><div class="val">'+escapeHtml(hw.cpu.model)+'</div></div>';
     bodyHtml+='</div></div>';
   }
-  // RAM
   if(hw.ram&&(hw.ram.type||hw.ram.size)){
     bodyHtml+='<div class="detail-section"><div class="detail-section-head"><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="1"/><line x1="6" y1="7" x2="6" y2="4"/><line x1="10" y1="7" x2="10" y2="4"/><line x1="14" y1="7" x2="14" y2="4"/><line x1="18" y1="7" x2="18" y2="4"/></svg></span>حافظه رم (RAM)</div><div class="detail-rows">';
     if(hw.ram.type)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>نوع</div><div class="val">'+escapeHtml(hw.ram.type)+'</div></div>';
     if(hw.ram.size)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>حجم</div><div class="val">'+escapeHtml(hw.ram.size)+'</div></div>';
     bodyHtml+='</div></div>';
   }
-  // Disk
   if(hw.disk&&(hw.disk.type||hw.disk.size)){
     bodyHtml+='<div class="detail-section"><div class="detail-section-head"><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></span>حافظه ذخیره‌سازی</div><div class="detail-rows">';
     if(hw.disk.type)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>نوع</div><div class="val">'+escapeHtml(hw.disk.type)+'</div></div>';
     if(hw.disk.size)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>حجم</div><div class="val">'+escapeHtml(hw.disk.size)+'</div></div>';
     bodyHtml+='</div></div>';
   }
-  // Warranty
   if(sys.buyDate||sys.warrantyDate||sys.price){
     let warrantyStatus='';
     if(sys.warrantyDate){
@@ -1295,7 +1600,6 @@ function showSystemDetail(deptId,sysId){
     if(sys.price)bodyHtml+='<div class="detail-row"><div class="lbl"><span class="dot-mark"></span>قیمت خرید</div><div class="val">'+faNum(sys.price.toLocaleString('en-US'))+' تومان</div></div>';
     bodyHtml+='</div></div>';
   }
-  // Notes
   if(sys.notes)bodyHtml+='<div class="detail-section"><div class="detail-section-head"><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>توضیحات</div><div style="font-size:13px;line-height:1.9;color:var(--text);padding:4px;">'+escapeHtml(sys.notes)+'</div></div>';
   if(!bodyHtml)bodyHtml='<div class="detail-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><div>هیچ مشخصاتی برای این سیستم ثبت نشده است</div></div>';
   document.getElementById('sdBody').innerHTML=bodyHtml;
@@ -1314,7 +1618,7 @@ function resetSystemForm(){['sfTitle','sfCpuModel','sfRamSize','sfDiskSize','sfN
 function saveSystem(){const deptId=+document.getElementById('sfDeptId').value;if(!deptId)return toast('بخش را انتخاب کنید','error');const title=document.getElementById('sfTitle').value.trim();if(!title)return toast('عنوان لازم','error');const g=id=>(document.getElementById(id).value||'').trim();const sys={id:editingSystem?editingSystem.sysId:Date.now(),title:g('sfTitle'),name:g('sfTitle'),type:document.getElementById('sfSysType').value,remoteType:g('sfRemoteType'),remoteCode:g('sfRemoteCode'),remotePass:g('sfRemotePass'),ip:g('sfIP'),mac:g('sfMAC'),hostname:g('sfHostname'),buyDate:g('sfBuyDate'),warrantyDate:g('sfWarrantyDate'),price:+g('sfPrice')||0,date:(()=>{const[jy,jm,jd]=todayJalali();return jy+'/'+pad(jm)+'/'+pad(jd);})(),hardware:{cpu:{brand:g('sfCpuBrand'),model:g('sfCpuModel')},ram:{type:g('sfRamType'),size:g('sfRamSize')},disk:{type:g('sfDiskType'),size:g('sfDiskSize')}},notes:g('sfNotes')};const list=DB.get('departments');const d=list.find(x=>x.id===deptId);if(!d.systems)d.systems=[];if(editingSystem&&editingSystem.deptId===deptId){const idx=d.systems.findIndex(s=>s.id===editingSystem.sysId);if(idx>=0)d.systems[idx]=sys;else d.systems.push(sys);}else{if(editingSystem){const od=list.find(x=>x.id===editingSystem.deptId);if(od)od.systems=od.systems.filter(s=>s.id!==editingSystem.sysId);}d.systems.push(sys);}DB.set('departments',list);logActivity(editingSystem?'update':'create','سیستم «'+title+'» ذخیره شد');closeSystemForm();toast('ذخیره شد','success');renderSystems();renderDepts();}
 
 /* ============ DEPARTMENTS ============ */
-function renderDepts(){const s=(document.getElementById('deptSearch').value||'').trim();let list=DB.get('departments');if(s)list=list.filter(d=>d.name.includes(s));const c=document.getElementById('deptList');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3></div>';return;}c.innerHTML=list.map(d=>{const sh=(d.systems&&d.systems.length)?d.systems.map(s=>'<div style="display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--bg-card);border-radius:9px;margin-bottom:6px;font-size:12.5px;flex-wrap:wrap;"><span class="badge badge-purple">'+(s.type||'سیستم')+'</span><span style="flex:1;font-weight:600;">'+escapeHtml(s.title||s.name)+'</span>'+(s.remoteCode?'<span class="badge badge-blue" style="direction:ltr;">'+escapeHtml(s.remoteType||'')+' '+escapeHtml(s.remoteCode)+'</span>':'')+'<button class="btn btn-info btn-sm" onclick="showSystemDetail('+d.id+','+s.id+')" title="مشاهده">'+ICONS.eye+'</button><button class="btn btn-info btn-sm" onclick="showQR('+d.id+','+s.id+')" title="QR">QR</button><button class="btn btn-warning btn-sm" onclick="editSystem('+d.id+','+s.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="delSystem('+d.id+','+s.id+')">'+ICONS.trash+'</button></div>').join(''):'<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12.5px;">سیستمی نیست</div>';return '<div class="dept-card" style="background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid var(--border);flex-wrap:wrap;"><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;">'+ICONS.box+'</div><h3 style="font-size:14px;font-weight:700;flex:1;min-width:100px;">'+escapeHtml(d.name)+'</h3><span class="badge badge-blue">'+faNum((d.systems||[]).length)+' سیستم</span><button class="btn btn-danger btn-sm" onclick="delDept('+d.id+')">'+ICONS.trash+'</button></div>'+sh+'</div>';}).join('');}
+function renderDepts(){const s=(document.getElementById('deptSearch').value||'').trim();let list=DB.get('departments');if(s)list=list.filter(d=>d.name.includes(s));const c=document.getElementById('deptList');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3><button class="btn btn-primary btn-lg" onclick="quickAddDept()">افزودن بخش</button></div>';return;}c.innerHTML=list.map(d=>{const sh=(d.systems&&d.systems.length)?d.systems.map(s=>'<div style="display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--bg-card);border-radius:9px;margin-bottom:6px;font-size:12.5px;flex-wrap:wrap;"><span class="badge badge-purple">'+(s.type||'سیستم')+'</span><span style="flex:1;font-weight:600;">'+escapeHtml(s.title||s.name)+'</span>'+(s.remoteCode?'<span class="badge badge-blue" style="direction:ltr;">'+escapeHtml(s.remoteType||'')+' '+escapeHtml(s.remoteCode)+'</span>':'')+'<button class="btn btn-info btn-sm" onclick="showSystemDetail('+d.id+','+s.id+')" title="مشاهده">'+ICONS.eye+'</button><button class="btn btn-info btn-sm" onclick="showQR('+d.id+','+s.id+')" title="QR">QR</button><button class="btn btn-warning btn-sm" onclick="editSystem('+d.id+','+s.id+')">'+ICONS.edit+'</button><button class="btn btn-danger btn-sm" onclick="delSystem('+d.id+','+s.id+')">'+ICONS.trash+'</button></div>').join(''):'<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12.5px;">سیستمی نیست</div>';return '<div class="dept-card" style="background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid var(--border);flex-wrap:wrap;"><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;">'+ICONS.box+'</div><h3 style="font-size:14px;font-weight:700;flex:1;min-width:100px;">'+escapeHtml(d.name)+'</h3><span class="badge badge-blue">'+faNum((d.systems||[]).length)+' سیستم</span><button class="btn btn-danger btn-sm" onclick="delDept('+d.id+')">'+ICONS.trash+'</button></div>'+sh+'</div>';}).join('');}
 function delDept(id){confirmAction('حذف بخش','همه سیستم‌ها حذف می‌شوند',()=>{DB.set('departments',DB.get('departments').filter(d=>d.id!==id));updateDeptSelects();renderDepts();renderSystems();toast('حذف شد','success');});}
 function delSystem(deptId,sysId){confirmAction('حذف سیستم','حذف شود؟',()=>{const list=DB.get('departments');const d=list.find(x=>x.id===deptId);if(d)d.systems=d.systems.filter(s=>s.id!==sysId);DB.set('departments',list);renderDepts();renderSystems();toast('حذف شد','success');});}
 function del(key,id,fn){confirmAction('حذف','مطمئن؟',()=>{DB.set(key,DB.get(key).filter(r=>r.id!==id));if(fn)fn();toast('حذف شد','success');});}
@@ -1323,12 +1627,12 @@ function del(key,id,fn){confirmAction('حذف','مطمئن؟',()=>{DB.set(key,DB
 let editingUser=null;
 function renderUserPermsList(perms){const list=document.getElementById('ufPermsList');list.innerHTML=Object.keys(PERMISSIONS).map(k=>{if(k==='users')return '';const p=PERMISSIONS[k];return '<label class="perm-item"><input type="checkbox" data-perm="'+k+'" '+(perms.includes(k)?'checked':'')+'><div><div style="font-weight:600;">'+p.label+'</div><div style="font-size:11px;color:var(--text-muted);">'+p.desc+'</div></div></label>';}).join('');}
 function getSelectedPerms(){return Array.from(document.querySelectorAll('#ufPermsList input:checked')).map(el=>el.dataset.perm);}
-function openUserForm(){if(!isAdmin())return toast('فقط مدیر می‌تواند کاربر اضافه کند','error');editingUser=null;document.getElementById('userFormTitle').textContent='افزودن کاربر';document.getElementById('ufName').value='';document.getElementById('ufPhone').value='';document.getElementById('ufPassword').value='';document.getElementById('ufLeaveBalance').value='26';document.querySelectorAll('input[name="ufRole"]').forEach(r=>{r.checked=r.value==='user';r.disabled=r.value==='admin';});renderUserPermsList(ROLE_DEFAULTS.user);document.getElementById('userFormModal').classList.add('show');}
+function openUserForm(){editingUser=null;document.getElementById('userFormTitle').textContent='افزودن کاربر';document.getElementById('ufName').value='';document.getElementById('ufPhone').value='';document.getElementById('ufPassword').value='';document.getElementById('ufLeaveBalance').value='26';document.querySelector('input[name="ufRole"][value="user"]').checked=true;renderUserPermsList(ROLE_DEFAULTS.user);document.getElementById('userFormModal').classList.add('show');}
 function closeUserForm(){document.getElementById('userFormModal').classList.remove('show');editingUser=null;}
-function editUser(id){if(!isAdmin())return toast('فقط مدیر می‌تواند کاربر را ویرایش کند','error');const u=DB.get('users').find(x=>x.id===id);if(!u)return;editingUser=id;document.getElementById('userFormTitle').textContent='ویرایش: '+u.displayName;document.getElementById('ufName').value=u.displayName||'';document.getElementById('ufPhone').value=u.username||'';document.getElementById('ufPassword').value=u.password||'';document.getElementById('ufLeaveBalance').value=u.leaveBalance!==undefined?u.leaveBalance:26;document.querySelectorAll('input[name="ufRole"]').forEach(r=>{r.disabled=(r.value==='admin'&&!isAdmin());r.checked=r.value===u.role;});const adminEdit=(u.username===ADMIN_PHONE||String(u.id)==='admin');const adminRadio=document.querySelector('input[name="ufRole"][value="admin"]');if(adminRadio){adminRadio.disabled=false;adminRadio.checked=adminEdit||u.role==='admin';}renderUserPermsList(u.permissions||ROLE_DEFAULTS[u.role]||ROLE_DEFAULTS.user);document.getElementById('userFormModal').classList.add('show');}
-function saveUser(){if(!isAdmin())return toast('فقط مدیر می‌تواند کاربران را مدیریت کند','error');const name=document.getElementById('ufName').value.trim();const phone=document.getElementById('ufPhone').value.trim();const password=document.getElementById('ufPassword').value;const leaveBalance=+document.getElementById('ufLeaveBalance').value||26;const rr=document.querySelector('input[name="ufRole"]:checked');let role=rr?rr.value:'user';const perms=getSelectedPerms();if(!name)return toast('نام لازم','error');if(!/^09\d{9}$/.test(phone))return toast('شماره معتبر نیست','error');if(!password||password.length<6)return toast('رمز حداقل ۶','error');const users=DB.get('users');if(editingUser){const idx=users.findIndex(u=>String(u.id)===String(editingUser));if(idx<0)return toast('کاربر پیدا نشد','error');const current=users[idx];const isProtectedAdmin=current.username===ADMIN_PHONE||String(current.id)==='admin';if(isProtectedAdmin)role='admin';if(!isProtectedAdmin&&role==='admin')return toast('ساخت حساب مدیر مجاز نیست','error');if(users.find(u=>u.username===phone&&String(u.id)!==String(editingUser)))return toast('شماره موبایل تکراری است','error');users[idx]={...current,displayName:name,username:isProtectedAdmin?ADMIN_PHONE:phone,password,role,permissions:isProtectedAdmin?[...ROLE_DEFAULTS.admin]:perms,leaveBalance};toast('کاربر با موفقیت ویرایش شد','success');}else{if(role==='admin')return toast('فقط حساب مدیر اصلی می‌تواند مدیر باشد','error');if(users.find(u=>u.username===phone))return toast('شماره موبایل تکراری است','error');users.push({id:Date.now()+Math.floor(Math.random()*1000),displayName:name,username:phone,password,role,permissions:perms,avatar:null,leaveBalance});toast('کاربر با موفقیت اضافه شد','success');}DB.set('users',users);closeUserForm();renderUsers();applyPermissions();}
-function renderUsers(){const s=(document.getElementById('usersSearch').value||'').trim();let list=DB.get('users');if(s)list=list.filter(u=>(u.displayName||'').includes(s)||(u.username||'').includes(s));const c=document.getElementById('usersContent');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.briefcase+'</div><h3>کاربری نیست</h3></div>';return;}const rl={admin:'مدیر',manager:'سرپرست',user:'کاربر',viewer:'مشاهده‌گر'};c.innerHTML='<div class="users-grid">'+list.map(u=>'<div class="user-card"><div class="user-card-avatar">'+(u.avatar?'<img src="'+u.avatar+'">':(u.displayName||'ک').charAt(0))+'</div><div class="user-card-info"><h4>'+escapeHtml(u.displayName||'—')+'</h4><div class="un">'+escapeHtml(u.username)+'</div><span class="role-badge '+u.role+'" style="display:inline-block;margin-top:5px;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;">'+(rl[u.role]||'کاربر')+'</span></div><div class="user-card-actions"><button class="btn btn-warning btn-sm" onclick="editUser('+u.id+')">'+ICONS.edit+'</button>'+(u.username!==ADMIN_PHONE?'<button class="btn btn-danger btn-sm" onclick="delUser('+u.id+')">'+ICONS.trash+'</button>':'')+'</div></div>').join('')+'</div>';}
-function delUser(id){const u=DB.get('users').find(x=>x.id===id);if(!u)return;if(u.username===ADMIN_PHONE)return toast('مدیر اصلی حذف نمی‌شود','error');confirmAction('حذف کاربر','حذف «'+u.displayName+'»؟',()=>{DB.set('users',DB.get('users').filter(x=>x.id!==id));renderUsers();toast('حذف شد','success');});}
+async function editUser(id){const users=await DB.getUsers();const u=users.find(x=>x.id===id);if(!u)return;editingUser=id;document.getElementById('userFormTitle').textContent='ویرایش: '+u.displayName;document.getElementById('ufName').value=u.displayName||'';document.getElementById('ufPhone').value=u.username||'';document.getElementById('ufPassword').value=u.password||'';document.getElementById('ufLeaveBalance').value=u.leaveBalance!==undefined?u.leaveBalance:26;const r=document.querySelector('input[name="ufRole"][value="'+u.role+'"]');if(r)r.checked=true;renderUserPermsList(u.permissions||ROLE_DEFAULTS[u.role]||[]);document.getElementById('userFormModal').classList.add('show');}
+async function saveUser(){const name=document.getElementById('ufName').value.trim();const phone=document.getElementById('ufPhone').value.trim();const password=document.getElementById('ufPassword').value;const leaveBalance=+document.getElementById('ufLeaveBalance').value||26;const rr=document.querySelector('input[name="ufRole"]:checked');const role=rr?rr.value:'user';const perms=getSelectedPerms();if(!name)return toast('نام لازم','error');if(!/^09\d{9}$/.test(phone))return toast('شماره معتبر نیست','error');if(!password||password.length<6)return toast('رمز حداقل ۶ کاراکتر','error');const users=await DB.getUsers();if(editingUser){if(users.find(u=>u.username===phone&&u.id!==editingUser))return toast('این شماره قبلا ثبت شده','error');const idx=users.findIndex(u=>u.id===editingUser);if(idx>=0){users[idx]={...users[idx],displayName:name,username:phone,password,role,permissions:perms,leaveBalance};DB.set('users',users);await DB.saveUser(users[idx]);toast('ویرایش شد','success');}}else{if(users.find(u=>u.username===phone))return toast('این شماره قبلا ثبت شده','error');const newUser={id:Date.now(),displayName:name,username:phone,password,role,permissions:perms,avatar:null,leaveBalance};users.push(newUser);DB.set('users',users);await DB.saveUser(newUser);toast('کاربر جدید ساخته شد','success');}closeUserForm();renderUsers();}
+async function renderUsers(){const s=(document.getElementById('usersSearch').value||'').trim();let list=await DB.getUsers();if(s)list=list.filter(u=>(u.displayName||'').includes(s)||(u.username||'').includes(s));const c=document.getElementById('usersContent');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.briefcase+'</div><h3>کاربری نیست</h3></div>';return;}const rl={admin:'مدیر',manager:'سرپرست',user:'کاربر',viewer:'مشاهده‌گر'};c.innerHTML='<div class="users-grid">'+list.map(u=>'<div class="user-card"><div class="user-card-avatar">'+(u.avatar?'<img src="'+u.avatar+'">':(u.displayName||'ک').charAt(0))+'</div><div class="user-card-info"><h4>'+escapeHtml(u.displayName||'—')+'</h4><div class="un">'+escapeHtml(u.username)+'</div><span class="role-badge '+u.role+'" style="display:inline-block;margin-top:5px;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;">'+(rl[u.role]||'کاربر')+'</span></div><div class="user-card-actions"><button class="btn btn-warning btn-sm" onclick="editUser('+u.id+')">'+ICONS.edit+'</button>'+(u.username!==ADMIN_PHONE?'<button class="btn btn-danger btn-sm" onclick="delUser('+u.id+')">'+ICONS.trash+'</button>':'')+'</div></div>').join('')+'</div>';}
+async function delUser(id){const users=await DB.getUsers();const u=users.find(x=>x.id===id);if(!u)return;if(u.username===ADMIN_PHONE)return toast('مدیر اصلی حذف نمی‌شود','error');confirmAction('حذف کاربر','حذف «'+u.displayName+'»؟',async()=>{const newUsers=users.filter(x=>x.id!==id);DB.set('users',newUsers);await window.supabaseClient.from('panel_users').delete().eq('id',id);renderUsers();toast('حذف شد','success');});}
 
 /* ============ PROFILE ============ */
 let pendingAvatarData=null;
@@ -1337,11 +1641,11 @@ function closeProfileForm(){document.getElementById('profileFormModal').classLis
 function updateProfileAvatarPreview(){const p=document.getElementById('profileAvatarPreview');const u=getCurrentUser();if(pendingAvatarData){p.innerHTML='<img src="'+pendingAvatarData+'"><div class="overlay-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/></svg></div>';}else{const init=(u&&u.displayName?u.displayName:'م').charAt(0);p.innerHTML='<span>'+init+'</span><div class="overlay-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/></svg></div>';}}
 function handleAvatarUpload(e){const f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024)return toast('حجم زیاد','error');const r=new FileReader();r.onload=ev=>{pendingAvatarData=ev.target.result;updateProfileAvatarPreview();toast('بارگذاری شد','success');};r.readAsDataURL(f);}
 function removeAvatar(){pendingAvatarData=null;updateProfileAvatarPreview();}
-function saveProfile(){const u=getCurrentUser();if(!u)return;const name=document.getElementById('pfName').value.trim();if(!name)return toast('نام لازم','error');const cp=document.getElementById('pfCurrentPass').value;const np=document.getElementById('pfNewPass').value;const conf=document.getElementById('pfConfirmPass').value;const users=DB.get('users');const idx=users.findIndex(x=>x.id===u.id);if(idx<0)return;const updates={displayName:name,avatar:pendingAvatarData};if(cp||np||conf){if(cp!==users[idx].password)return toast('رمز فعلی نادرست','error');if(!np||np.length<6)return toast('رمز جدید حداقل ۶','error');if(np!==conf)return toast('تکرار مطابقت ندارد','error');updates.password=np;}users[idx]={...users[idx],...updates};DB.set('users',users);closeProfileForm();updateSidebarUser();toast('بروزرسانی شد','success');}
+async function saveProfile(){const u=getCurrentUser();if(!u)return;const name=document.getElementById('pfName').value.trim();if(!name)return toast('نام لازم','error');const cp=document.getElementById('pfCurrentPass').value;const np=document.getElementById('pfNewPass').value;const conf=document.getElementById('pfConfirmPass').value;const users=DB.get('users');const idx=users.findIndex(x=>x.id===u.id);if(idx<0)return;const updates={displayName:name,avatar:pendingAvatarData};if(cp||np||conf){if(cp!==users[idx].password)return toast('رمز فعلی نادرست','error');if(!np||np.length<6)return toast('رمز جدید حداقل ۶','error');if(np!==conf)return toast('تکرار مطابقت ندارد','error');updates.password=np;}users[idx]={...users[idx],...updates};DB.set('users',users);await DB.saveUser(users[idx]);closeProfileForm();updateSidebarUser();toast('بروزرسانی شد','success');}
 
 /* ============ DASHBOARD ============ */
 function renderDashboard(){const me=getCurrentUser();const[jy,jm]=todayJalali();const ym=jy+'/'+pad(jm);const att=DB.get('attendance').filter(r=>r.date.startsWith(ym)&&(me.role!=='user'||r.userId===me.id||!r.userId));const home=DB.get('home').filter(r=>r.date.startsWith(ym)&&(me.role!=='user'||r.userId===me.id||!r.userId));const tasks=DB.get('tasks').filter(r=>r.date.startsWith(ym));const mywork=DB.get('mywork').filter(r=>r.status!=='done');const tickets=DB.get('tickets').filter(t=>t.status!=='closed');const sumAtt=att.reduce((s,r)=>s+r.hours,0);const sumHome=home.reduce((s,r)=>s+r.hours,0);const total=sumAtt+sumHome;const[py,pm]=jm===1?[jy-1,12]:[jy,jm-1];const prevYm=py+'/'+pad(pm);const prevAtt=DB.get('attendance').filter(r=>r.date.startsWith(prevYm));const prevHome=DB.get('home').filter(r=>r.date.startsWith(prevYm));const prevTotal=prevAtt.reduce((s,r)=>s+r.hours,0)+prevHome.reduce((s,r)=>s+r.hours,0);const trend=prevTotal>0?((total-prevTotal)/prevTotal*100).toFixed(0):0;document.getElementById('dashStats').innerHTML='<div class="stat"><div class="stat-top"><div class="stat-icon">'+ICONS.clock+'</div></div><div class="stat-value">'+faNum(sumAtt.toFixed(1))+'</div><div class="stat-label">ساعت محل کار</div></div><div class="stat success"><div class="stat-top"><div class="stat-icon">'+ICONS.home+'</div></div><div class="stat-value">'+faNum(sumHome.toFixed(1))+'</div><div class="stat-label">ساعت خانه</div></div><div class="stat warning"><div class="stat-top"><div class="stat-icon">'+ICONS.ticket+'</div></div><div class="stat-value">'+faNum(tickets.length)+'</div><div class="stat-label">تیکت باز</div></div><div class="stat info"><div class="stat-top"><div class="stat-icon">'+ICONS.star+'</div></div><div class="stat-value">'+faNum(mywork.length)+'</div><div class="stat-label">کارهای روزانه</div></div><div class="stat danger"><div class="stat-top"><div class="stat-icon">'+ICONS.box+'</div></div><div class="stat-value">'+faNum(total.toFixed(1))+'</div><div class="stat-label">جمع ساعات</div><div class="stat-trend '+(trend>=0?'up':'down')+'">'+(trend>=0?'↑':'↓')+' '+faNum(Math.abs(trend))+'٪</div></div>';updateNotifBadge();}
-function renderWidgets(){const me=getCurrentUser();const now=todayJalali();const[jy,jm,jd]=now;const ym=jy+'/'+pad(jm);const att=DB.get('attendance').filter(r=>r.date.startsWith(ym));const home=DB.get('home').filter(r=>r.date.startsWith(ym));const sumAtt=att.reduce((s,r)=>s+r.hours,0);const sumHome=home.reduce((s,r)=>s+r.hours,0);const mywork=DB.get('mywork');const recentLogs=DB.get('activityLog').slice(0,6);const grid=document.getElementById('widgetsGrid');if(!grid)return;grid.innerHTML='<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.activity+'</div><h3>فعالیت‌های اخیر</h3></div>'+recentLogs.map(l=>'<div class="feed-item"><div class="feed-dot '+l.type+'"></div><div class="feed-text"><strong>'+escapeHtml(l.userName)+'</strong> — '+escapeHtml(l.text)+'<div class="feed-time">'+l.timestamp+'</div></div></div>').join('')+'</div>'+'<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.check+'</div><h3>وضعیت کارهای من</h3></div><div style="display:flex;justify-content:space-around;padding:20px 0;"><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--danger);">'+faNum(mywork.filter(m=>m.status==='pending').length)+'</div><div style="font-size:11px;color:var(--text-muted);">انجام نشده</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--warning);">'+faNum(mywork.filter(m=>m.status==='inprogress').length)+'</div><div style="font-size:11px;color:var(--text-muted);">در حال انجام</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--success);">'+faNum(mywork.filter(m=>m.status==='done').length)+'</div><div style="font-size:11px;color:var(--text-muted);">انجام شده</div></div></div></div>'+'<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.clock+'</div><h3>ساعات این ماه</h3></div><div style="display:flex;justify-content:space-around;padding:20px 0;"><div style="text-align:center;"><div style="font-size:24px;font-weight:800;">'+faNum(sumAtt.toFixed(1))+'</div><div style="font-size:11px;color:var(--text-muted);">محل کار</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;">'+faNum(sumHome.toFixed(1))+'</div><div style="font-size:11px;color:var(--text-muted);">خانه</div></div></div></div>';}
+function renderWidgets(){const me=getCurrentUser();const[jy,jm,jd]=todayJalali();const ym=jy+'/'+pad(jm);const att=DB.get('attendance').filter(r=>r.date.startsWith(ym));const home=DB.get('home').filter(r=>r.date.startsWith(ym));const sumAtt=att.reduce((s,r)=>s+r.hours,0);const sumHome=home.reduce((s,r)=>s+r.hours,0);const mywork=DB.get('mywork');const recentLogs=DB.get('activityLog').slice(0,6);const grid=document.getElementById('widgetsGrid');if(!grid)return;grid.innerHTML='<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.activity+'</div><h3>فعالیت‌های اخیر</h3></div>'+recentLogs.map(l=>'<div class="feed-item"><div class="feed-dot '+l.type+'"></div><div class="feed-text"><strong>'+escapeHtml(l.userName)+'</strong> — '+escapeHtml(l.text)+'<div class="feed-time">'+l.timestamp+'</div></div></div>').join('')+'</div>'+'<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.check+'</div><h3>وضعیت کارهای من</h3></div><div style="display:flex;justify-content:space-around;padding:20px 0;"><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--danger);">'+faNum(mywork.filter(m=>m.status==='pending').length)+'</div><div style="font-size:11px;color:var(--text-muted);">انجام نشده</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--warning);">'+faNum(mywork.filter(m=>m.status==='inprogress').length)+'</div><div style="font-size:11px;color:var(--text-muted);">در حال انجام</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;color:var(--success);">'+faNum(mywork.filter(m=>m.status==='done').length)+'</div><div style="font-size:11px;color:var(--text-muted);">انجام شده</div></div></div></div>'+'<div class="widget"><div class="widget-head"><div class="w-icon">'+ICONS.clock+'</div><h3>ساعات این ماه</h3></div><div style="display:flex;justify-content:space-around;padding:20px 0;"><div style="text-align:center;"><div style="font-size:24px;font-weight:800;">'+faNum(sumAtt.toFixed(1))+'</div><div style="font-size:11px;color:var(--text-muted);">محل کار</div></div><div style="text-align:center;"><div style="font-size:24px;font-weight:800;">'+faNum(sumHome.toFixed(1))+'</div><div style="font-size:11px;color:var(--text-muted);">خانه</div></div></div></div>';}
 function renderActivity(){const f=document.getElementById('activityFilter').value;let list=DB.get('activityLog');if(f)list=list.filter(l=>l.type===f);const c=document.getElementById('activityList');if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.activity+'</div><h3>فعالیتی نیست</h3></div>';return;}const ti={create:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',update:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/></svg>',delete:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>',login:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>',assign:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'};c.innerHTML=list.map(l=>'<div class="activity-item"><div class="activity-icon '+l.type+'">'+(ti[l.type]||ti.update)+'</div><div class="activity-body"><div class="activity-text"><strong>'+escapeHtml(l.userName)+'</strong> — '+escapeHtml(l.text)+'</div><div class="activity-meta"><span>'+l.timestamp+'</span></div></div></div>').join('');}
 function clearActivity(){confirmAction('پاک کردن','مطمئن؟',()=>{DB.set('activityLog',[]);renderActivity();toast('پاک شد','success');});}
 function calcReport(){const m=document.getElementById('reportMonth').value;if(!m)return toast('ماه را انتخاب کنید','error');const ym=m.split('/').slice(0,2).join('/');const me=getCurrentUser();let att=DB.get('attendance').filter(r=>r.date.startsWith(ym));let home=DB.get('home').filter(r=>r.date.startsWith(ym));if(me.role!=='admin'&&me.role!=='manager'){att=att.filter(r=>r.userId===me.id||!r.userId);home=home.filter(r=>r.userId===me.id||!r.userId);}const tasks=DB.get('tasks').filter(r=>r.date.startsWith(ym));const so=att.reduce((s,r)=>s+r.hours,0);const sh=home.reduce((s,r)=>s+r.hours,0);const t=so+sh;document.getElementById('reportStats').innerHTML='<div class="stat"><div class="stat-top"><div class="stat-icon">'+ICONS.clock+'</div></div><div class="stat-value">'+faNum(so.toFixed(1))+'</div><div class="stat-label">محل کار</div></div><div class="stat success"><div class="stat-top"><div class="stat-icon">'+ICONS.home+'</div></div><div class="stat-value">'+faNum(sh.toFixed(1))+'</div><div class="stat-label">خانه</div></div><div class="stat warning"><div class="stat-top"><div class="stat-icon">'+ICONS.check+'</div></div><div class="stat-value">'+faNum(t.toFixed(1))+'</div><div class="stat-label">جمع</div></div><div class="stat danger"><div class="stat-top"><div class="stat-icon">'+ICONS.monitor+'</div></div><div class="stat-value">'+faNum(tasks.length)+'</div><div class="stat-label">کارها</div></div>';drawBarChart('reportChart',[{label:'محل کار',value:so,color:'#6c47c9'},{label:'خانه',value:sh,color:'#10b981'},{label:'جمع',value:t,color:'#f59e0b'}]);const types={};tasks.forEach(t=>{if(!types[t.type])types[t.type]={count:0,hours:0};types[t.type].count++;types[t.type].hours+=t.hours;});const cont=document.getElementById('taskReportContent');const keys=Object.keys(types);if(!keys.length){cont.innerHTML='<div class="empty-state">کاری نیست</div>';return;}const th=keys.reduce((s,k)=>s+types[k].hours,0)||1;cont.innerHTML='<div class="table-wrap"><table><thead><tr><th>نوع</th><th>تعداد</th><th>جمع</th><th>سهم</th></tr></thead><tbody>'+keys.map(k=>{const p=((types[k].hours/th)*100).toFixed(1);return '<tr><td><span class="badge '+(TASK_COLORS[k]||'badge-blue')+'">'+k+'</span></td><td>'+faNum(types[k].count)+'</td><td><strong>'+formatHours(types[k].hours)+'</strong></td><td><div style="display:flex;align-items:center;gap:8px;"><div class="progress-bar" style="flex:1;"><div style="width:'+p+'%"></div></div><span>'+faNum(p)+'٪</span></div></td></tr>';}).join('')+'</tbody></table></div>';}
@@ -1355,6 +1659,8 @@ const themeBtn=document.getElementById('themeBtn');const themeIcon=document.getE
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('theme',t);themeIcon.innerHTML=t==='dark'?'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>':'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';}
 themeBtn.onclick=()=>{const c=document.documentElement.getAttribute('data-theme')||'light';setTheme(c==='dark'?'light':'dark');};
 setTheme(localStorage.getItem('theme')||'light');setColor(localStorage.getItem('panelColor')||'purple');
+
+/* ============ CMDK ============ */
 function openCmdk(){document.getElementById('cmdkOverlay').classList.add('show');document.getElementById('cmdkInput').value='';renderCmdk();setTimeout(()=>document.getElementById('cmdkInput').focus(),100);}
 function closeCmdk(){document.getElementById('cmdkOverlay').classList.remove('show');}
 let cmdkSel=0;
@@ -1363,6 +1669,8 @@ const slice=results.slice(0,20);cmdkSel=Math.min(cmdkSel,slice.length-1);if(cmdk
 function runCmdk(i){const d=document.getElementById('cmdkResults')._data;if(!d||!d[i])return;const r=d[i];closeCmdk();if(r.type==='page'){const btn=document.querySelector('.nav-item[data-page="'+r.page+'"]');if(btn&&!btn.classList.contains('hidden'))btn.click();}else if(r.type==='task')editTask(r.id);else if(r.type==='system')showSystemDetail(r.deptId,r.id);else if(r.type==='user')editUser(r.id);else if(r.type==='ticket')openTicketForm(r.id);}
 function cmdkKeydown(e){const d=document.getElementById('cmdkResults')._data||[];if(e.key==='ArrowDown'){e.preventDefault();cmdkSel=Math.min(cmdkSel+1,d.length-1);renderCmdk();}else if(e.key==='ArrowUp'){e.preventDefault();cmdkSel=Math.max(cmdkSel-1,0);renderCmdk();}else if(e.key==='Enter')runCmdk(cmdkSel);else if(e.key==='Escape')closeCmdk();}
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openCmdk();}if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();openTaskForm();}if((e.ctrlKey||e.metaKey)&&e.key==='t'){e.preventDefault();openTicketForm();}if((e.ctrlKey||e.metaKey)&&e.key==='d'){e.preventDefault();themeBtn.click();}if(e.key==='Escape'){closeCmdk();document.querySelectorAll('.modal-overlay.show').forEach(m=>m.classList.remove('show'));document.querySelectorAll('.fullpage-modal.show').forEach(m=>m.classList.remove('show'));}});
+
+/* ============ SESSION ============ */
 let sessionTimeout=15*60*1000,sessionWarnAt=60*1000;
 let sessionTimerId,sessionWarnId,sessionCountdownId,sessionWarningActive=false,sessionDeadline=0;
 function initSessionTimeout(){const s=localStorage.getItem('sessionTimeout');const m=s!==null?parseInt(s):15;sessionTimeout=m*60*1000;const sel=document.getElementById('sessionTimeoutSelect');if(sel)sel.value=String(m);startSessionTimer();}
@@ -1383,26 +1691,27 @@ let hiddenAt=0;
 document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt){if(Date.now()-hiddenAt>60000)onUserActivity();hiddenAt=0;}});
 
 /* ============ INIT ============ */
-function initApp(){
-  ensureAdminUser();
+async function initApp(){
+  await ensureAdminUser();
   updateSidebarUser();
   applyPermissions();
   const bindInput=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('input',fn);};
   bindInput('attSearch',()=>{attPage=1;renderAttendance();});
   bindInput('homeSearch',()=>{homePage=1;renderHome();});
   bindInput('taskSearch',()=>{taskPage=1;renderTasks();});
-  bindInput('devSearch',()=>{devPage=1;renderDevices();});
   bindInput('mwSearch',()=>{mwPage=1;renderMyWork();});
+  bindInput('jobsSearch',()=>renderJobs());
   document.querySelectorAll('input[name="ufRole"]').forEach(r=>{r.addEventListener('change',()=>renderUserPermsList(ROLE_DEFAULTS[r.value]));});
   renderMyWork();renderAttendance();renderHome();renderTasks();renderJobs();
   renderAssigned();renderDevices();renderDepts();updateDeptSelects();renderSystems();
-  renderUsers();renderDashboard();renderWidgets();renderKanban();
+  await renderUsers();
+  renderDashboard();renderWidgets();renderKanban();
   renderActivity();renderTickets();renderLicenses();renderLeave();updateDate();
   highlightColor();updateNotifBadge();
   initSessionTimeout();
 }
-window.addEventListener('load',()=>{
-  ensureAdminUser();
+window.addEventListener('load',async()=>{
+  await ensureAdminUser();
   const s=localStorage.getItem('savedUser');
   if(s)document.getElementById('loginUser').value=s;
   const reason=sessionStorage.getItem('logoutReason');
@@ -1411,365 +1720,5 @@ window.addEventListener('load',()=>{
 });
 window.addEventListener('resize',()=>{if(document.getElementById('page-dashboard').classList.contains('active')){renderDashboard();}});
 </script>
-
-<script>
-/* ============ IT PRO RESTORE + PERMISSION PATCH ============ */
-(function(){
-  // Extend the existing permission catalog without removing any original permission.
-  Object.assign(PERMISSIONS,{
-    assignTasks:{label:'ایجاد و محول کردن کار',desc:'نوشتن و محول کردن کار به کاربران'},
-    replyTasks:{label:'پاسخ به کارهای محول شده',desc:'پاسخ و گزارش کارهای دریافتی'},
-    viewMyReport:{label:'گزارش شخصی',desc:'مشاهده مجموع ساعات و گزارش روزانه خود'}
-  });
-  if(!ROLE_DEFAULTS.admin.includes('assignTasks')) ROLE_DEFAULTS.admin.push('assignTasks','replyTasks','viewMyReport');
-  if(!ROLE_DEFAULTS.manager.includes('assignTasks')) ROLE_DEFAULTS.manager.push('assignTasks','replyTasks','viewMyReport');
-  if(!ROLE_DEFAULTS.user.includes('replyTasks')) ROLE_DEFAULTS.user.push('replyTasks','viewMyReport');
-  if(!ROLE_DEFAULTS.viewer.includes('viewMyReport')) ROLE_DEFAULTS.viewer.push('viewMyReport');
-
-  const oldEnsureAdminUser=ensureAdminUser;
-  window.normalizeITUser=function(u){
-    if(!u) return u;
-    // Migrate users created by the previous permissions build.
-    if(!u.displayName && u.name) u.displayName=u.name;
-    if(!u.username && u.phone) u.username=u.phone;
-    if(u.id===undefined||u.id===null) u.id=Date.now()+Math.random();
-    if(!u.role) u.role='user';
-    if(!Array.isArray(u.permissions)) u.permissions=(u.role==='admin'?[...ROLE_DEFAULTS.admin]:[...ROLE_DEFAULTS.user]);
-    if(u.role==='admin') u.permissions=[...ROLE_DEFAULTS.admin];
-    if(u.avatar===undefined) u.avatar=null;
-    if(u.leaveBalance===undefined) u.leaveBalance=26;
-    return u;
-  };
-  window.ensureAdminUser=function(){
-    let users=DB.get('users');
-    users=users.map(normalizeITUser);
-    let admin=users.find(u=>String(u.username)===ADMIN_PHONE||String(u.id)==='admin');
-    if(!admin){admin={id:'admin',username:ADMIN_PHONE,displayName:'مهندس نجف‌زاده',password:ADMIN_DEFAULT_PASS,role:'admin',avatar:null,permissions:[...ROLE_DEFAULTS.admin],leaveBalance:26};users.unshift(admin);}
-    else{admin.role='admin';admin.username=ADMIN_PHONE;admin.permissions=[...ROLE_DEFAULTS.admin];if(!admin.displayName)admin.displayName='مهندس نجف‌زاده';if(!admin.password)admin.password=ADMIN_DEFAULT_PASS;}
-    users.forEach(normalizeITUser);DB.set('users',users);
-  };
-  window.getCurrentUser=function(){
-    const id=localStorage.getItem('currentUserId');
-    const users=DB.get('users').map(normalizeITUser);
-    if(id!==null&&id!==''){
-      return users.find(u=>String(u.id)===String(id)) || null;
-    }
-    if(localStorage.getItem('loggedIn')==='1'){
-      return users.find(u=>String(u.username)===ADMIN_PHONE) || null;
-    }
-    return null;
-  };
-  window.isAdmin=function(){const u=getCurrentUser();return !!u&&(u.role==='admin'||String(u.id)==='admin'||String(u.username)===ADMIN_PHONE);};
-  window.hasPerm=function(key){const u=getCurrentUser();return !!u&&(isAdmin()||Array.isArray(u.permissions)&&u.permissions.includes(key));};
-  window.canSeePage=function(page){
-    if(isAdmin()) return true;
-    const map={
-      mywork:'mywork',dashboard:'dashboard',attendance:'attendance',home:'home',leave:'home',
-      tasks:'tasks',kanban:'tasks',tickets:'tasks',jobs:'jobs',assigned:'assigned',
-      devices:'devices',systems:'systems',licenses:'systems',departments:'departments',
-      report:'report',activity:'users',settings:'dashboard',users:'users'
-    };
-    return hasPerm(map[page]||page);
-  };
-  window.canAssignTasks=function(){return isAdmin()||hasPerm('assignTasks');};
-  window.canReplyTask=function(t){const u=getCurrentUser();if(!u||!t)return false;return isAdmin()||(hasPerm('replyTasks')&&String(t.assignedToId)===String(u.id));};
-  window.canManageTask=function(t){const u=getCurrentUser();if(!u||!t)return false;return isAdmin()||String(t.assignedFromId)===String(u.id);};
-  window.getTaskVisibleList=function(){const u=getCurrentUser();if(!u)return [];return DB.get('tasks').filter(t=>isAdmin()||String(t.assignedFromId)===String(u.id)||String(t.assignedToId)===String(u.id));};
-
-  // Fix navigation: the previous permissions version accidentally removed the original tab binding.
-  document.addEventListener('click',function(e){
-    const btn=e.target.closest&&e.target.closest('.nav-item[data-page]');
-    if(!btn||btn.classList.contains('hidden')||btn.style.display==='none')return;
-    e.stopImmediatePropagation();
-    const page=btn.dataset.page;
-    if(!canSeePage(page)){toast('دسترسی به این بخش ندارید','error');return;}
-    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    btn.classList.add('active');
-    const pg=document.getElementById('page-'+page);
-    if(pg)pg.classList.add('active');
-    if(typeof PAGE_TITLES!=='undefined')document.getElementById('pageTitle').innerHTML=(PAGE_TITLES[page]||page)+'<small id="todayDate"></small>';
-    if(typeof updateDate==='function')updateDate();
-    try{
-      if(page==='dashboard'){renderDashboard();if(typeof renderWidgets==='function')renderWidgets();}
-      if(page==='systems')renderSystems();
-      if(page==='jobs')renderJobs();
-      if(page==='users'&&isAdmin())renderUsers();
-      if(page==='assigned')renderAssigned();
-      if(page==='activity')renderActivity();
-      if(page==='kanban')renderKanban();
-      if(page==='tickets')renderTickets();
-      if(page==='licenses')renderLicenses();
-      if(page==='leave')renderLeave();
-      if(page==='settings'&&typeof highlightColor==='function')highlightColor();
-      if(page==='devices')renderDevices();
-      if(page==='departments')renderDepts();
-      if(page==='report')fillMyReportMonthIfNeeded();
-    }catch(err){console.error(err);}
-    if(window.innerWidth<=900&&typeof closeSidebar==='function')closeSidebar();
-  },true);
-
-  // Permission-aware menu and buttons while keeping every original section.
-  const usersPageGuard=true;
-  window.applyPermissions=function(){
-    const u=getCurrentUser();if(!u)return;
-    document.querySelectorAll('.nav-item[data-page]').forEach(item=>{
-      const page=item.dataset.page;
-      const visible=canSeePage(page);
-      item.classList.toggle('hidden',!visible);
-      item.style.display=visible?'':'none';
-    });
-    const usersBtn=document.querySelector('.nav-item[data-page="users"]');
-    if(usersBtn)usersBtn.style.display=isAdmin()?'':'none';
-    const userPage=document.getElementById('page-users');if(userPage)userPage.style.display=isAdmin()?'':'none';
-    const addTask=document.querySelector('#page-tasks .round-btn.primary');if(addTask)addTask.style.display=canAssignTasks()?'':'none';
-    const addKanban=document.querySelector('#page-kanban .btn-primary');if(addKanban)addKanban.style.display=canAssignTasks()?'':'none';
-    const first=document.querySelector('.nav-item[data-page]:not(.hidden)');
-    if(first){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));first.classList.add('active');const page=first.dataset.page;const pg=document.getElementById('page-'+page);if(pg)pg.classList.add('active');if(typeof PAGE_TITLES!=='undefined')document.getElementById('pageTitle').innerHTML=(PAGE_TITLES[page]||page)+'<small id="todayDate"></small>';if(typeof updateDate==='function')updateDate();}
-    const nb=document.getElementById('notifBtn');if(nb)nb.style.display=(isAdmin()||hasPerm('assigned')||hasPerm('replyTasks'))?'grid':'none';
-  };
-
-  // Secure the user-management entry point and keep the main administrator protected.
-  const oldOpenUserForm=window.openUserForm;
-  window.openUserForm=function(){if(!isAdmin())return toast('فقط مدیر می‌تواند کاربر مدیریت کند','error');return oldOpenUserForm.apply(this,arguments);};
-  const oldEditUser=window.editUser;
-  if(oldEditUser)window.editUser=function(id){if(!isAdmin())return toast('فقط مدیر می‌تواند کاربر مدیریت کند','error');return oldEditUser.apply(this,arguments);};
-  const oldDelUser=window.delUser;
-  if(oldDelUser)window.delUser=function(id){if(!isAdmin())return toast('فقط مدیر می‌تواند کاربر مدیریت کند','error');return oldDelUser.apply(this,arguments);};
-
-  // Make task creation/editing obey the selected permission while preserving the original task UI.
-  const oldOpenTaskForm=window.openTaskForm;
-  window.openTaskForm=function(){if(!canAssignTasks())return toast('اجازه ایجاد یا محول کردن کار ندارید','error');return oldOpenTaskForm.apply(this,arguments);};
-  const oldEditTask=window.editTask;
-  if(oldEditTask)window.editTask=function(id){const t=DB.get('tasks').find(x=>String(x.id)===String(id));if(t&&!canManageTask(t))return toast('این کار توسط شما مدیریت نمی‌شود','error');return oldEditTask.apply(this,arguments);};
-
-  // Reply to an assigned task: keep the original chat feature and add explicit permission checks.
-  const oldOpenChatModal=window.openChatModal;
-  window.openChatModal=function(id){const t=DB.get('tasks').find(x=>String(x.id)===String(id));if(!t)return;if(!(isAdmin()||canManageTask(t)||canReplyTask(t)))return toast('دسترسی به این کار ندارید','error');const r=oldOpenChatModal.apply(this,arguments);setTimeout(()=>{if(!isAdmin()&&!canReplyTask(t)){const inp=document.getElementById('chatReplyText');if(inp){const wrap=inp.closest('.form-group');if(wrap)wrap.style.display='none';}const sendBtns=Array.from(document.querySelectorAll('#chatModal button')).filter(b=>String(b.textContent||'').includes('ارسال'));sendBtns.forEach(b=>b.style.display='none');}},0);return r;};
-  const oldSendChatReply=window.sendChatReply;
-  window.sendChatReply=function(){const id=window.currentChatTaskId;const t=DB.get('tasks').find(x=>String(x.id)===String(id));if(t&&!canReplyTask(t)&&!isAdmin())return toast('فقط گیرنده کار می‌تواند پاسخ ارسال کند','error');return oldSendChatReply.apply(this,arguments);};
-
-  // Restore user-specific report with total hours and daily detail.
-  window.fillMyReportMonthIfNeeded=function(){
-    const me=getCurrentUser();if(!me)return;
-    const el=document.getElementById('reportMonth');
-    if(el&&!el.value){const[jy,jm]=todayJalali();el.value=jy+'/'+pad(jm);}
-    if(el&&typeof calcReport==='function')setTimeout(()=>calcReport(),30);
-  };
-  const oldCalcReport=window.calcReport;
-  window.calcReport=function(){
-    if(!hasPerm('report')&&!isAdmin())return toast('دسترسی به گزارش ندارید','error');
-    const r=oldCalcReport.apply(this,arguments);
-    try{
-      const month=document.getElementById('reportMonth').value;const ym=month.split('/').slice(0,2).join('/');const me=getCurrentUser();
-      let att=DB.get('attendance').filter(x=>String(x.date||'').startsWith(ym));
-      let home=DB.get('home').filter(x=>String(x.date||'').startsWith(ym));
-      let tasks=DB.get('tasks').filter(x=>String(x.date||'').startsWith(ym));
-      if(!isAdmin()&&!hasPerm('viewAllReports')){att=att.filter(x=>String(x.userId)===String(me.id)||!x.userId);home=home.filter(x=>String(x.userId)===String(me.id)||!x.userId);tasks=tasks.filter(x=>String(x.assignedFromId)===String(me.id)||String(x.assignedToId)===String(me.id)||!x.assignedFromId);}
-      const dates=[...new Set(att.map(x=>x.date).concat(home.map(x=>x.date),tasks.map(x=>x.date)))].sort().reverse();
-      const rows=dates.map(d=>{const a=att.filter(x=>x.date===d).reduce((s,x)=>s+(+x.hours||0),0);const h=home.filter(x=>x.date===d).reduce((s,x)=>s+(+x.hours||0),0);const tc=tasks.filter(x=>x.date===d).length;return '<tr><td><strong>'+d+'</strong></td><td>'+formatHours(a)+'</td><td>'+formatHours(h)+'</td><td><strong>'+formatHours(a+h)+'</strong></td><td>'+faNum(tc)+'</td></tr>';}).join('');
-      const title='<div class="card-head" style="margin-top:18px;"><div class="card-icon">'+ICONS.calendar+'</div><div><h2>گزارش روزانه</h2><div class="sub">تفکیک ساعات محل کار، کار در خانه و تعداد کارها</div></div></div>';
-      const table='<div class="table-wrap"><table><thead><tr><th>تاریخ</th><th>محل کار</th><th>خانه</th><th>جمع ساعات</th><th>کارها</th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" style="text-align:center;">داده‌ای برای این ماه ثبت نشده است.</td></tr>')+'</tbody></table></div>';
-      const cont=document.getElementById('taskReportContent');if(cont)cont.insertAdjacentHTML('beforeend','<div class="panel-card" style="margin-top:18px;">'+title+table+'</div>');
-    }catch(err){console.error(err);}return r;
-  };
-
-  // Keep the rich IT-device table from the older build: search also scans notes and the notes column is visible.
-  // (renderDevices was restored above in the base file.)
-
-  // Make the initial data safe for both old and new localStorage formats.
-  window.addEventListener('load',function(){
-    try{ensureAdminUser();applyPermissions();updateSidebarUser();updateNotifBadge();}catch(err){console.error(err);}
-  });
-
-  // When a user is saved, refresh permission-dependent UI.
-  const oldSaveUser=window.saveUser;
-  if(oldSaveUser)window.saveUser=function(){const r=oldSaveUser.apply(this,arguments);setTimeout(()=>{ensureAdminUser();applyPermissions();updateSidebarUser();},20);return r;};
-})();
-</script>
-
-<script>
-/* ===== USERS MODULE FINAL FIX ===== */
-(function(){
-  const ADMIN='09900153578';
-
-  function usersRead(){
-    try{return JSON.parse(localStorage.getItem('users')||'[]');}
-    catch(e){return [];}
-  }
-  function usersWrite(v){localStorage.setItem('users',JSON.stringify(v));}
-
-  function currentUserDirect(){
-    const users=usersRead();
-    const id=localStorage.getItem('currentUserId');
-    if(id!==null && id!==''){
-      const u=users.find(x=>String(x.id)===String(id));
-      if(u)return u;
-    }
-    if(localStorage.getItem('loggedIn')==='1'){
-      return users.find(x=>String(x.username)===ADMIN)||null;
-    }
-    return null;
-  }
-  function adminDirect(){
-    const u=currentUserDirect();
-    return !!u && (String(u.username)===ADMIN || String(u.id)==='admin' || u.role==='admin');
-  }
-
-  function openUsersModal(){
-    if(!adminDirect()){ if(typeof toast==='function')toast('فقط مدیر می‌تواند کاربران را مدیریت کند','error'); return; }
-    window.editingUser=null;
-    const title=document.getElementById('userFormTitle');
-    const name=document.getElementById('ufName');
-    const phone=document.getElementById('ufPhone');
-    const pass=document.getElementById('ufPassword');
-    const leave=document.getElementById('ufLeaveBalance');
-    const modal=document.getElementById('userFormModal');
-    if(!modal||!name||!phone||!pass)return;
-    if(title)title.textContent='افزودن کاربر';
-    name.value=''; phone.value=''; pass.value=''; if(leave)leave.value='26';
-    document.querySelectorAll('input[name="ufRole"]').forEach(r=>{
-      r.checked=r.value==='user';
-      r.disabled=r.value==='admin';
-    });
-    if(typeof renderUserPermsList==='function')renderUserPermsList(
-      (typeof ROLE_DEFAULTS!=='undefined'&&ROLE_DEFAULTS.user)||[]
-    );
-    modal.classList.add('show');
-  }
-
-  function editUserDirect(id){
-    if(!adminDirect()){ if(typeof toast==='function')toast('فقط مدیر می‌تواند کاربران را مدیریت کند','error'); return; }
-    const u=usersRead().find(x=>String(x.id)===String(id));
-    if(!u)return;
-    window.editingUser=u.id;
-    const title=document.getElementById('userFormTitle');
-    const name=document.getElementById('ufName');
-    const phone=document.getElementById('ufPhone');
-    const pass=document.getElementById('ufPassword');
-    const leave=document.getElementById('ufLeaveBalance');
-    if(title)title.textContent='ویرایش: '+(u.displayName||'کاربر');
-    if(name)name.value=u.displayName||'';
-    if(phone)phone.value=u.username||'';
-    if(pass)pass.value=u.password||'';
-    if(leave)leave.value=u.leaveBalance!==undefined?u.leaveBalance:26;
-    const isProtected=String(u.username)===ADMIN || String(u.id)==='admin' || u.role==='admin';
-    document.querySelectorAll('input[name="ufRole"]').forEach(r=>{
-      r.disabled=(r.value==='admin'&&!isProtected);
-      r.checked=r.value===(isProtected?'admin':(u.role||'user'));
-    });
-    const perms=isProtected
-      ? ((typeof ROLE_DEFAULTS!=='undefined'&&ROLE_DEFAULTS.admin)||[])
-      : (Array.isArray(u.permissions)?u.permissions:((typeof ROLE_DEFAULTS!=='undefined'&&ROLE_DEFAULTS[u.role])||[]));
-    if(typeof renderUserPermsList==='function')renderUserPermsList(perms);
-    document.getElementById('userFormModal')?.classList.add('show');
-  }
-
-  function saveUserDirect(){
-    if(!adminDirect()){if(typeof toast==='function')toast('فقط مدیر می‌تواند کاربران را مدیریت کند','error');return;}
-    const name=(document.getElementById('ufName')?.value||'').trim();
-    const phone=(document.getElementById('ufPhone')?.value||'').trim();
-    const password=document.getElementById('ufPassword')?.value||'';
-    const leaveBalance=+(document.getElementById('ufLeaveBalance')?.value||26)||26;
-    const rr=document.querySelector('input[name="ufRole"]:checked');
-    let role=rr?rr.value:'user';
-    if(!name)return toast('نام لازم','error');
-    if(!/^09\d{9}$/.test(phone))return toast('شماره موبایل معتبر نیست','error');
-    if(password.length<6)return toast('رمز حداقل ۶ کاراکتر باشد','error');
-
-    const users=usersRead();
-    const editing=window.editingUser;
-    if(editing!==null&&editing!==undefined&&editing!==''){
-      const idx=users.findIndex(x=>String(x.id)===String(editing));
-      if(idx<0)return toast('کاربر پیدا نشد','error');
-      const old=users[idx];
-      const protectedAdmin=String(old.username)===ADMIN || String(old.id)==='admin' || old.role==='admin';
-      if(protectedAdmin){
-        role='admin';
-      }else if(role==='admin'){
-        return toast('برای کاربران جدید/عادی نقش مدیر قابل انتخاب نیست','error');
-      }
-      const duplicate=users.some((x,i)=>i!==idx&&String(x.username)===phone);
-      if(duplicate)return toast('این شماره موبایل قبلاً ثبت شده است','error');
-      let perms=[];
-      if(protectedAdmin){
-        perms=(typeof ROLE_DEFAULTS!=='undefined'&&ROLE_DEFAULTS.admin)||[];
-      }else{
-        perms=typeof getSelectedPerms==='function'?getSelectedPerms():(
-          (typeof ROLE_DEFAULTS!=='undefined'&&ROLE_DEFAULTS[role])||[]
-        );
-      }
-      users[idx]={...old,displayName:name,username:protectedAdmin?ADMIN:phone,password,role,
-        permissions:[...perms],leaveBalance};
-      usersWrite(users);
-      if(typeof closeUserForm==='function')closeUserForm();else document.getElementById('userFormModal')?.classList.remove('show');
-      if(typeof renderUsers==='function')renderUsers();
-      if(typeof applyPermissions==='function')applyPermissions();
-      if(typeof updateSidebarUser==='function')updateSidebarUser();
-      return toast('کاربر با موفقیت ویرایش شد','success');
-    }
-
-    if(role==='admin')return toast('ساخت حساب مدیر دوم مجاز نیست','error');
-    if(users.some(x=>String(x.username)===phone))return toast('این شماره موبایل قبلاً ثبت شده است','error');
-    const perms=typeof getSelectedPerms==='function'?getSelectedPerms():(
-      (typeof ROLE_DEFAULTS!=='undefined'&&ROLE_DEFAULTS[role])||[]
-    );
-    users.push({
-      id:Date.now()+Math.floor(Math.random()*10000),
-      displayName:name,username:phone,password,role,
-      permissions:[...perms],avatar:null,leaveBalance
-    });
-    usersWrite(users);
-    if(typeof closeUserForm==='function')closeUserForm();else document.getElementById('userFormModal')?.classList.remove('show');
-    if(typeof renderUsers==='function')renderUsers();
-    if(typeof applyPermissions==='function')applyPermissions();
-    toast('کاربر با موفقیت اضافه شد','success');
-  }
-
-  function renderUsersDirect(){
-    const box=document.getElementById('usersContent');
-    if(!box)return;
-    const search=(document.getElementById('usersSearch')?.value||'').trim();
-    let list=usersRead();
-    if(search)list=list.filter(u=>(u.displayName||'').includes(search)||(u.username||'').includes(search));
-    if(!list.length){
-      box.innerHTML='<div class="empty-guide"><div class="icon">'+((typeof ICONS!=='undefined'&&ICONS.briefcase)||'')+'</div><h3>کاربری نیست</h3></div>';
-      return;
-    }
-    const roles={admin:'مدیر',manager:'سرپرست',user:'کاربر',viewer:'مشاهده‌گر'};
-    box.innerHTML='<div class="users-grid">'+list.map(u=>{
-      const safeName=typeof escapeHtml==='function'?escapeHtml(u.displayName||'—'):(u.displayName||'—');
-      const safePhone=typeof escapeHtml==='function'?escapeHtml(u.username||''):(u.username||'');
-      const avatar=u.avatar?'<img src="'+u.avatar+'">':(u.displayName||'ک').charAt(0);
-      const editIcon=(typeof ICONS!=='undefined'&&ICONS.edit)||'ویرایش';
-      const trashIcon=(typeof ICONS!=='undefined'&&ICONS.trash)||'حذف';
-      return '<div class="user-card"><div class="user-card-avatar">'+avatar+
-        '</div><div class="user-card-info"><h4>'+safeName+'</h4><div class="un">'+safePhone+
-        '</div><span class="role-badge '+(u.role||'user')+'">'+(roles[u.role]||'کاربر')+
-        '</span></div><div class="user-card-actions"><button class="btn btn-warning btn-sm" onclick="editUser('+JSON.stringify(u.id)+')">'+editIcon+
-        '</button>'+(String(u.username)!==ADMIN?'<button class="btn btn-danger btn-sm" onclick="delUser('+JSON.stringify(u.id)+')">'+trashIcon+'</button>':'')+
-        '</div></div>';
-    }).join('')+'</div>';
-  }
-
-  function delUserDirect(id){
-    if(!adminDirect())return toast('فقط مدیر می‌تواند کاربران را مدیریت کند','error');
-    const users=usersRead();
-    const u=users.find(x=>String(x.id)===String(id));
-    if(!u)return;
-    if(String(u.username)===ADMIN||String(u.id)==='admin')return toast('مدیر اصلی حذف نمی‌شود','error');
-    const remove=()=>{usersWrite(users.filter(x=>String(x.id)!==String(id)));renderUsersDirect();toast('کاربر حذف شد','success');};
-    if(typeof confirmAction==='function')confirmAction('حذف کاربر','حذف «'+(u.displayName||'کاربر')+'»؟',remove);
-    else if(confirm('حذف کاربر؟'))remove();
-  }
-
-  window.openUserForm=openUsersModal;
-  window.editUser=editUserDirect;
-  window.saveUser=saveUserDirect;
-  window.renderUsers=renderUsersDirect;
-  window.delUser=delUserDirect;
-})();
-</script>
-
 </body>
 </html>
