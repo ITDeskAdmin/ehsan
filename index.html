@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>پنل مدیریت IT Pro 5.6</title>
+<title>پنل مدیریت IT Pro 5.7</title>
 <link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,49 +91,54 @@ select option{background:var(--bg-card);color:var(--text);}
 .app{display:none;min-height:100vh;}
 .app.show{display:flex;}
 
-/* ============ SIDEBAR ============ */
-.sidebar{width:270px;background:linear-gradient(180deg,#060b18 0%,#0a1120 40%,#0a1120 100%);color:#8fa0c0;display:flex;flex-direction:column;position:fixed;top:0;right:0;height:100vh;height:100dvh;z-index:40;border-left:1px solid rgba(255,255,255,.04);box-shadow:-8px 0 40px rgba(0,0,0,.25);transition:transform .22s;}
+/* ============ SIDEBAR (New Professional Look) ============ */
+.sidebar{width:270px;background:linear-gradient(180deg,#0b0f19 0%,#151f32 100%);color:#8fa0c0;display:flex;flex-direction:column;position:fixed;top:0;right:0;height:100vh;height:100dvh;z-index:40;border-left:1px solid rgba(255,255,255,.05);box-shadow:-10px 0 30px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1);}
 .sidebar-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:8px;}
-.sidebar-scroll::-webkit-scrollbar{width:4px;}
-.sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(108,71,201,.4);border-radius:10px;}
-.sidebar-footer{flex-shrink:0;padding:12px 16px 16px;background:linear-gradient(180deg,transparent,rgba(6,10,20,.8) 40%,#0a1120);border-top:1px solid rgba(255,255,255,.06);}
+.sidebar-scroll::-webkit-scrollbar{width:5px;}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(108,71,201,.5);border-radius:10px;}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover{background:rgba(108,71,201,.8);}
+.sidebar-footer{flex-shrink:0;padding:14px 16px 16px;background:linear-gradient(180deg,transparent,rgba(11,15,25,.9) 40%,#0b0f19);border-top:1px solid rgba(255,255,255,.06);}
 .sidebar-footer label{display:flex;align-items:center;gap:7px;font-size:11px;color:#8fa0c0;margin-bottom:8px;font-weight:600;}
 .sidebar-footer svg{width:13px!important;height:13px!important;}
-.sidebar-footer select{width:100%;padding:9px 12px;padding-left:36px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-family:inherit;font-size:12px;outline:none;}
-.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);z-index:39;opacity:0;visibility:hidden;transition:all .22s;}
+.sidebar-footer select{width:100%;padding:10px 12px;padding-left:36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-family:inherit;font-size:12px;outline:none;transition:all .2s;}
+.sidebar-footer select:hover{border-color:var(--primary);background:rgba(108,71,201,.1);}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:39;opacity:0;visibility:hidden;transition:all .3s;}
 .sidebar-overlay.show{opacity:1;visibility:visible;}
-.user-box{display:flex;align-items:center;gap:14px;padding:20px 18px 18px;margin-bottom:4px;background:linear-gradient(135deg,rgba(108,71,201,.15) 0%,rgba(6,182,212,.05) 100%);border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;position:relative;overflow:hidden;}
-.user-box::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(108,71,201,.3),transparent 65%);border-radius:50%;animation:userGlow 6s ease-in-out infinite;}
+
+/* User Box Glowing Effect */
+.user-box{display:flex;align-items:center;gap:14px;padding:22px 18px;margin-bottom:8px;background:linear-gradient(135deg,rgba(108,71,201,.15) 0%,rgba(6,182,212,.08) 100%);border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;position:relative;overflow:hidden;}
+.user-box::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(108,71,201,.4),transparent 65%);border-radius:50%;animation:userGlow 6s ease-in-out infinite;}
 @keyframes userGlow{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
-.user-avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#6c47c9,#8a5cf6,#06b6d4);padding:2.5px;position:relative;flex-shrink:0;box-shadow:0 8px 24px rgba(108,71,201,.4);}
+.user-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#6c47c9,#8a5cf6,#06b6d4);padding:3px;position:relative;flex-shrink:0;box-shadow:0 8px 24px rgba(108,71,201,.5);}
 .user-avatar>div,.user-avatar>img{width:100%!important;height:100%!important;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#6c47c9,#8a5cf6);display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px;object-fit:cover;}
-.user-avatar::after{content:'';position:absolute;bottom:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#10b981;border:2.5px solid #0a1120;box-shadow:0 0 10px rgba(16,185,129,.7);}
+.user-avatar::after{content:'';position:absolute;bottom:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#10b981;border:3px solid #0b0f19;box-shadow:0 0 12px rgba(16,185,129,.8);}
 .user-info{flex:1;min-width:0;position:relative;z-index:1;}
-.user-info h4{font-size:14px;color:#fff;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
-.user-info .phone{font-size:11px;color:#8fa0c0;display:block;direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;opacity:.85;margin-bottom:4px;}
-.role-badge{display:inline-block;font-size:9.5px;padding:2px 8px;border-radius:8px;font-weight:700;}
-.role-badge.admin{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3);}
-.role-badge.manager{background:rgba(245,158,11,.2);color:#fbbf24;border:1px solid rgba(245,158,11,.3);}
-.role-badge.user{background:rgba(16,185,129,.2);color:#6ee7b7;border:1px solid rgba(16,185,129,.3);}
-.role-badge.viewer{background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid rgba(59,130,246,.3);}
-.search-side{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:11px 14px;margin:14px 14px 16px;box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer;}
-.search-side svg{width:18px!important;height:18px!important;color:#6b7692;flex-shrink:0;order:-1;}
-.search-side span{color:#98a4b8;font-size:13.5px;font-weight:500;flex:1;text-align:right;}
-.search-side .kbd-hint{background:#f0f2f7;padding:2px 8px;border-radius:6px;font-size:10px;color:#6b7692;font-family:'JetBrains Mono',monospace;font-weight:700;}
-.nav-section-title{font-size:10px;text-transform:uppercase;color:#5c6d8c;padding:14px 22px 6px;letter-spacing:2px;font-weight:800;display:flex;align-items:center;gap:8px;}
-.nav-section-title::before{content:'';width:12px;height:2px;background:linear-gradient(90deg,var(--primary),transparent);border-radius:2px;}
-.nav-item{display:flex;align-items:center;gap:12px;padding:11px 16px;margin:2px 10px;border-radius:12px;cursor:pointer;color:#b8c2d9;font-size:13px;font-weight:500;border:none;background:transparent;width:calc(100% - 20px);text-align:right;font-family:inherit;position:relative;overflow:hidden;transition:all .28s cubic-bezier(.4,0,.2,1);}
-.nav-item svg{width:18px!important;height:18px!important;flex-shrink:0;position:relative;z-index:1;}
+.user-info h4{font-size:14.5px;color:#fff;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
+.user-info .phone{font-size:11.5px;color:#8fa0c0;display:block;direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;opacity:.9;margin-bottom:5px;}
+.role-badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:12px;font-weight:800;letter-spacing:.5px;}
+.role-badge.admin{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.4);}
+.role-badge.manager{background:rgba(245,158,11,.2);color:#fbbf24;border:1px solid rgba(245,158,11,.4);}
+.role-badge.user{background:rgba(16,185,129,.2);color:#6ee7b7;border:1px solid rgba(16,185,129,.4);}
+.role-badge.viewer{background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid rgba(59,130,246,.4);}
+
+.search-side{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px 14px;margin:14px 14px 16px;cursor:pointer;transition:all .3s;}
+.search-side:hover{background:rgba(255,255,255,.1);border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 15px rgba(108,71,201,.2);}
+.search-side svg{width:18px!important;height:18px!important;color:#8fa0c0;flex-shrink:0;order:-1;}
+.search-side span{color:#8fa0c0;font-size:13px;font-weight:500;flex:1;text-align:right;}
+.search-side .kbd-hint{background:rgba(255,255,255,.1);padding:3px 8px;border-radius:6px;font-size:10px;color:#cbd5e1;font-family:'JetBrains Mono',monospace;font-weight:700;}
+
+.nav-section-title{font-size:10px;text-transform:uppercase;color:#5c6d8c;padding:16px 22px 8px;letter-spacing:2px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.nav-section-title::before{content:'';width:16px;height:2px;background:linear-gradient(90deg,var(--primary),transparent);border-radius:2px;}
+
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;margin:3px 12px;border-radius:12px;cursor:pointer;color:#94a3b8;font-size:13.5px;font-weight:600;border:none;background:transparent;width:calc(100% - 24px);text-align:right;font-family:inherit;position:relative;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);}
+.nav-item svg{width:20px!important;height:20px!important;flex-shrink:0;position:relative;z-index:1;transition:all .3s;}
 .nav-item>span{position:relative;z-index:1;}
-.nav-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,71,201,.15),rgba(138,92,246,.08));opacity:0;transition:opacity .22s;border-radius:inherit;}
-.nav-item:hover{color:#fff;transform:translateX(-3px);}
-.nav-item:hover::before{opacity:1;}
-.nav-item:hover svg{color:var(--primary);}
-.nav-item.active{background:linear-gradient(135deg,var(--primary) 0%,#8a5cf6 100%);color:#fff;font-weight:700;box-shadow:0 10px 28px rgba(108,71,201,.45);transform:translateX(-3px);border-radius:14px;}
-.nav-item.active::before{display:none;}
-.nav-item.active::after{content:'';position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:4px;height:26px;background:linear-gradient(180deg,#06b6d4,#8a5cf6);border-radius:4px 0 0 4px;box-shadow:0 0 12px rgba(138,92,246,.8);}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.04);transform:translateX(-4px);}
+.nav-item:hover svg{color:var(--primary);transform:scale(1.1);}
+.nav-item.active{background:linear-gradient(135deg,var(--primary) 0%,#8a5cf6 100%);color:#fff;font-weight:800;box-shadow:0 8px 25px rgba(108,71,201,.5);transform:translateX(-4px);border-radius:14px;border:1px solid rgba(255,255,255,.1);}
+.nav-item.active::after{content:'';position:absolute;right:-12px;top:50%;transform:translateY(-50%);width:4px;height:28px;background:linear-gradient(180deg,#06b6d4,#8a5cf6);border-radius:4px 0 0 4px;box-shadow:0 0 15px rgba(138,92,246,1);}
 .nav-item.active svg{color:#fff;}
-.nav-item .badge-num{margin-right:auto;background:rgba(255,255,255,.18);color:#fff;font-size:10.5px;padding:2px 8px;border-radius:10px;font-weight:700;min-width:22px;text-align:center;position:relative;z-index:1;}
+.nav-item .badge-num{margin-right:auto;background:rgba(255,255,255,.2);color:#fff;font-size:10.5px;padding:2px 9px;border-radius:10px;font-weight:800;min-width:24px;text-align:center;position:relative;z-index:1;}
 .nav-item.hidden{display:none!important;}
 
 /* ============ MAIN ============ */
@@ -571,6 +576,23 @@ tbody tr:hover td{background:var(--bg);}
 .feed-text{font-size:12.5px;flex:1;}
 .feed-time{font-size:10.5px;color:var(--text-muted);margin-top:2px;}
 
+/* ============ CHAT (New) ============ */
+.chat-container{display:flex;flex-direction:column;height:calc(100vh - 180px);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:15px;background:var(--bg);}
+.chat-messages::-webkit-scrollbar{width:6px;}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.chat-bubble{max-width:75%;display:flex;flex-direction:column;animation:fadeIn .3s;}
+.chat-bubble.me{align-self:flex-end;align-items:flex-end;}
+.chat-bubble.other{align-self:flex-start;align-items:flex-start;}
+.chat-bubble .bubble-text{background:var(--bg-card);padding:10px 14px;border-radius:14px;border-bottom-right-radius:2px;font-size:13px;line-height:1.6;box-shadow:var(--shadow-sm);border:1px solid var(--border);position:relative;}
+.chat-bubble.me .bubble-text{background:var(--primary);color:#fff;border-color:var(--primary);border-bottom-right-radius:14px;border-bottom-left-radius:2px;}
+.chat-bubble .bubble-info{font-size:10px;color:var(--text-muted);margin-top:4px;display:flex;gap:6px;}
+.chat-input-area{padding:15px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;}
+.chat-input-area input{flex:1;padding:12px 15px;border:1.5px solid var(--border);border-radius:20px;background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:all .2s;}
+.chat-input-area input:focus{border-color:var(--primary);background:var(--bg-card);box-shadow:0 0 0 3px rgba(108,71,201,.1);}
+.chat-input-area .btn{border-radius:50%;width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(108,71,201,.3);}
+.chat-input-area .btn svg{width:20px!important;height:20px!important;transform:rotate(180deg);}
+
 /* ============ TICKETS ============ */
 .ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative;overflow:hidden;transition:all .22s;cursor:pointer;}
 .ticket-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
@@ -615,23 +637,6 @@ tbody tr:hover td{background:var(--bg);}
 .team-cal-day .leave-chip{font-size:9.5px;padding:2px 6px;border-radius:6px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
 .team-cal-day .leave-chip.approved{background:var(--success-soft);color:var(--success);}
 .team-cal-day .leave-chip.pending{background:var(--warning-soft);color:var(--warning);}
-
-/* ============ CHAT ============ */
-.chat-thread{background:var(--bg);border-radius:10px;padding:12px;margin:12px 0;max-height:320px;overflow-y:auto;}
-.chat-thread::-webkit-scrollbar{width:5px;}
-.chat-thread::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-.chat-msg{display:flex;gap:8px;margin-bottom:10px;animation:fadeIn .3s;}
-.chat-msg.me{flex-direction:row-reverse;}
-.chat-msg-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;overflow:hidden;}
-.chat-msg-avatar img{width:100%;height:100%;object-fit:cover;}
-.chat-msg.me .chat-msg-avatar{background:linear-gradient(135deg,var(--success),#06b6d4);}
-.chat-msg-bubble{max-width:75%;background:var(--bg-card);padding:8px 12px;border-radius:12px;font-size:12.5px;line-height:1.7;position:relative;border:1px solid var(--border);}
-.chat-msg.me .chat-msg-bubble{background:var(--primary-soft);border-color:var(--primary);}
-.chat-msg-bubble .msg-time{font-size:10px;color:var(--text-muted);margin-top:4px;display:block;direction:ltr;text-align:left;}
-.chat-reply-box{display:flex;gap:6px;align-items:stretch;}
-.chat-reply-box textarea{flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg-card);color:var(--text);font-family:inherit;font-size:12.5px;outline:none;resize:vertical;min-height:42px;max-height:120px;}
-.chat-reply-box textarea:focus{border-color:var(--primary);}
-.chat-reply-box .btn{align-self:flex-end;}
 
 /* ============ SESSION ============ */
 .session-timer{position:fixed;bottom:16px;left:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;box-shadow:var(--shadow);z-index:90;}
@@ -703,14 +708,14 @@ tbody tr:hover td{background:var(--bg);}
   <div class="login-card">
     <div class="login-brand">
       <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.6</p></div>
+      <div><h2>ورود به سیستم مدیریت</h2><p class="sub">IT Management Pro v5.7</p></div>
     </div>
     <div class="login-error" id="loginError"></div>
     <div class="login-field"><label>نام کاربری</label><input type="text" id="loginUser" inputmode="numeric" placeholder="09900153578"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div></div>
     <div class="login-field"><label>رمز عبور</label><input type="password" id="loginPass" placeholder="••••••••"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div></div>
     <div class="login-options"><label><input type="checkbox" id="rememberMe"> مرا به خاطر بسپار</label></div>
     <button class="login-btn" onclick="doLogin()" id="loginBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ورود امن</button>
-    <div class="login-footer">// SECURE_v5.6 // ALL_FEATURES</div>
+    <div class="login-footer">// SECURE_v5.7 // ALL_FEATURES</div>
   </div>
 </div>
 
@@ -738,6 +743,8 @@ tbody tr:hover td{background:var(--bg);}
       <button class="nav-item" data-page="attendance" data-perm="attendance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>ورود / خروج</span></button>
       <button class="nav-item" data-page="home" data-perm="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>کار در خانه</span></button>
       <button class="nav-item" data-page="leave" data-perm="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg><span>مرخصی من</span><span class="badge-num" id="leaveBadge" style="display:none;">۰</span></button>
+      <div class="nav-section-title">ارتباطات</div>
+      <button class="nav-item" data-page="chat" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>گفتگوی تیمی</span></button>
       <div class="nav-section-title">پشتیبانی</div>
       <button class="nav-item" data-page="tickets" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg><span>تیکت‌ها</span><span class="badge-num" id="ticketBadge" style="display:none;">۰</span></button>
       <div class="nav-section-title">مدیریت</div>
@@ -778,9 +785,30 @@ tbody tr:hover td{background:var(--bg);}
     </header>
 
     <div class="content">
+      
+      <!-- Chat Page -->
+      <div class="page" id="page-chat">
+        <div class="panel-card" style="padding:0;">
+          <div class="chat-container">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+              <button class="btn btn-primary" onclick="sendChatMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+              <input type="text" id="chatInput" placeholder="پیامی بنویسید..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="page" id="page-tickets">
         <div class="panel-card">
-          <div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg></div><div><h2>تیکت‌های پشتیبانی</h2><div class="sub">با SLA</div></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="openTicketForm()">+ تیکت جدید</button></div></div>
+          <div class="card-head">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg></div>
+            <div><h2>تیکت‌های پشتیبانی</h2><div class="sub">با SLA</div></div>
+            <div class="actions">
+              <button class="btn btn-ghost btn-sm" onclick="exportToCSV(DB.get('tickets'), 'tickets')">خروجی اکسل</button>
+              <button class="btn btn-primary btn-sm" onclick="openTicketForm()">+ تیکت جدید</button>
+            </div>
+          </div>
           <div class="toolbar">
             <select class="filter-select" id="ticketStatusFilter" onchange="renderTickets()"><option value="">همه وضعیت‌ها</option><option value="open">باز</option><option value="inprogress">در حال بررسی</option><option value="closed">بسته</option></select>
             <select class="filter-select" id="ticketPriorityFilter" onchange="renderTickets()"><option value="">همه اولویت‌ها</option><option value="urgent">فوری</option><option value="normal">عادی</option><option value="low">کم</option></select>
@@ -852,7 +880,7 @@ tbody tr:hover td{background:var(--bg);}
             <select class="filter-select" id="taskTypeFilter" onchange="renderTasks()"><option value="">همه انواع</option><option>کارهای آی تی</option><option>پشتیبانی سایت</option><option>بروشورها</option><option>طراحی‌ها</option><option>موارد متفرقه</option></select>
             <select class="filter-select" id="taskStatusFilter" onchange="renderTasks()"><option value="">همه وضعیت‌ها</option><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select>
             <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="taskSearch" placeholder="جستجو..."></div>
-            <div class="action-btns"><button class="round-btn primary" onclick="openTaskForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div>
+            <div class="action-btns"><button class="btn btn-ghost btn-sm" onclick="exportToCSV(DB.get('tasks'), 'tasks')">خروجی اکسل</button><button class="round-btn primary" onclick="openTaskForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div>
           </div>
           <div id="taskContent"></div>
           <div class="pagination" id="taskPaginationWrap"><div class="total">تعداد: <span id="taskTotal">۰</span></div><div class="pages" id="taskPagination"></div></div>
@@ -891,7 +919,10 @@ tbody tr:hover td{background:var(--bg);}
               <option value="repair">در تعمیر</option>
               <option value="retired">اسقاط</option>
             </select>
-            <div class="action-btns"><button class="btn btn-primary btn-sm" onclick="openDeviceForm()">+ وسیله جدید</button></div>
+            <div class="action-btns">
+              <button class="btn btn-ghost btn-sm" onclick="exportToCSV(DB.get('devices'), 'devices')">خروجی اکسل</button>
+              <button class="btn btn-primary btn-sm" onclick="openDeviceForm()">+ وسیله جدید</button>
+            </div>
           </div>
           <div id="devContent"></div>
           <div class="pagination" id="devPaginationWrap"><div class="total">تعداد: <span id="devTotal">۰</span></div><div class="pages" id="devPagination"></div></div>
@@ -919,7 +950,13 @@ tbody tr:hover td{background:var(--bg);}
 
       <div class="page" id="page-users">
         <div class="panel-card">
-          <div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="usersSearch" placeholder="جستجو..." oninput="renderUsers()"></div><div class="action-btns"><button class="round-btn primary" onclick="openUserForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></button></div></div>
+          <div class="toolbar">
+            <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="usersSearch" placeholder="جستجو..." oninput="renderUsers()"></div>
+            <div class="action-btns">
+              <button class="btn btn-ghost btn-sm" onclick="exportToCSV(DB.get('users'), 'users')">خروجی اکسل</button>
+              <button class="round-btn primary" onclick="openUserForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></button>
+            </div>
+          </div>
           <div id="usersContent"></div>
         </div>
       </div>
@@ -1166,7 +1203,7 @@ const DB = {
 function setupRealtimeSubscriptions() {
   if (!window.supabaseClient) return;
 
-  // 1. گوش دادن به تغییرات جدول panel_data (برای سیستم‌ها، بخش‌ها، تیکت‌ها و...)
+  // 1. گوش دادن به تغییرات جدول panel_data (برای سیستم‌ها، بخش‌ها، تیکت‌ها، چت و...)
   window.supabaseClient.channel('panel_data_channel')
     .on('postgres_changes', { 
         event: '*', 
@@ -1226,6 +1263,7 @@ function refreshCurrentPageData() {
   if (pageId === 'home') renderHome();
   if (pageId === 'tasks') renderTasks();
   if (pageId === 'kanban') renderKanban();
+  if (pageId === 'chat') renderChat();
   if (pageId === 'dashboard') { renderDashboard(); renderWidgets(); }
 }
 
@@ -1362,12 +1400,46 @@ function nowTimestamp(){const[jy,jm,jd]=todayJalali();return jy+'/'+pad(jm)+'/'+
 function daysBetween(d1,d2){const[gy1,gm1,gd1]=jalaliToGregorian(...d1.split('/').map(Number));const[gy2,gm2,gd2]=jalaliToGregorian(...d2.split('/').map(Number));const diff=Math.floor((new Date(gy2,gm2-1,gd2)-new Date(gy1,gm1-1,gd1))/(1000*60*60*24));return diff;}
 function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
+/* ============ EXPORT TO CSV ============ */
+function exportToCSV(data, filename) {
+  if (!data || !data.length) return toast('داده‌ای برای خروجی وجود ندارد', 'warning');
+  
+  // استخراج کلیدهای یکتا از تمام آبجکت‌ها
+  const allKeys = new Set();
+  data.forEach(obj => Object.keys(obj).forEach(k => allKeys.add(k)));
+  const headers = Array.from(allKeys);
+  
+  const csvRows = [];
+  csvRows.push(headers.join(','));
+  
+  for (const row of data) {
+    const values = headers.map(header => {
+      let val = row[header];
+      if (typeof val === 'object' && val !== null) val = JSON.stringify(val);
+      if (val === undefined || val === null) val = '';
+      const escaped = ('' + val).replace(/"/g, '""');
+      return `"${escaped}"`;
+    });
+    csvRows.push(values.join(','));
+  }
+  
+  const csvString = '\uFEFF' + csvRows.join('\n'); // BOM for Excel Persian support
+  const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename + '-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('خروجی اکسل دانلود شد', 'success');
+}
+
 /* ============ STATUS ============ */
 const STATUS_LABELS={pending:'انجام نشده',inprogress:'در حال انجام',done:'انجام شده',open:'باز',closed:'بسته'};
 function statusBadge(status){const label=STATUS_LABELS[status]||status;const cls=status||'pending';return '<span class="status-badge '+cls+'"><span class="eye-icon">'+ICONS.eye+'</span><span>'+label+'</span></span>';}
 
 /* ============ TABS ============ */
-const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد'};
+const PAGE_TITLES={mywork:'کارهای روزانه',dashboard:'داشبورد',attendance:'ورود و خروج',home:'کار در خانه',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد','chat':'گفتگوی تیمی'};
 
 document.querySelectorAll('.nav-item').forEach(btn=>{
   btn.onclick=async()=>{
@@ -1395,6 +1467,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>{
     if(page==='tasks')renderTasks();
     if(page==='devices')renderDevices();
     if(page==='user-report')renderUserReport();
+    if(page==='chat')renderChat();
     if(page==='settings')highlightColor();
     if(window.innerWidth<=900)closeSidebar();
   };
@@ -1416,10 +1489,71 @@ const openTickets=DB.get('tickets').filter(t=>t.status!=='closed').length;const 
 const licWarn=DB.get('licenses').filter(l=>{const d=daysBetween(todayJalali().join('/'),l.expireDate);return d<=60&&d>=0;}).length;const lb=document.getElementById('licBadge');if(lb){if(licWarn>0){lb.style.display='inline-block';lb.textContent=faNum(licWarn);}else lb.style.display='none';}
 const pendingLeaves=DB.get('leaves').filter(l=>l.status==='pending').length;const lbv=document.getElementById('leaveBadge');if(lbv){if(pendingLeaves>0){lbv.style.display='inline-block';lbv.textContent=faNum(pendingLeaves);}else lbv.style.display='none';}}
 
+/* ============ CHAT ============ */
+function renderChat() {
+  const me = getCurrentUser();
+  if (!me) return;
+  const container = document.getElementById('chatMessages');
+  if (!container) return;
+  
+  const messages = DB.get('internal_messages') || [];
+  // مرتب‌سازی بر اساس زمان
+  messages.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+  
+  if (!messages.length) {
+    container.innerHTML = '<div class="empty-state" style="margin:auto;">شروع به گفتگو کنید...</div>';
+    return;
+  }
+  
+  container.innerHTML = messages.map(msg => {
+    const isMe = msg.userId === me.id;
+    const u = DB.get('users').find(x => x.id === msg.userId);
+    const name = u ? u.displayName : 'ناشناس';
+    const initial = name.charAt(0);
+    const avatar = u && u.avatar ? `<img src="${u.avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;margin-left:6px;">` : '';
+    
+    return `
+      <div class="chat-bubble ${isMe ? 'me' : 'other'}">
+        ${!isMe ? `<div class="bubble-info" style="margin-bottom:4px;margin-left:6px;">${avatar}<span style="font-weight:700;">${escapeHtml(name)}</span></div>` : ''}
+        <div class="bubble-text">${escapeHtml(msg.text)}</div>
+        <div class="bubble-info"><span>${msg.time}</span> ${isMe ? '<span>✓✓</span>' : ''}</div>
+      </div>
+    `;
+  }).join('');
+  
+  // اسکرول به آخرین پیام
+  setTimeout(() => {
+    container.scrollTop = container.scrollHeight;
+  }, 50);
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const me = getCurrentUser();
+  const msg = {
+    id: Date.now(),
+    userId: me.id,
+    text: text,
+    time: nowTime(),
+    timestamp: new Date().toISOString()
+  };
+  
+  const messages = DB.get('internal_messages') || [];
+  messages.push(msg);
+  
+  // بروزرسانی محلی فوری و سپس سینک
+  input.value = '';
+  DB.set('internal_messages', messages);
+  renderChat();
+}
+
 /* ============ ASSIGNED ============ */
 function renderAssigned(){const user=getCurrentUser();if(!user)return;const list=DB.get('tasks').filter(t=>t.assignedToId===user.id);list.sort((a,b)=>{const o={pending:0,inprogress:1,done:2};if(o[a.status||'pending']!==o[b.status||'pending'])return o[a.status||'pending']-o[b.status||'pending'];return(b.createdAt||'').localeCompare(a.createdAt||'');});const content=document.getElementById('assignedContent');if(!list.length){content.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.mail+'</div><h3>کار محولی ندارید</h3></div>';return;}content.innerHTML='<div class="jobs-grid">'+list.map(t=>{const st=t.status||'pending';const f=DB.get('users').find(u=>u.id===t.assignedFromId);const fn=f?f.displayName:'نامشخص';const fa=f&&f.avatar?'<img src="'+f.avatar+'">':fn.charAt(0);const rc=(t.replies||[]).length;return '<div class="job-card '+st+'"><div class="job-card-head" style="padding-left:0;"><div style="display:flex;gap:10px;align-items:center;width:100%;"><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-weight:700;overflow:hidden;">'+fa+'</div><div style="flex:1;"><div style="font-size:12.5px;font-weight:700;">از: '+escapeHtml(fn)+'</div><div style="font-size:11px;color:var(--text-muted);">'+(t.createdAt||'')+'</div></div><div>'+statusBadge(st)+'</div></div></div><div style="font-size:14px;font-weight:700;margin:12px 0;">'+escapeHtml(t.title)+'</div><div class="job-card-meta"><span class="badge badge-blue">'+escapeHtml(t.type)+'</span><span>📅 '+t.date+'</span><span>⏰ '+t.start+' - '+t.end+'</span></div>'+(t.notes?'<div style="font-size:12px;color:var(--text-muted);padding:8px 10px;background:var(--bg);border-radius:8px;margin-bottom:12px;">'+escapeHtml(t.notes)+'</div>':'')+'<div class="job-card-actions">'+(rc>0?'<span class="badge badge-blue">💬 '+faNum(rc)+'</span>':'')+'<button class="btn btn-primary btn-sm" onclick="openChatModal('+t.id+')">'+ICONS.send+'پاسخ</button></div></div>';}).join('')+'</div>';}
 
-/* ============ CHAT ============ */
+/* ============ TASK CHAT (Modal) ============ */
 let currentChatTaskId=null;
 function openChatModal(taskId){const t=DB.get('tasks').find(x=>x.id===taskId);if(!t)return;currentChatTaskId=taskId;renderChatModal();document.getElementById('chatModal').classList.add('show');}
 function renderChatModal(){const t=DB.get('tasks').find(x=>x.id===currentChatTaskId);if(!t)return;const me=getCurrentUser();const f=DB.get('users').find(u=>u.id===t.assignedFromId);const to=DB.get('users').find(u=>u.id===t.assignedToId);const replies=t.replies||[];const st=t.status||'pending';let h='<h3>💬 گفتگو: '+escapeHtml(t.title)+'</h3><p style="margin-bottom:16px;">از <strong>'+(f?f.displayName:'?')+'</strong> به <strong>'+(to?to.displayName:'?')+'</strong></p>'+(t.notes?'<div style="padding:12px;background:var(--bg);border-radius:10px;margin-bottom:14px;font-size:13px;">'+escapeHtml(t.notes)+'</div>':'')+'<div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">وضعیت: '+statusBadge(st)+'</div><div class="form-group" style="margin-bottom:14px;"><label>تغییر وضعیت</label><select id="chatStatusSelect" style="padding:10px;padding-left:36px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg-card);color:var(--text);font-family:inherit;font-size:13px;outline:none;"><option value="pending" '+(st==='pending'?'selected':'')+'>انجام نشده</option><option value="inprogress" '+(st==='inprogress'?'selected':'')+'>در حال انجام</option><option value="done" '+(st==='done'?'selected':'')+'>انجام شده</option></select></div><div class="form-section-title" style="margin-top:20px;">گفتگو ('+faNum(replies.length)+')</div><div class="chat-thread" id="chatThread">'+(replies.length?replies.map(r=>{const isMe=r.userId===me.id;const u=DB.get('users').find(x=>x.id===r.userId);const name=u?u.displayName:'?';const av=u&&u.avatar?'<img src="'+u.avatar+'">':name.charAt(0);return '<div class="chat-msg '+(isMe?'me':'')+'"><div class="chat-msg-avatar">'+av+'</div><div class="chat-msg-bubble"><strong style="font-size:11.5px;">'+name+'</strong><br>'+escapeHtml(r.text)+'<span class="msg-time">'+(r.timestamp||'')+'</span></div></div>';}).join(''):'<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12.5px;">هنوز پیامی نیست</div>')+'</div><div class="chat-reply-box"><textarea id="chatReplyText" placeholder="پیام..."></textarea><button class="btn btn-primary" onclick="sendChatReply()">'+ICONS.send+'ارسال</button></div>';document.getElementById('chatModalContent').innerHTML=h;setTimeout(()=>{const th=document.getElementById('chatThread');if(th)th.scrollTop=th.scrollHeight;},100);}
@@ -2021,6 +2155,7 @@ async function initApp(){
   renderDashboard();renderWidgets();renderKanban();
   renderActivity();renderTickets();renderLicenses();renderLeave();updateDate();
   renderUserReport(); 
+  renderChat();
   highlightColor();updateNotifBadge();
   initSessionTimeout();
   
