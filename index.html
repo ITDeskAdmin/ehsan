@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>پنل مدیریت IT Pro 5.2</title>
 <link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -873,7 +874,6 @@ tbody tr:hover td{background:var(--bg);}
         </div>
       </div>
 
-      <!-- ✅ صفحه وسایل IT بازسازی شده -->
       <div class="page" id="page-devices">
         <div class="stats-grid" id="devStats"></div>
         <div class="panel-card">
@@ -1011,7 +1011,7 @@ tbody tr:hover td{background:var(--bg);}
 <!-- HOME FORM -->
 <div class="fullpage-modal" id="homeFormModal"><div class="fp-header"><button class="save-btn" onclick="saveHome()">ذخیره</button><h2><span>کار در خانه</span></h2><button class="close-btn" onclick="document.getElementById('homeFormModal').classList.remove('show')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-3"><div class="form-group"><label>تاریخ</label><input type="text" id="homeDate" readonly onclick="openCal('homeDate', this)"></div><div class="form-group"><label>شروع</label><input type="time" id="homeStart"></div><div class="form-group"><label>پایان</label><input type="time" id="homeEnd"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><input type="text" id="homeDesc"></div></div></div></div></div>
 
-<!-- ✅ DEVICE FORM کامل بازسازی شده -->
+<!-- DEVICE FORM -->
 <div class="fullpage-modal" id="deviceFormModal">
   <div class="fp-header">
     <button class="save-btn" onclick="saveDevice()">ذخیره</button>
@@ -1087,10 +1087,21 @@ const OFFICIAL_HOLIDAYS={'01/01':'نوروز','01/02':'نوروز','01/03':'نو
 /* ============ ICONS ============ */
 const ICONS={eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',monitor:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>',edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',empty:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',briefcase:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>',layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',activity:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',ticket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>',key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'};
 
-/* ============ SUPABASE SYNC ============ */
+/* ============ SUPABASE SYNC LAYER ============ */
 const DB = {
   get: k => JSON.parse(localStorage.getItem(k) || '[]'),
-  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  set: (k, v) => {
+    localStorage.setItem(k, JSON.stringify(v));
+    if (window.supabaseClient) {
+      window.supabaseClient.from('panel_data').upsert({
+        key: k,
+        value: v,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'key' }).then(({error}) => {
+        if (error) console.error('خطا در همگام‌سازی ' + k + ':', error);
+      });
+    }
+  },
   async getUsers() {
     try {
       const { data, error } = await window.supabaseClient.from('panel_users').select('*');
@@ -1103,7 +1114,7 @@ const DB = {
         localStorage.setItem('users', JSON.stringify(users)); 
         return users;
       }
-    } catch (e) { console.error('خطا در خواندن کاربران از سرور:', e); }
+    } catch (e) { console.error('خطا در خواندن کاربران:', e); }
     return JSON.parse(localStorage.getItem('users') || '[]');
   },
   async saveUser(user) {
@@ -1114,8 +1125,21 @@ const DB = {
         permissions: user.permissions || [], avatar: user.avatar || null,
         leave_balance: user.leaveBalance ?? 26
       }, { onConflict: 'id' });
-      if (error) console.error('خطا در ذخیره کاربر در سرور:', error);
+      if (error) console.error('خطا در ذخیره کاربر:', error);
     } catch(e) { console.error(e); }
+  },
+  async syncAllFromServer() {
+    try {
+      const { data, error } = await window.supabaseClient.from('panel_data').select('*');
+      if (error) throw error;
+      if (data && data.length > 0) {
+        data.forEach(row => {
+          localStorage.setItem(row.key, JSON.stringify(row.value));
+        });
+      }
+    } catch (e) {
+      console.error('خطا در همگام‌سازی اولیه:', e);
+    }
   }
 };
 
@@ -1693,6 +1717,12 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Da
 /* ============ INIT ============ */
 async function initApp(){
   await ensureAdminUser();
+  
+  if(window.supabaseClient){
+    toast('در حال همگام‌سازی با سرور...', 'warning');
+    await DB.syncAllFromServer();
+  }
+  
   updateSidebarUser();
   applyPermissions();
   const bindInput=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('input',fn);};
