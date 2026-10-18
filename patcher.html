@@ -1,1266 +1,6 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>پنل مدیریت IT Pro</title>
-<link rel="manifest" href='data:application/manifest+json,{"name":"IT Panel Pro","short_name":"IT Pro","start_url":"./","display":"standalone","background_color":"%230a1120","theme_color":"%236c47c9"}'>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://apxgjwrqmvrtjdagjuvp.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_NOHyjNzQewYZ7h7V0hfQog_wmb3eoN9';
-  window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
-<style>
-:root{--primary:#6c47c9;--primary-hover:#5838a8;--primary-soft:#efe9fb;--bg:#f5f7fb;--bg-card:#fff;--border:#e5e9f2;--text:#1a2233;--text-muted:#6b7692;--success:#10b981;--success-soft:#e7f8f2;--danger:#ef4444;--danger-soft:#feefef;--warning:#f59e0b;--warning-soft:#fef3e2;--info:#3b82f6;--info-soft:#e6f0fe;--pink:#ec4899;--cyan:#06b6d4;--shadow-sm:0 1px 2px rgba(16,24,40,.04);--shadow:0 4px 16px rgba(16,24,40,.06);--shadow-lg:0 12px 32px rgba(16,24,40,.10);--radius:14px;--radius-sm:9px;--transition:.22s cubic-bezier(.4,0,.2,1);}
-[data-theme="dark"]{--bg:#0b1120;--bg-card:#131a2c;--border:#26304a;--text:#e8ecf5;--text-muted:#93a0bd;--primary-soft:#2a1f4a;--success-soft:#113027;--danger-soft:#3a1c1c;--warning-soft:#3a2a10;--info-soft:#16294a;--shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow:0 4px 16px rgba(0,0,0,.35);--shadow-lg:0 12px 32px rgba(0,0,0,.5);}
-[data-color="blue"]{--primary:#3b82f6;--primary-hover:#2563eb;--primary-soft:#e6f0fe;}
-[data-color="blue"][data-theme="dark"]{--primary-soft:#16294a;}
-[data-color="green"]{--primary:#10b981;--primary-hover:#059669;--primary-soft:#e7f8f2;}
-[data-color="green"][data-theme="dark"]{--primary-soft:#113027;}
-[data-color="orange"]{--primary:#f59e0b;--primary-hover:#d97706;--primary-soft:#fef3e2;}
-[data-color="orange"][data-theme="dark"]{--primary-soft:#3a2a10;}
-[data-color="pink"]{--primary:#ec4899;--primary-hover:#db2777;--primary-soft:#fce7f3;}
-[data-color="pink"][data-theme="dark"]{--primary-soft:#3a1c2c;}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;}
-body{font-family:'Vazirmatn',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;overflow-x:hidden;}
-::-webkit-scrollbar{width:6px;height:6px;}
-::-webkit-scrollbar-thumb{background:rgba(108,71,201,.4);border-radius:10px;}
-svg{max-width:100%;max-height:100%;}
-select{appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236c47c9' stroke-width='3' stroke-linecap='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")!important;background-repeat:no-repeat!important;background-position:left 12px center!important;padding-left:36px!important;cursor:pointer!important;}
-[data-theme="dark"] select{background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238a5cf6' stroke-width='3' stroke-linecap='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e")!important;}
-
-.login-wrap{position:fixed;inset:0;z-index:9999;display:grid;grid-template-columns:1.15fr 1fr;background:#050a15;overflow:hidden;}
-.login-visual{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px 52px;isolation:isolate;}
-.lv-bg{position:absolute;inset:0;background:radial-gradient(ellipse 800px 600px at 20% 15%, rgba(108,71,201,.35), transparent 60%),radial-gradient(ellipse 700px 500px at 85% 85%, rgba(6,182,212,.28), transparent 65%),radial-gradient(ellipse 500px 400px at 50% 50%, rgba(236,72,153,.08), transparent 70%),linear-gradient(160deg, #0a0f1c 0%, #121b2e 50%, #0d1526 100%);z-index:0;}
-.lv-circuit{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.5;animation:circuitPulse 8s ease-in-out infinite;}
-@keyframes circuitPulse{0%,100%{opacity:.4;}50%{opacity:.6;}}
-.lv-matrix{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;opacity:.35;}
-.lv-matrix span{position:absolute;top:-100%;width:1px;background:linear-gradient(to bottom, transparent, #06b6d4, transparent);animation:matrixFall linear infinite;font-family:'JetBrains Mono', monospace;font-size:11px;color:#06b6d4;letter-spacing:2px;text-shadow:0 0 8px #06b6d4;white-space:nowrap;}
-@keyframes matrixFall{0%{transform:translateY(-100vh);}100%{transform:translateY(100vh);}}
-.lv-servers{position:absolute;bottom:0;right:0;z-index:3;display:flex;gap:8px;padding:0 60px 0 0;opacity:.7;transform:perspective(800px) rotateY(-25deg);transform-origin:right bottom;}
-.server-rack{display:flex;flex-direction:column;gap:6px;background:linear-gradient(180deg, #1a2438 0%, #0d1524 100%);border:1px solid rgba(6,182,212,.2);border-radius:8px;padding:10px 14px;box-shadow:0 0 20px rgba(6,182,212,.15), inset 0 1px 0 rgba(255,255,255,.05);}
-.server-unit{display:flex;gap:4px;padding:6px 8px;background:rgba(0,0,0,.4);border-radius:4px;border:1px solid rgba(255,255,255,.05);}
-.led{width:5px;height:5px;border-radius:50%;box-shadow:0 0 6px currentColor;}
-.led.green{background:#10b981;color:#10b981;animation:ledBlink 2s ease-in-out infinite;}
-.led.amber{background:#f59e0b;color:#f59e0b;animation:ledBlink 1.5s ease-in-out infinite .3s;}
-@keyframes ledBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
-.lv-particles{position:absolute;inset:0;z-index:4;pointer-events:none;}
-.lv-particles span{position:absolute;width:2px;height:2px;background:#06b6d4;border-radius:50%;box-shadow:0 0 10px #06b6d4, 0 0 20px #06b6d4;animation:particleFloat linear infinite;}
-@keyframes particleFloat{0%{transform:translate(0,0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translate(100px,-200px);opacity:0;}}
-.lv-overlay{position:absolute;inset:0;z-index:5;background:linear-gradient(to top, rgba(5,10,21,.95) 0%, rgba(5,10,21,.5) 40%, rgba(5,10,21,.2) 70%, transparent 100%),linear-gradient(to left, transparent 60%, rgba(5,10,21,.4) 100%);pointer-events:none;}
-.lv-content{position:relative;z-index:6;display:flex;flex-direction:column;height:100%;justify-content:space-between;}
-.lv-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:20px;font-size:11.5px;font-weight:600;color:#6ee7b7;width:fit-content;margin-bottom:auto;}
-.lv-badge-dot{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 12px #10b981;animation:badgeDotPulse 2s ease-in-out infinite;}
-@keyframes badgeDotPulse{0%,100%{transform:scale(1);box-shadow:0 0 12px #10b981;}50%{transform:scale(1.3);box-shadow:0 0 20px #10b981;}}
-.lv-logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg, #06b6d4 0%, #6c47c9 55%, #8a5cf6 100%);display:grid;place-items:center;color:#fff;box-shadow:0 16px 40px rgba(6,182,212,.5);margin-bottom:24px;}
-.lv-logo svg{width:32px!important;height:32px!important;}
-.lv-title{font-size:38px;font-weight:900;color:#fff;line-height:1.2;margin:0 0 16px;letter-spacing:-1px;}
-.lv-title span{display:block;}
-.lv-highlight{background:linear-gradient(90deg, #06b6d4 0%, #8a5cf6 50%, #ec4899 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
-.lv-desc{font-size:14px;line-height:1.85;color:#a8b9d4;max-width:420px;margin:0 0 32px;}
-.lv-stats{display:flex;align-items:center;gap:24px;padding:20px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:24px;}
-.lv-stat{text-align:center;flex:1;}
-.lv-stat-value{font-size:26px;font-weight:900;color:#fff;font-family:'JetBrains Mono', monospace;letter-spacing:-1px;line-height:1.2;}
-.lv-stat-label{font-size:10.5px;color:#7a8ba8;margin-top:2px;font-weight:600;}
-.lv-stat-divider{width:1px;height:32px;background:linear-gradient(to bottom, transparent, rgba(255,255,255,.15), transparent);}
-.lv-footer{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#5c6d8c;font-family:'JetBrains Mono', monospace;}
-.lv-secure{display:flex;align-items:center;gap:6px;}
-.lv-secure svg{width:13px!important;height:13px!important;color:#06b6d4;opacity:.7;}
-.lv-version{padding:3px 10px;border-radius:6px;background:rgba(6,182,212,.1);color:#06b6d4;font-weight:700;}
-
-.login-form-side{background:#050a15;padding:60px 52px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow-y:auto;}
-.login-form-side::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, transparent, #06b6d4, #6c47c9, transparent);animation:topLine 4s ease-in-out infinite;}
-@keyframes topLine{0%,100%{opacity:.5;transform:scaleX(.7);}50%{opacity:1;transform:scaleX(1);}}
-.lfs-header{margin-bottom:28px;}
-.lfs-logo-mobile{display:none;}
-.lfs-header h2{font-size:26px;font-weight:800;color:#fff;margin:0 0 8px;letter-spacing:-.5px;}
-.lfs-header p{font-size:13.5px;color:#8fa5c9;margin:0;line-height:1.6;}
-.connection-status{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;font-size:11.5px;color:#8fa5c9;margin-bottom:24px;width:fit-content;}
-.cs-dot{width:8px;height:8px;border-radius:50%;background:#6b7692;position:relative;}
-.cs-dot::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:currentColor;opacity:.3;animation:statusPulse 2s ease-in-out infinite;}
-@keyframes statusPulse{0%,100%{transform:scale(1);opacity:.3;}50%{transform:scale(1.8);opacity:0;}}
-.connection-status.online{border-color:rgba(16,185,129,.3);color:#6ee7b7;}
-.connection-status.online .cs-dot{background:#10b981;color:#10b981;}
-.connection-status.offline{border-color:rgba(239,68,68,.3);color:#fca5a5;}
-.connection-status.offline .cs-dot{background:#ef4444;color:#ef4444;}
-.connection-status.syncing{border-color:rgba(245,158,11,.3);color:#fbbf24;}
-.connection-status.syncing .cs-dot{background:#f59e0b;color:#f59e0b;}
-.login-error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);color:#fca5a5;padding:12px 16px;border-radius:12px;font-size:12.5px;margin-bottom:18px;display:none;line-height:1.6;animation:errorShake .4s;white-space:pre-line;}
-@keyframes errorShake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
-.input-group{margin-bottom:18px;}
-.input-group label{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:#8fa5c9;margin-bottom:8px;}
-.input-group label svg{width:14px!important;height:14px!important;color:#06b6d4;opacity:.8;}
-.input-wrap{position:relative;}
-.input-wrap input{width:100%;padding:14px 48px 14px 16px;background:rgba(6,182,212,.04);border:1.5px solid rgba(6,182,212,.18);border-radius:12px;color:#fff;font-size:14px;font-family:'Vazirmatn', sans-serif;outline:none;transition:all .25s;direction:ltr;text-align:right;}
-.input-wrap input[type="text"]{font-family:'JetBrains Mono', monospace;letter-spacing:.3px;}
-.input-wrap input::placeholder{color:rgba(6,182,212,.3);font-family:'JetBrains Mono', monospace;}
-.input-wrap input:hover{border-color:rgba(6,182,212,.35);background:rgba(6,182,212,.06);}
-.input-wrap input:focus{border-color:#06b6d4;background:rgba(6,182,212,.08);box-shadow:0 0 0 4px rgba(6,182,212,.12);}
-.input-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:rgba(6,182,212,.5);pointer-events:none;}
-.input-icon svg{width:100%!important;height:100%!important;}
-.toggle-pass{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:8px;background:transparent;border:none;color:#8fa5c9;cursor:pointer;display:grid;place-items:center;transition:all .2s;}
-.toggle-pass:hover{background:rgba(6,182,212,.1);color:#06b6d4;}
-.toggle-pass svg{width:18px!important;height:18px!important;}
-.caps-lock-warning{display:none;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;color:#fbbf24;font-size:11.5px;width:fit-content;}
-.caps-lock-warning.show{display:flex;}
-.caps-lock-warning svg{width:13px!important;height:13px!important;}
-.form-options{display:flex;justify-content:space-between;align-items:center;margin:8px 0 24px;font-size:12px;}
-.checkbox-label{display:flex;align-items:center;gap:10px;cursor:pointer;color:#8fa5c9;user-select:none;}
-.checkbox-label input[type="checkbox"]{position:absolute;opacity:0;pointer-events:none;}
-.checkbox-box{width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(6,182,212,.3);background:rgba(6,182,212,.05);display:grid;place-items:center;flex-shrink:0;transition:all .2s;}
-.checkbox-box svg{width:12px!important;height:12px!important;color:#fff;opacity:0;}
-.checkbox-label input:checked + .checkbox-box{background:linear-gradient(135deg,#06b6d4,#6c47c9);border-color:transparent;}
-.checkbox-label input:checked + .checkbox-box svg{opacity:1;}
-.forgot-link{color:#06b6d4;cursor:pointer;font-weight:600;transition:color .2s;}
-.forgot-link:hover{color:#8a5cf6;text-decoration:underline;}
-.login-btn{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg, #06b6d4 0%, #6c47c9 50%, #8a5cf6 100%);background-size:200% 200%;color:#fff;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 10px 30px rgba(6,182,212,.35);transition:all .3s;overflow:hidden;animation:gradientFlow 6s ease infinite;}
-@keyframes gradientFlow{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
-.login-btn:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(6,182,212,.5);}
-.login-btn:disabled{opacity:.7;cursor:not-allowed;transform:none;}
-.btn-arrow{width:18px!important;height:18px!important;}
-.btn-loader{display:flex;align-items:center;gap:10px;}
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.lfs-footer{margin-top:28px;padding-top:22px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:#5c6d8c;}
-.lfs-footer svg{width:13px!important;height:13px!important;color:#06b6d4;opacity:.6;}
-@media(max-width:1024px){.login-visual{padding:36px 32px;}.lv-title{font-size:30px;}.login-form-side{padding:48px 32px;}}
-@media(max-width:768px){.login-wrap{grid-template-columns:1fr;}.login-visual{display:none;}.login-form-side{padding:60px 28px 40px;min-height:100vh;}.lfs-logo-mobile{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 24px;border-radius:18px;background:linear-gradient(135deg,#06b6d4,#6c47c9,#8a5cf6);color:#fff;}.lfs-logo-mobile svg{width:32px!important;height:32px!important;}.lfs-header{text-align:center;}}
-
-.app{display:none;min-height:100vh;}
-.app.show{display:flex;}
-.sidebar{width:270px;background:linear-gradient(180deg,#0b0f19 0%,#151f32 100%);color:#8fa0c0;display:flex;flex-direction:column;position:fixed;top:0;right:0;height:100vh;height:100dvh;z-index:40;border-left:1px solid rgba(255,255,255,.05);transition:transform .3s;}
-.sidebar-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:8px;}
-.sidebar-footer{flex-shrink:0;padding:14px 16px 16px;background:linear-gradient(180deg,transparent,rgba(11,15,25,.9) 40%,#0b0f19);border-top:1px solid rgba(255,255,255,.06);}
-.sidebar-footer label{display:flex;align-items:center;gap:7px;font-size:11px;color:#8fa0c0;margin-bottom:8px;font-weight:600;}
-.sidebar-footer select{width:100%;padding:10px 12px;padding-left:36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-family:inherit;font-size:12px;outline:none;}
-.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:39;opacity:0;visibility:hidden;transition:all .3s;}
-.sidebar-overlay.show{opacity:1;visibility:visible;}
-.user-box{display:flex;align-items:center;gap:14px;padding:22px 18px;margin-bottom:8px;background:linear-gradient(135deg,rgba(108,71,201,.15) 0%,rgba(6,182,212,.08) 100%);border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;}
-.user-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#6c47c9,#8a5cf6,#06b6d4);padding:3px;flex-shrink:0;position:relative;}
-#sidebarAvatar{width:100%!important;height:100%!important;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:50%;background:linear-gradient(135deg,#6c47c9,#8a5cf6);color:#fff;font-weight:800;font-size:20px;}
-#sidebarAvatar img{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%;display:block;}
-.user-avatar::after{content:'';position:absolute;bottom:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#10b981;border:3px solid #0b0f19;z-index:2;}
-.user-info{flex:1;min-width:0;}
-.user-info h4{font-size:14.5px;color:#fff;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
-.user-info .phone{font-size:11.5px;color:#8fa0c0;display:block;direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
-.role-badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:12px;font-weight:800;}
-.role-badge.admin{background:rgba(239,68,68,.2);color:#fca5a5;}
-.role-badge.manager{background:rgba(245,158,11,.2);color:#fbbf24;}
-.role-badge.user{background:rgba(16,185,129,.2);color:#6ee7b7;}
-.role-badge.viewer{background:rgba(59,130,246,.2);color:#93c5fd;}
-.search-side{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px 14px;margin:14px 14px 16px;cursor:pointer;}
-.search-side svg{width:18px!important;height:18px!important;color:#8fa0c0;flex-shrink:0;order:-1;}
-.search-side span{color:#8fa0c0;font-size:13px;flex:1;text-align:right;}
-.search-side .kbd-hint{background:rgba(255,255,255,.1);padding:3px 8px;border-radius:6px;font-size:10px;color:#cbd5e1;font-family:'JetBrains Mono',monospace;font-weight:700;}
-.nav-section-title{font-size:10px;text-transform:uppercase;color:#5c6d8c;padding:16px 22px 8px;letter-spacing:2px;font-weight:800;}
-.nav-item{display:flex;align-items:center;gap:12px;padding:12px 16px;margin:3px 12px;border-radius:12px;cursor:pointer;color:#94a3b8;font-size:13.5px;font-weight:600;border:none;background:transparent;width:calc(100% - 24px);text-align:right;font-family:inherit;}
-.nav-item svg{width:20px!important;height:20px!important;flex-shrink:0;}
-.nav-item:hover{color:#fff;background:rgba(255,255,255,.04);}
-.nav-item.active{background:linear-gradient(135deg,var(--primary) 0%,#8a5cf6 100%);color:#fff;font-weight:800;}
-.nav-item .badge-num{margin-right:auto;background:rgba(255,255,255,.2);color:#fff;font-size:10.5px;padding:2px 9px;border-radius:10px;font-weight:800;min-width:24px;text-align:center;}
-.nav-item.hidden{display:none!important;}
-.main{flex:1;min-width:0;display:flex;flex-direction:column;margin-right:270px;}
-.topbar{height:64px;background:var(--bg-card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;position:sticky;top:0;z-index:30;}
-.menu-btn{display:none;background:transparent;border:none;color:var(--text);cursor:pointer;padding:6px;border-radius:8px;width:36px;height:36px;}
-.menu-btn svg{width:22px!important;height:22px!important;}
-.greeting{font-size:14.5px;font-weight:700;}
-.greeting small{display:block;font-size:11.5px;font-weight:400;color:var(--text-muted);}
-.topbar-actions{margin-right:auto;display:flex;gap:6px;align-items:center;}
-.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;display:grid;place-items:center;position:relative;}
-.icon-btn:hover{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);}
-.icon-btn svg{width:17px!important;height:17px!important;}
-.icon-btn .notif-badge{position:absolute;top:-4px;left:-4px;background:var(--danger);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;padding:0 5px;border-radius:9px;display:flex;align-items:center;justify-content:center;}
-.notif-dropdown{position:absolute;top:56px;left:20px;width:340px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);z-index:100;display:none;overflow:hidden;}
-.notif-dropdown.show{display:block;}
-.notif-dropdown-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:13.5px;}
-.notif-dropdown-head button{background:transparent;border:none;color:var(--primary);font-size:11.5px;cursor:pointer;font-family:inherit;font-weight:600;}
-.notif-list{max-height:400px;overflow-y:auto;}
-.notif-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;cursor:pointer;}
-.notif-item .n-title{font-size:12.5px;font-weight:600;}
-.notif-empty{padding:40px 20px;text-align:center;color:var(--text-muted);font-size:12.5px;}
-.content{padding:22px;flex:1;overflow-x:hidden;}
-.page{display:none;}
-.page.active{display:block;}
-.panel-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);margin-bottom:18px;overflow:hidden;}
-.card-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
-.card-head h2{font-size:15px;font-weight:700;}
-.card-head .sub{font-size:12px;color:var(--text-muted);}
-.card-head .actions{margin-right:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.card-icon{width:36px;height:36px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex-shrink:0;}
-.card-icon svg{width:20px!important;height:20px!important;}
-.empty-guide{text-align:center;padding:50px 20px;}
-.empty-guide .icon{width:90px;height:90px;margin:0 auto 20px;border-radius:24px;background:linear-gradient(135deg,var(--primary-soft),#e0d5fa);color:var(--primary);display:grid;place-items:center;}
-.empty-guide h3{font-size:18px;font-weight:800;margin-bottom:8px;}
-.empty-state{text-align:center;padding:40px 20px;color:var(--text-muted);}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:22px;}
-.stat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;}
-.stat::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--primary);}
-.stat.success::before{background:var(--success);}
-.stat.warning::before{background:var(--warning);}
-.stat.danger::before{background:var(--danger);}
-.stat.info::before{background:var(--info);}
-.stat-top{display:flex;justify-content:space-between;align-items:flex-start;}
-.stat-icon{width:40px;height:40px;border-radius:11px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;}
-.stat.success .stat-icon{background:var(--success-soft);color:var(--success);}
-.stat.warning .stat-icon{background:var(--warning-soft);color:var(--warning);}
-.stat.danger .stat-icon{background:var(--danger-soft);color:var(--danger);}
-.stat.info .stat-icon{background:var(--info-soft);color:var(--info);}
-.stat-icon svg{width:21px!important;height:21px!important;}
-.stat-value{font-size:25px;font-weight:800;margin-top:12px;}
-.stat-label{font-size:12px;color:var(--text-muted);margin-top:2px;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap;}
-.btn svg{width:15px!important;height:15px!important;}
-.btn-primary{background:var(--primary);color:#fff;}
-.btn-primary:hover{background:var(--primary-hover);}
-.btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border);}
-.btn-ghost:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary);}
-.btn-danger{background:var(--danger-soft);color:var(--danger);}
-.btn-danger:hover{background:var(--danger);color:#fff;}
-.btn-warning{background:var(--warning-soft);color:var(--warning);}
-.btn-warning:hover{background:var(--warning);color:#fff;}
-.btn-info{background:var(--info-soft);color:var(--info);}
-.btn-info:hover{background:var(--info);color:#fff;}
-.btn-success{background:var(--success-soft);color:var(--success);}
-.btn-success:hover{background:var(--success);color:#fff;}
-.btn-sm{padding:6px 11px;font-size:11.5px;}
-.btn-sm svg{width:13px!important;height:13px!important;}
-.btn-lg{padding:13px 24px;font-size:14px;}
-.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
-.toolbar .search-box{flex:1;min-width:200px;}
-.toolbar .filter-select{min-width:150px;padding:9px 12px;padding-left:36px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);border-radius:var(--radius-sm);font-size:12.5px;font-family:inherit;outline:none;cursor:pointer;}
-.toolbar .action-btns{display:flex;gap:6px;margin-right:auto;}
-.round-btn{width:38px;height:38px;border-radius:10px;border:none;cursor:pointer;display:grid;place-items:center;color:#fff;background:var(--primary);}
-.round-btn svg{width:17px!important;height:17px!important;}
-.table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--border);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-thead th{background:#1c2331;color:#fff;font-weight:600;font-size:12px;padding:13px;text-align:right;white-space:nowrap;}
-[data-theme="dark"] thead th{background:#0a0f1a;}
-tbody td{padding:12px 13px;border-bottom:1px solid var(--border);font-size:12.5px;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:var(--bg);}
-.row-num{background:var(--bg);font-weight:700;color:var(--text-muted);text-align:center;width:50px;}
-.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 4px;font-size:12.5px;color:var(--text-muted);flex-wrap:wrap;gap:10px;}
-.pagination .pages{display:flex;gap:4px;align-items:center;}
-.page-btn{min-width:34px;height:34px;padding:0 8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text);border-radius:8px;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;}
-.page-btn:hover:not(:disabled){background:var(--primary-soft);color:var(--primary);border-color:var(--primary);}
-.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
-.page-btn:disabled{opacity:.4;cursor:not-allowed;}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
-.badge-blue{background:var(--info-soft);color:var(--info);}
-.badge-green{background:var(--success-soft);color:var(--success);}
-.badge-orange{background:var(--warning-soft);color:#d97706;}
-.badge-red{background:var(--danger-soft);color:var(--danger);}
-.badge-purple{background:var(--primary-soft);color:var(--primary);}
-.badge-gray{background:var(--bg);color:var(--text-muted);}
-.status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11.5px;font-weight:700;border:1.5px solid;}
-.status-badge.done{background:var(--success-soft);color:var(--success);border-color:var(--success);}
-.status-badge.inprogress{background:var(--warning-soft);color:#d97706;border-color:var(--warning);}
-.status-badge.pending{background:var(--danger-soft);color:var(--danger);border-color:var(--danger);}
-.status-badge.open{background:var(--info-soft);color:var(--info);border-color:var(--info);}
-.status-badge.closed{background:var(--success-soft);color:var(--success);border-color:var(--success);}
-.search-box{display:flex;align-items:center;gap:7px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;}
-.search-box:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,71,201,.12);}
-.search-box svg{width:15px!important;height:15px!important;color:var(--text-muted);flex-shrink:0;}
-.search-box input{border:none;background:transparent;outline:none;color:var(--text);font-family:inherit;font-size:12.5px;width:100%;}
-.jobs-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px;}
-.job-stat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;position:relative;overflow:hidden;}
-.job-stat::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
-.job-stat.all::before{background:var(--primary);}
-.job-stat.done::before{background:var(--success);}
-.job-stat.inprogress::before{background:var(--warning);}
-.job-stat.pending::before{background:var(--danger);}
-.job-stat .js-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;}
-.job-stat.all .js-icon{background:var(--primary-soft);color:var(--primary);}
-.job-stat.done .js-icon{background:var(--success-soft);color:var(--success);}
-.job-stat.inprogress .js-icon{background:var(--warning-soft);color:var(--warning);}
-.job-stat.pending .js-icon{background:var(--danger-soft);color:var(--danger);}
-.job-stat .js-icon svg{width:21px!important;height:21px!important;}
-.job-stat .js-value{font-size:22px;font-weight:800;}
-.job-stat .js-label{font-size:11.5px;color:var(--text-muted);}
-.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
-.job-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden;cursor:pointer;}
-.job-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
-.job-card.done::before{background:var(--success);}
-.job-card.inprogress::before{background:var(--warning);}
-.job-card.pending::before{background:var(--danger);}
-.job-card-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;padding-left:140px;}
-.job-card-head .job-title{flex:1;font-size:14px;font-weight:700;line-height:1.4;}
-.job-card-meta{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:11.5px;color:var(--text-muted);margin-bottom:12px;}
-.job-card-actions{display:flex;gap:6px;padding-top:12px;border-top:1px dashed var(--border);justify-content:flex-end;}
-.job-card-actions .btn{flex:1;}
-.job-card-status{position:absolute;top:16px;left:16px;}
-.kanban-board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start;}
-@media(max-width:900px){.kanban-board{grid-template-columns:1fr;}}
-.kanban-col{background:var(--bg);border-radius:var(--radius);padding:12px;min-height:300px;}
-.kanban-col.drag-over{background:var(--primary-soft);box-shadow:inset 0 0 0 2px var(--primary);}
-.kanban-col-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-.kanban-col-head h3{font-size:13.5px;font-weight:800;flex:1;}
-.kanban-col.pending .kanban-col-head h3{color:var(--danger);}
-.kanban-col.inprogress .kanban-col-head h3{color:var(--warning);}
-.kanban-col.done .kanban-col-head h3{color:var(--success);}
-.kanban-col-head .count{background:var(--bg-card);border:1px solid var(--border);font-size:11px;padding:2px 9px;border-radius:12px;font-weight:700;}
-.kanban-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;cursor:grab;}
-.kanban-card.dragging{opacity:.4;}
-.kanban-card .kc-title{font-size:13px;font-weight:700;margin-bottom:6px;}
-.kanban-card .kc-meta{font-size:11px;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:6px 10px;margin-bottom:8px;}
-.kanban-add{width:100%;padding:10px;border:1.5px dashed var(--border);background:transparent;border-radius:10px;color:var(--text-muted);font-family:inherit;font-size:12.5px;cursor:pointer;font-weight:600;}
-.activity-list{display:flex;flex-direction:column;}
-.activity-item{display:flex;gap:12px;padding:14px 4px;border-bottom:1px solid var(--border);}
-.activity-item:last-child{border-bottom:none;}
-.activity-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;}
-.activity-icon svg{width:18px!important;height:18px!important;}
-.activity-icon.create{background:var(--success-soft);color:var(--success);}
-.activity-icon.update{background:var(--info-soft);color:var(--info);}
-.activity-icon.delete{background:var(--danger-soft);color:var(--danger);}
-.activity-icon.login{background:var(--warning-soft);color:var(--warning);}
-.activity-icon.assign{background:var(--primary-soft);color:var(--primary);}
-.activity-body{flex:1;}
-.activity-text{font-size:13px;line-height:1.6;}
-.activity-text strong{color:var(--primary);font-weight:700;}
-.activity-meta{font-size:11px;color:var(--text-muted);margin-top:3px;}
-.cmdk-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding-top:10vh;}
-.cmdk-overlay.show{display:flex;}
-.cmdk{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:620px;box-shadow:0 40px 80px rgba(0,0,0,.5);overflow:hidden;}
-.cmdk-search{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border);}
-.cmdk-search svg{width:20px!important;height:20px!important;color:var(--text-muted);}
-.cmdk-search input{flex:1;border:none;background:transparent;color:var(--text);font-family:inherit;font-size:15px;outline:none;font-weight:500;}
-.cmdk-search .kbd{background:var(--bg);border:1px solid var(--border);padding:3px 8px;border-radius:6px;font-size:10.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-weight:700;}
-.cmdk-results{max-height:60vh;overflow-y:auto;padding:8px;}
-.cmdk-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;}
-.cmdk-item:hover,.cmdk-item.selected{background:var(--primary-soft);}
-.cmdk-title{font-size:13.5px;font-weight:600;}
-.cmdk-empty{padding:40px;text-align:center;color:var(--text-muted);font-size:13px;}
-.cmdk-footer{padding:10px 16px;border-top:1px solid var(--border);background:var(--bg);display:flex;gap:14px;font-size:11px;color:var(--text-muted);}
-.cmdk-footer .kbd-sm{background:var(--bg-card);border:1px solid var(--border);padding:2px 6px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-weight:700;}
-.qr-container{background:#fff;padding:20px;border-radius:14px;margin-bottom:16px;text-align:center;}
-.qr-container img{width:220px;height:220px;display:block;margin:0 auto;}
-.qr-info{text-align:center;font-size:13px;line-height:1.8;color:var(--text-muted);}
-.sys-detail-overlay{position:fixed;inset:0;background:rgba(10,15,25,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;}
-.sys-detail-overlay.show{display:flex;}
-.sys-detail-modal{background:var(--bg-card);border-radius:20px;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;}
-.sys-detail-header{display:flex;align-items:center;gap:14px;padding:22px 24px;background:linear-gradient(135deg,#1c2331,#252e42);color:#fff;flex-shrink:0;}
-.sys-detail-header .header-icon{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,var(--primary),#8a5cf6);display:grid;place-items:center;flex-shrink:0;}
-.sys-detail-header .header-icon svg{width:24px!important;height:24px!important;color:#fff;}
-.sys-detail-header .header-info{flex:1;min-width:0;}
-.sys-detail-header .header-info h3{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px;}
-.sys-detail-header .header-info .meta{font-size:11.5px;color:rgba(255,255,255,.65);display:flex;gap:10px;flex-wrap:wrap;}
-.sys-detail-close{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:grid;place-items:center;flex-shrink:0;}
-.sys-detail-close svg{width:16px!important;height:16px!important;}
-.sys-detail-edit-btn{height:38px;padding:0 14px;border-radius:10px;border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.15);color:#fcd34d;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12.5px;font-weight:600;}
-.sys-detail-body{padding:20px;overflow-y:auto;flex:1;background:var(--bg);}
-.detail-section{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
-.detail-section-head{display:flex;align-items:center;gap:9px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);font-size:13.5px;font-weight:700;color:var(--primary);}
-.detail-rows{display:flex;flex-direction:column;}
-.detail-row{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px dashed var(--border);font-size:13px;gap:10px;}
-.detail-row:last-child{border-bottom:none;}
-.detail-row .lbl{color:var(--text-muted);font-weight:500;flex-shrink:0;}
-.detail-row .val{font-weight:700;color:var(--text);text-align:left;direction:ltr;font-family:'JetBrains Mono',monospace;font-size:12.5px;word-break:break-word;}
-.detail-row .val.rtl{direction:rtl;font-family:'Vazirmatn',sans-serif;}
-.detail-empty{text-align:center;padding:30px 20px;color:var(--text-muted);font-size:13px;}
-.detail-section.remote{background:linear-gradient(135deg,rgba(108,71,201,.08),rgba(6,182,212,.05));border:1.5px solid var(--primary);}
-.copy-field{display:inline-flex;align-items:center;gap:6px;background:var(--bg);padding:4px 10px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;direction:ltr;}
-.copy-field:hover{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);}
-.users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.user-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:center;}
-.user-card-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;flex-shrink:0;overflow:hidden;position:relative;}
-.user-card-avatar img{width:100%;height:100%;object-fit:cover;}
-.user-card-info{flex:1;min-width:0;}
-.user-card-info h4{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.user-card-info .un{font-size:11.5px;color:var(--text-muted);direction:ltr;text-align:right;margin-top:2px;}
-.user-card-actions{display:flex;gap:4px;flex-direction:column;}
-.online-dot{position:absolute;bottom:0;left:0;width:14px;height:14px;border-radius:50%;background:var(--success);border:3px solid var(--bg-card);z-index:2;}
-.online-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
-.online-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:center;position:relative;}
-.online-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--success);border-radius:0 4px 4px 0;}
-.online-time{font-size:10.5px;color:var(--text-muted);margin-top:4px;}
-.role-radio-group{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-@media(min-width:800px){.role-radio-group{grid-template-columns:repeat(4,1fr);}}
-.role-radio{position:relative;cursor:pointer;}
-.role-radio input{position:absolute;opacity:0;pointer-events:none;}
-.role-radio .rr-label{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 10px;border-radius:12px;border:2px solid var(--border);background:var(--bg-card);text-align:center;}
-.role-radio .rr-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;}
-.role-radio .rr-icon svg{width:20px!important;height:20px!important;}
-.role-radio .rr-text{font-size:12px;font-weight:700;}
-.role-radio.admin .rr-icon{background:var(--danger-soft);color:var(--danger);}
-.role-radio.manager .rr-icon{background:var(--warning-soft);color:var(--warning);}
-.role-radio.user .rr-icon{background:var(--success-soft);color:var(--success);}
-.role-radio.viewer .rr-icon{background:var(--info-soft);color:var(--info);}
-.role-radio input:checked + .rr-label{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.08);}
-.role-radio.admin input:checked + .rr-label{border-color:var(--danger);background:var(--danger-soft);}
-.role-radio.manager input:checked + .rr-label{border-color:var(--warning);background:var(--warning-soft);}
-.role-radio.user input:checked + .rr-label{border-color:var(--success);background:var(--success-soft);}
-.role-radio.viewer input:checked + .rr-label{border-color:var(--info);background:var(--info-soft);}
-.perm-list{display:flex;flex-direction:column;gap:8px;}
-.perm-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border);font-size:13px;cursor:pointer;}
-.perm-item input[type="checkbox"]{appearance:none;width:20px;height:20px;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;background:var(--bg-card);flex-shrink:0;position:relative;}
-.perm-item input[type="checkbox"]:checked{background:linear-gradient(135deg,var(--primary),#8a5cf6);border-color:transparent;}
-.perm-item input[type="checkbox"]:checked::after{content:'✓';position:absolute;color:#fff;font-size:13px;font-weight:bold;top:50%;left:50%;transform:translate(-50%,-50%);}
-.color-picker{display:flex;gap:10px;padding:12px 0;flex-wrap:wrap;}
-.color-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;}
-.color-dot.active{border-color:var(--text);box-shadow:0 0 0 3px var(--bg-card);}
-.color-dot.purple{background:#6c47c9;}.color-dot.blue{background:#3b82f6;}.color-dot.green{background:#10b981;}.color-dot.orange{background:#f59e0b;}.color-dot.pink{background:#ec4899;}
-.calendar-popup{position:fixed;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;width:305px;box-shadow:var(--shadow-lg);z-index:10000;display:none;}
-.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-.cal-head .title{font-weight:700;font-size:13.5px;}
-.cal-nav{display:flex;gap:4px;}
-.cal-nav button{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--bg-card);color:var(--text);cursor:pointer;display:grid;place-items:center;}
-.cal-nav button svg{width:13px!important;height:13px!important;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-grid .dow{text-align:center;font-size:10.5px;font-weight:700;color:var(--text-muted);padding:7px 0;}
-.cal-grid .day{aspect-ratio:1;display:grid;place-items:center;font-size:12.5px;border-radius:8px;cursor:pointer;font-weight:500;}
-.cal-grid .day:hover{background:var(--primary-soft);color:var(--primary);}
-.cal-grid .day.today{background:var(--primary);color:#fff;font-weight:700;}
-.cal-grid .day.holiday{color:var(--danger);}
-.cal-grid .day.empty{cursor:default;opacity:.35;}
-.fullpage-modal{position:fixed;inset:0;background:var(--bg);z-index:150;display:none;flex-direction:column;overflow-y:auto;}
-.fullpage-modal.show{display:flex;}
-.fp-header{background:var(--bg-card);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;}
-.fp-header h2{font-size:17px;font-weight:700;}
-.fp-header .close-btn{margin-right:auto;width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);cursor:pointer;display:grid;place-items:center;color:var(--text);}
-.fp-header .close-btn:hover{background:var(--danger-soft);color:var(--danger);}
-.fp-header .save-btn{background:var(--primary);color:#fff;border:none;padding:10px 20px;border-radius:11px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
-.fp-body{padding:24px 20px;max-width:1100px;margin:0 auto;width:100%;flex:1;}
-.form-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px;}
-.form-section-title{font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-.form-rows{display:grid;gap:14px;}
-.form-row-2{grid-template-columns:repeat(2,1fr);}
-.form-row-3{grid-template-columns:repeat(3,1fr);}
-@media(max-width:800px){.form-row-2,.form-row-3{grid-template-columns:1fr;}}
-.form-group{display:flex;flex-direction:column;gap:6px;}
-.form-group label{font-size:12.5px;font-weight:500;color:var(--text-muted);}
-.form-group label .req{color:var(--danger);font-weight:700;}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 13px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);border-radius:10px;font-size:13.5px;font-family:inherit;outline:none;}
-.form-group select{padding-left:36px;}
-.form-group textarea{resize:vertical;min-height:70px;}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(108,71,201,.12);}
-.status-radio-group{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.status-radio{position:relative;cursor:pointer;}
-.status-radio input{position:absolute;opacity:0;pointer-events:none;}
-.status-radio .sr-label{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 10px;border-radius:12px;border:2px solid var(--border);background:var(--bg-card);text-align:center;}
-.status-radio .sr-icon{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;}
-.status-radio .sr-icon svg{width:18px!important;height:18px!important;}
-.status-radio .sr-text{font-size:12px;font-weight:700;}
-.status-radio.done .sr-icon{background:var(--success-soft);color:var(--success);}
-.status-radio.inprogress .sr-icon{background:var(--warning-soft);color:var(--warning);}
-.status-radio.pending .sr-icon{background:var(--danger-soft);color:var(--danger);}
-.status-radio input:checked + .sr-label{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.08);}
-.status-radio.done input:checked + .sr-label{border-color:var(--success);background:var(--success-soft);}
-.status-radio.inprogress input:checked + .sr-label{border-color:var(--warning);background:var(--warning-soft);}
-.status-radio.pending input:checked + .sr-label{border-color:var(--danger);background:var(--danger-soft);}
-.avatar-upload{display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px;}
-.avatar-preview{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-weight:700;font-size:36px;overflow:hidden;position:relative;border:4px solid var(--bg-card);cursor:pointer;}
-.avatar-preview img{width:100%;height:100%;object-fit:cover;}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
-.modal-overlay.show{display:flex;}
-.modal{background:var(--bg-card);border-radius:var(--radius);padding:22px;max-width:400px;width:100%;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
-.modal.lg{max-width:640px;}
-.modal h3{font-size:16px;margin-bottom:8px;}
-.modal p{color:var(--text-muted);font-size:13px;margin-bottom:20px;line-height:1.7;}
-.modal-actions{display:flex;gap:10px;justify-content:flex-start;margin-top:18px;}
-.toast-container{position:fixed;top:20px;left:20px;z-index:99999;display:flex;flex-direction:column;gap:10px;}
-.toast{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 15px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow-lg);min-width:250px;border-right:3px solid var(--primary);}
-.toast.success{border-right-color:var(--success);}
-.toast.error{border-right-color:var(--danger);}
-.toast.warning{border-right-color:var(--warning);}
-.toast svg{width:17px!important;height:17px!important;flex-shrink:0;}
-.toast.success svg{color:var(--success);}
-.toast.error svg{color:var(--danger);}
-.toast.warning svg{color:var(--warning);}
-.prio-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:5px;}
-.prio-high{background:var(--danger);}
-.prio-med{background:var(--warning);}
-.prio-low{background:var(--success);}
-.progress-bar{width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
-.progress-bar > div{height:100%;background:linear-gradient(90deg,var(--primary),#8a5cf6);border-radius:3px;}
-.widgets-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;}
-.widget{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;}
-.widget-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.widget-head h3{font-size:14px;font-weight:700;flex:1;}
-.widget-head .w-icon{width:32px;height:32px;border-radius:9px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;}
-.widget-head .w-icon svg{width:16px!important;height:16px!important;}
-.feed-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border);}
-.feed-item:last-child{border-bottom:none;}
-.feed-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:7px;}
-.feed-dot.create{background:var(--success);}
-.feed-dot.update{background:var(--info);}
-.feed-dot.delete{background:var(--danger);}
-.feed-dot.login{background:var(--warning);}
-.feed-text{font-size:12.5px;flex:1;}
-.feed-time{font-size:10.5px;color:var(--text-muted);margin-top:2px;}
-.chat-container{display:flex;flex-direction:column;height:calc(100vh - 180px);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:15px;background:var(--bg);}
-.chat-bubble{max-width:75%;display:flex;flex-direction:column;position:relative;}
-.chat-bubble.me{align-self:flex-end;align-items:flex-end;}
-.chat-bubble.other{align-self:flex-start;align-items:flex-start;}
-.chat-bubble .bubble-text{background:var(--bg-card);padding:10px 14px;border-radius:14px;border-bottom-right-radius:2px;font-size:13px;line-height:1.6;border:1px solid var(--border);word-break:break-word;position:relative;}
-.chat-bubble.me .bubble-text{background:var(--primary);color:#fff;border-color:var(--primary);border-bottom-right-radius:14px;border-bottom-left-radius:2px;}
-.chat-bubble .bubble-info{font-size:10px;color:var(--text-muted);margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-.chat-bubble .msg-action{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:11px;transition:background .2s;background:transparent;border:none;color:var(--text-muted);padding:0;}
-.chat-bubble .msg-action:hover{background:var(--bg-card);color:var(--primary);}
-.chat-bubble.me .msg-action:hover{background:rgba(255,255,255,.15);color:#fff;}
-.chat-bubble .msg-action.del:hover{color:var(--danger);}
-.chat-bubble .reactions{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
-.chat-bubble .reaction{background:var(--bg);border:1px solid var(--border);padding:2px 6px;border-radius:10px;font-size:11px;cursor:pointer;}
-.chat-input-area{padding:15px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;}
-.chat-input-area input[type="text"]{flex:1;padding:12px 15px;border:1.5px solid var(--border);border-radius:20px;background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;outline:none;}
-.chat-input-area .btn{border-radius:50%;width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.chat-input-area .btn svg{width:20px!important;height:20px!important;}
-.chat-input-area .btn.btn-primary svg{transform:rotate(180deg);}
-.chat-bubble .bubble-text img.chat-img{max-width:100%;border-radius:10px;cursor:zoom-in;display:block;margin:2px 0;}
-.dm-user-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;}
-.ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer;}
-.ticket-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
-.ticket-card.urgent::before{background:var(--danger);}
-.ticket-card.normal::before{background:var(--info);}
-.ticket-card.low::before{background:var(--success);}
-.ticket-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;}
-.ticket-title{font-size:13.5px;font-weight:700;flex:1;}
-.ticket-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--text-muted);align-items:center;}
-.ticket-sla{padding:3px 9px;border-radius:12px;font-size:10.5px;font-weight:700;}
-.ticket-sla.ok{background:var(--success-soft);color:var(--success);}
-.ticket-sla.warn{background:var(--warning-soft);color:var(--warning);}
-.ticket-sla.over{background:var(--danger-soft);color:var(--danger);}
-.priority-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
-.priority-badge.urgent{background:var(--danger-soft);color:var(--danger);}
-.priority-badge.normal{background:var(--info-soft);color:var(--info);}
-.priority-badge.low{background:var(--success-soft);color:var(--success);}
-.license-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden;}
-.license-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
-.license-card.active::before{background:var(--success);}
-.license-card.warning::before{background:var(--warning);}
-.license-card.expired::before{background:var(--danger);}
-.license-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;}
-.license-name{font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:6px;}
-.license-info{display:flex;flex-direction:column;gap:6px;font-size:12px;}
-.license-info>div{display:flex;justify-content:space-between;}
-.license-info .lbl{color:var(--text-muted);}
-.license-info .val{font-weight:700;direction:ltr;}
-.team-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.team-cal-day{aspect-ratio:1;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--bg);overflow:hidden;position:relative;min-height:80px;}
-.team-cal-day.today{border-color:var(--primary);}
-.team-cal-day .day-num{font-size:11px;font-weight:700;color:var(--text-muted);}
-.session-timer{position:fixed;bottom:16px;left:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;z-index:90;}
-.session-timer svg{width:15px!important;height:15px!important;color:var(--primary);}
-.session-timer .time{font-family:'JetBrains Mono',monospace;direction:ltr;}
-.session-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:500;padding:20px;}
-.session-modal-overlay.show{display:flex;}
-.session-modal{background:var(--bg-card);border-radius:20px;padding:30px 26px 24px;max-width:400px;width:100%;text-align:center;}
-.session-modal-icon{width:66px;height:66px;margin:0 auto 16px;border-radius:20px;background:var(--warning-soft);color:var(--warning);display:grid;place-items:center;}
-.session-modal-icon svg{width:32px!important;height:32px!important;}
-.session-modal-actions{display:flex;gap:10px;margin-top:20px;}
-.session-modal-actions .btn{flex:1;padding:12px;}
-.heatmap-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:12px;}
-.heatmap-cell{aspect-ratio:1;border-radius:4px;background:var(--border);position:relative;}
-.heatmap-cell.level-0{background:rgba(108,71,201,.05);}
-.heatmap-cell.level-1{background:rgba(108,71,201,.25);}
-.heatmap-cell.level-2{background:rgba(108,71,201,.5);}
-.heatmap-cell.level-3{background:rgba(108,71,201,.75);}
-.heatmap-cell.level-4{background:rgba(108,71,201,1);}
-.heatmap-cell:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg-card);padding:4px 8px;border-radius:6px;font-size:10px;white-space:nowrap;z-index:10;}
-.pomodoro-widget{position:fixed;bottom:20px;right:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:var(--shadow-lg);z-index:85;display:none;width:220px;}
-.pomodoro-widget.show{display:block;}
-.pomodoro-widget .pomo-time{font-size:32px;font-weight:900;font-family:'JetBrains Mono',monospace;text-align:center;color:var(--primary);}
-.pomodoro-widget .pomo-label{font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:10px;}
-.pomodoro-widget .pomo-actions{display:flex;gap:6px;justify-content:center;}
-.achievement-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
-.achievement-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;position:relative;}
-.achievement-card.unlocked{border-color:var(--success);background:var(--success-soft);}
-.achievement-card.locked{opacity:.5;}
-.achievement-card .ach-icon{font-size:36px;margin-bottom:8px;}
-.achievement-card .ach-title{font-size:12px;font-weight:700;margin-bottom:4px;}
-.achievement-card .ach-desc{font-size:10.5px;color:var(--text-muted);}
-.github-repos{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
-.github-repo{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;}
-.github-repo h4{font-size:13.5px;font-weight:700;margin-bottom:6px;color:var(--primary);direction:ltr;text-align:right;}
-.github-repo p{font-size:11.5px;color:var(--text-muted);line-height:1.6;margin-bottom:10px;direction:ltr;text-align:right;}
-.github-repo .repo-meta{display:flex;gap:12px;font-size:11px;color:var(--text-muted);flex-wrap:wrap;}
-.tag-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;background:var(--primary-soft);color:var(--primary);}
-.summary-banner{background:linear-gradient(135deg,rgba(108,71,201,.08),rgba(6,182,212,.05));border:1px solid var(--primary);border-radius:var(--radius);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
-.summary-banner-icon{width:38px;height:38px;border-radius:10px;background:var(--primary);color:#fff;display:grid;place-items:center;flex-shrink:0;}
-.summary-banner-text{flex:1;font-size:13px;font-weight:600;}
-.summary-banner-close{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;line-height:1;}
-body.focus-mode .sidebar,body.focus-mode .topbar .topbar-actions .icon-btn:not(#themeBtn):not(#focusBtn){opacity:.2;pointer-events:none;}
-body.focus-mode .content{max-width:900px;margin:0 auto;}
-
-/* ═══ SETTINGS ADVANCED ═══ */
-.settings-tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;}
-.settings-tab{background:var(--bg-card);border:1.5px solid var(--border);padding:10px 16px;border-radius:10px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;color:var(--text-muted);white-space:nowrap;transition:all .2s;}
-.settings-tab:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary);}
-.settings-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
-.settings-pane{display:none;animation:fadeIn .25s;}
-.settings-pane.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0;}
-.setting-hint{font-size:11.5px;color:var(--text-muted);margin-top:2px;}
-.toggle-switch{position:relative;width:48px;height:26px;background:var(--border);border-radius:14px;cursor:pointer;transition:background .25s;flex-shrink:0;}
-.toggle-switch.active{background:var(--primary);}
-.toggle-knob{position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .25s;box-shadow:0 2px 6px rgba(0,0,0,.2);}
-.toggle-switch.active .toggle-knob{transform:translateX(-22px);}
-body.compact-mode .panel-card{padding:12px;margin-bottom:12px;}
-body.compact-mode .content{padding:14px;}
-body.compact-mode .stat{padding:12px;}
-body.compact-mode .stat-value{font-size:20px;}
-body.no-animations *{animation:none!important;transition:none!important;}
-body[data-fontsize="small"]{font-size:12px;}
-body[data-fontsize="large"]{font-size:16px;}
-body[data-fontsize="xlarge"]{font-size:18px;}
-body[data-fontweight="300"]{font-weight:300;}
-body[data-fontweight="600"]{font-weight:600;}
-body[data-fontweight="800"]{font-weight:800;}
-body[data-lineheight="1.4"]{line-height:1.4;}
-body[data-lineheight="1.9"]{line-height:1.9;}
-body.sidebar-collapsed .sidebar{width:70px;}
-body.sidebar-collapsed .main{margin-right:70px;}
-body.sidebar-collapsed .sidebar .nav-item span:not(.badge-num),
-body.sidebar-collapsed .sidebar .user-info,
-body.sidebar-collapsed .sidebar .nav-section-title,
-body.sidebar-collapsed .sidebar .search-side span{display:none;}
-body.sidebar-position-left .sidebar{right:auto;left:0;border-left:none;border-right:1px solid rgba(255,255,255,.05);}
-body.sidebar-position-left .main{margin-right:0;margin-left:270px;}
-body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right:0;}
-body[data-layout="compact"] .panel-card{padding:12px;}
-body[data-layout="spacious"] .panel-card{padding:24px;}
-
-#welcomeOverlay{backdrop-filter:blur(8px);}
-#welcomeOverlay .modal{animation:welcomePop .5s cubic-bezier(.34,1.56,.64,1);}
-@keyframes welcomePop{0%{transform:scale(.8) translateY(20px);opacity:0;}100%{transform:scale(1) translateY(0);opacity:1;}}
-
-@media(max-width:900px){
-  .sidebar{transform:translateX(100%);}
-  .sidebar.open{transform:translateX(0);}
-  .main{margin-right:0;}
-  .menu-btn{display:grid;place-items:center;}
-  .content{padding:14px;}
-  .notif-dropdown{left:12px;right:12px;width:auto;}
-}
-@media(max-width:640px){
-  .topbar{padding:0 12px;height:58px;}
-  .panel-card{padding:14px;}
-  .jobs-grid,.users-grid,.widgets-grid,.online-grid{grid-template-columns:1fr;}
-  .job-card-head{padding-left:0;}
-  .job-card-status{position:static;margin-bottom:8px;display:inline-block;}
-  .kanban-board{grid-template-columns:1fr;}
-  .user-card{flex-wrap:wrap;}
-  .toolbar .filter-select{min-width:0;flex:1;}
-  .pomodoro-widget{width:calc(100% - 40px);right:20px;left:20px;}
-}
-
-.menu-btn { display: none; background: var(--bg-card); border: 1px solid var(--border); color: var(--text); cursor: pointer; padding: 8px; border-radius: 10px; width: 40px; height: 40px; place-items: center; z-index: 45; box-shadow: var(--shadow-sm); }
-.menu-btn svg { width: 22px!important; height: 22px!important; }
-@media (max-width: 900px) {
-  .sidebar { transform: translateX(100%); }
-  .sidebar.open { transform: translateX(0); }
-  .main { margin-right: 0; }
-  .menu-btn { display: grid; }
-  .topbar { padding: 0 10px; gap: 8px; }
-  .greeting { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
-  .greeting small { display: none; }
-  .topbar-actions { gap: 4px; }
-  .icon-btn { width: 34px; height: 34px; }
-  .icon-btn svg { width: 16px!important; height: 16px!important; }
-}
-</style>
-</head>
-<body>
-<!-- ═══════════ LOGIN ═══════════ -->
-<div class="login-wrap" id="loginWrap">
-  <div class="login-visual">
-    <div class="lv-bg"></div>
-    <svg class="lv-circuit" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <pattern id="circuitPattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-          <path d="M10 10 L50 10 L50 40 L90 40 L90 90 L50 90 L50 60 L10 60 Z" fill="none" stroke="rgba(6,182,212,.25)" stroke-width="1"/>
-          <circle cx="10" cy="10" r="3" fill="rgba(6,182,212,.6)"/>
-          <circle cx="90" cy="90" r="3" fill="rgba(138,92,246,.6)"/>
-        </pattern>
-      </defs>
-      <rect width="800" height="800" fill="url(#circuitPattern)" opacity=".6"/>
-    </svg>
-    <div class="lv-matrix" id="lvMatrix"></div>
-    <div class="lv-servers">
-      <div class="server-rack">
-        <div class="server-unit"><span class="led green"></span><span class="led green"></span><span class="led amber"></span></div>
-        <div class="server-unit"><span class="led green"></span><span class="led green"></span><span class="led green"></span></div>
-        <div class="server-unit"><span class="led amber"></span><span class="led green"></span><span class="led green"></span></div>
-        <div class="server-unit"><span class="led green"></span><span class="led green"></span><span class="led amber"></span></div>
-        <div class="server-unit"><span class="led green"></span><span class="led amber"></span><span class="led green"></span></div>
-      </div>
-      <div class="server-rack">
-        <div class="server-unit"><span class="led green"></span><span class="led green"></span><span class="led green"></span></div>
-        <div class="server-unit"><span class="led green"></span><span class="led amber"></span><span class="led green"></span></div>
-        <div class="server-unit"><span class="led green"></span><span class="led green"></span><span class="led amber"></span></div>
-        <div class="server-unit"><span class="led amber"></span><span class="led green"></span><span class="led green"></span></div>
-        <div class="server-unit"><span class="led green"></span><span class="led green"></span><span class="led green"></span></div>
-      </div>
-    </div>
-    <div class="lv-particles" id="lvParticles"></div>
-    <div class="lv-overlay"></div>
-    <div class="lv-content">
-      <div class="lv-badge">
-        <span class="lv-badge-dot"></span>
-        <span>سیستم فعال · Real-time</span>
-      </div>
-      <div>
-        <div class="lv-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-        <h1 class="lv-title"><span>کنترل کامل</span><span class="lv-highlight">زیرساخت IT</span></h1>
-        <p class="lv-desc">مدیریت یکپارچه تیم، کارها، سیستم‌ها و دارایی‌های فناوری اطلاعات — همه در یک پنل هوشمند و امن.</p>
-        <div class="lv-stats">
-          <div class="lv-stat"><div class="lv-stat-value" data-count="0" data-stat="systems">۰</div><div class="lv-stat-label">سیستم</div></div>
-          <div class="lv-stat-divider"></div>
-          <div class="lv-stat"><div class="lv-stat-value" data-count="99">۰</div><div class="lv-stat-label">٪ آپتایم</div></div>
-          <div class="lv-stat-divider"></div>
-          <div class="lv-stat"><div class="lv-stat-value" data-count="0" data-stat="online">۰</div><div class="lv-stat-label">آنلاین</div></div>
-        </div>
-      </div>
-      <div class="lv-footer"><span class="lv-secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>رمزنگاری End-to-End</span><span class="lv-version">v7.3</span></div>
-    </div>
-  </div>
-  <div class="login-form-side">
-    <div class="lfs-header">
-      <div class="lfs-logo-mobile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 4 5-5"/></svg></div>
-      <h2>ورود به پنل</h2>
-      <p>خوش برگشتی! لطفاً اطلاعات خود را وارد کن</p>
-    </div>
-    <div class="connection-status" id="connStatus"><span class="cs-dot"></span><span class="cs-text">در حال بررسی...</span></div>
-    <div class="login-error" id="loginError" role="alert"></div>
-    <form id="loginForm" onsubmit="event.preventDefault(); doLogin();" autocomplete="on">
-      <div class="input-group">
-        <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>نام کاربری</label>
-        <div class="input-wrap">
-          <input type="text" id="loginUser" inputmode="numeric" placeholder="۰۹۹۰۰۱۵۳۵۷۸" autocomplete="username" required>
-          <div class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        </div>
-      </div>
-      <div class="input-group">
-        <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>رمز عبور</label>
-        <div class="input-wrap">
-          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" required>
-          <button type="button" class="toggle-pass" id="togglePass" onclick="togglePasswordVisibility()" aria-label="نمایش رمز"><svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        </div>
-        <div class="caps-lock-warning" id="capsLockWarn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/></svg>Caps Lock روشن است</div>
-      </div>
-      <div class="form-options">
-        <label class="checkbox-label">
-          <input type="checkbox" id="rememberMe"><span class="checkbox-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-          <span>مرا به خاطر بسپار</span>
-        </label>
-        <span class="forgot-link" onclick="toast('برای بازیابی رمز با مدیر سیستم تماس بگیرید','warning')">فراموشی رمز؟</span>
-      </div>
-      <button type="submit" class="login-btn" id="loginBtn">
-        <span class="btn-text">ورود امن</span>
-        <span class="btn-loader" style="display:none;"><span class="spinner"></span><span>در حال احراز هویت...</span></span>
-        <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      </button>
-    </form>
-    <div class="lfs-footer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>اتصال امن SSL · IT Management Pro</span></div>
-  </div>
-</div>
-
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
-<!-- ═══════════ APP ═══════════ -->
-<div class="app" id="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-scroll">
-      <div class="user-box" onclick="openProfileForm()">
-        <div class="user-avatar"><div id="sidebarAvatar">م</div></div>
-        <div class="user-info">
-          <h4 id="sidebarUserName">—</h4>
-          <span class="phone" id="sidebarUserPhone">—</span>
-          <span class="role-badge admin" id="sidebarUserRole">—</span>
-        </div>
-      </div>
-      <div class="search-side" onclick="openCmdk()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>جستجو در پنل...</span><span class="kbd-hint">⌘K</span>
-      </div>
-      
-      <div class="nav-section-title">🔒 خصوصی (شخصی)</div>
-      <button class="nav-item" data-page="mywork" data-perm="mywork"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>کارهای روزانه</span><span class="badge-num" id="myWorkBadge">۰</span></button>
-      <button class="nav-item" data-page="assigned" data-perm="assigned"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>کارهای محول به من</span><span class="badge-num" id="assignedBadge" style="display:none;">۰</span></button>
-      <button class="nav-item" data-page="attendance" data-perm="attendance"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>ساعت کاری</span></button>
-      <button class="nav-item" data-page="home" data-perm="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>کار در خانه</span></button>
-      <button class="nav-item" data-page="leave" data-perm="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M9 16l2 2 4-4"/></svg><span>مرخصی من</span><span class="badge-num" id="leaveBadge" style="display:none;">۰</span></button>
-      <button class="nav-item" data-page="achievements" data-perm="mywork"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg><span>دستاوردها</span></button>
-      
-      <div class="nav-section-title">🌐 عمومی (مشترک)</div>
-      <button class="nav-item" data-page="systems" data-perm="systems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg><span>سیستم‌ها</span></button>
-      <button class="nav-item" data-page="departments" data-perm="departments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span>بخش‌ها</span></button>
-      <button class="nav-item" data-page="devices" data-perm="devices"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg><span>وسایل IT</span></button>
-      <button class="nav-item" data-page="licenses" data-perm="systems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>لایسنس‌ها</span><span class="badge-num" id="licBadge" style="display:none;">۰</span></button>
-      <button class="nav-item" data-page="chat" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>گفتگوی تیمی</span></button>
-      <button class="nav-item" data-page="dm" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg><span>چت خصوصی</span><span class="badge-num" id="dmBadge" style="display:none;">۰</span></button>
-      <button class="nav-item" data-page="tickets" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/></svg><span>تیکت‌ها</span><span class="badge-num" id="ticketBadge" style="display:none;">۰</span></button>
-      <button class="nav-item" data-page="github" data-perm="systems"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg><span>گیت‌هاب</span></button>
-      
-      <div class="nav-section-title">🛠️ مدیریت</div>
-      <button class="nav-item" data-page="tasks" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>کارهای محول</span></button>
-      <button class="nav-item" data-page="kanban" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="12"/></svg><span>کانبان</span></button>
-      <button class="nav-item" data-page="jobs" data-perm="jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg><span>کارها</span><span class="badge-num" id="jobsBadge">۰</span></button>
-      <button class="nav-item" data-page="calendar" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>تقویم</span></button>
-      <button class="nav-item" data-page="meetings" data-perm="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><span>جلسات</span></button>
-      
-      <div class="nav-section-title">⚙️ سیستم</div>
-      <button class="nav-item" data-page="dashboard" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span>داشبورد</span></button>
-      <button class="nav-item" data-page="report" data-perm="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>گزارش ماهانه</span></button>
-      <button class="nav-item" data-page="user-report" data-perm="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg><span>گزارش عملکرد</span></button>
-      <button class="nav-item" data-page="activity" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><span>لاگ فعالیت</span></button>
-      <button class="nav-item" data-page="users" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>کاربران</span></button>
-      <button class="nav-item" id="nav-online-users" style="display:none;" data-page="online-users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg><span>کاربران آنلاین</span><span class="badge-num" id="onlineUsersBadge" style="background:var(--success);color:#fff;">۰</span></button>
-      <button class="nav-item" data-page="sessions" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 6v6l4 2"/></svg><span>تاریخچه ورود</span></button>
-      <button class="nav-item" data-page="tools" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>ابزارها</span></button>
-      <button class="nav-item" data-page="settings" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg><span>تنظیمات</span></button>
-    </div>
-    <div class="sidebar-footer">
-      <label>خروج خودکار پس از</label>
-      <select id="sessionTimeoutSelect" onchange="setSessionTimeout(this.value)"><option value="5">۵ دقیقه</option><option value="10">۱۰ دقیقه</option><option value="15" selected>۱۵ دقیقه</option><option value="30">۳۰ دقیقه</option><option value="60">۶۰ دقیقه</option><option value="0">غیرفعال</option></select>
-    </div>
-  </aside>
-
-  <div class="main">
-    <header class="topbar">
-      <button class="menu-btn" onclick="toggleSidebar()" aria-label="منو">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <line x1="3" y1="6" x2="21" y2="6"/>
-    <line x1="3" y1="12" x2="21" y2="12"/>
-    <line x1="3" y1="18" x2="21" y2="18"/>
-  </svg>
-</button>
-      <div class="greeting" id="pageTitle">داشبورد<small id="todayDate"></small></div>
-      <div class="topbar-actions">
-        <button class="icon-btn" onclick="toggleFocusMode()" title="حالت تمرکز" id="focusBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg></button>
-        <button class="icon-btn" onclick="togglePomodoro()" title="تایمر پومودورو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
-        <button class="icon-btn" id="notifBtn" onclick="toggleNotif()" style="display:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span class="notif-badge" id="notifBadge">0</span></button>
-        <button class="icon-btn" onclick="openCmdk()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-        <button class="icon-btn" id="themeBtn"><svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-        <button class="icon-btn" onclick="openProfileForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
-        <button class="icon-btn" onclick="doLogout()" title="خروج"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
-      </div>
-      <div class="notif-dropdown" id="notifDropdown"><div class="notif-dropdown-head"><span>اعلان‌ها</span><button onclick="markAllRead()">همه خوانده</button></div><div class="notif-list" id="notifList"></div></div>
-    </header>
-
-    <div class="content">
-      <div id="summaryBannerWrap"></div>
-      
-      <div class="page" id="page-online-users"><div class="panel-card"><div class="card-head"><div class="card-icon" style="background:var(--success-soft);color:var(--success);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div><h2>کاربران آنلاین</h2></div></div><div id="onlineUsersContent"></div></div></div>
-      
-      <div class="page" id="page-achievements"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div><div><h2>دستاوردها و سطح</h2></div></div><div id="achievementsContent"></div></div></div>
-      
-      <div class="page" id="page-sessions"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><h2>تاریخچه ورود</h2></div></div><div id="sessionsContent"></div></div></div>
-      
-      <div class="page" id="page-tools"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><div><h2>ابزارهای داخلی</h2></div></div><div id="toolsContent"></div></div></div>
-      
-      <div class="page" id="page-github"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77 5.44 5.44 0 0 0 3.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div><div><h2>ریپازیتوری‌های گیت‌هاب</h2><div class="sub">نمایش ریپازیتوری‌های کاربران تیم</div></div><div class="actions"><input type="text" id="githubUser" placeholder="نام کاربری گیت‌هاب" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg-card);color:var(--text);font-family:inherit;font-size:12.5px;"><button class="btn btn-primary btn-sm" onclick="fetchGithubRepos()">دریافت</button></div></div><div id="githubContent"><div class="empty-state">نام کاربری گیت‌هاب را وارد کنید</div></div></div></div>
-      
-      <div class="page" id="page-meetings"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><h2>جلسات و رویدادها</h2></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="openMeetingForm()">+ جلسه جدید</button></div></div><div id="meetingsContent"></div></div></div>
-      
-      <div class="page" id="page-calendar"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div><h2>تقویم کارها</h2></div></div><div id="calendarContent"></div></div></div>
-      
-      <div class="page" id="page-chat">
-        <div class="panel-card" style="padding:0;">
-          <div class="chat-container">
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-area">
-              <button class="btn btn-ghost" onclick="document.getElementById('chatImageInput').click()" title="ارسال عکس" style="border-radius:50%;width:44px;height:44px;padding:0;flex-shrink:0;">📷</button>
-              <button class="btn btn-primary" onclick="sendChatMessage()" title="ارسال" style="flex-shrink:0;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              </button>
-              <input type="text" id="chatInput" placeholder="پیامی بنویسید..." onkeypress="if(event.key==='Enter')sendChatMessage()">
-              <input type="file" id="chatImageInput" accept="image/*" style="display:none" onchange="handleTeamImage(event)">
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="page" id="page-dm"><div class="panel-card" style="padding:0;"><div class="chat-container" id="dmContainer"></div></div></div>
-      
-      <div class="page" id="page-tickets"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/></svg></div><div><h2>تیکت‌ها</h2></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="openTicketForm()">+ تیکت</button></div></div><div class="toolbar"><select class="filter-select" id="ticketStatusFilter" onchange="renderTickets()"><option value="">همه</option><option value="open">باز</option><option value="inprogress">در حال بررسی</option><option value="closed">بسته</option></select><select class="filter-select" id="ticketPriorityFilter" onchange="renderTickets()"><option value="">همه اولویت‌ها</option><option value="urgent">فوری</option><option value="normal">عادی</option><option value="low">کم</option></select><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="ticketSearch" placeholder="جستجو..." oninput="renderTickets()"></div></div><div id="ticketsContent"></div></div></div>
-      
-      <div class="page" id="page-leave"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><div><h2>مدیریت مرخصی</h2></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="openLeaveForm()">+ درخواست</button></div></div><div class="form-row-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;"><div class="stat"><div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div></div><div class="stat-value" id="leaveBalance">۰</div><div class="stat-label">مانده مرخصی</div></div><div class="stat success"><div class="stat-top"><div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div></div><div class="stat-value" id="approvedLeaves">۰</div><div class="stat-label">تایید شده</div></div></div><div class="table-wrap" style="margin-bottom:14px;"><table><thead><tr><th>کاربر</th><th>نوع</th><th>از</th><th>تا</th><th>مدت</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody id="leaveTbody"></tbody></table></div><div class="card-head"><h2 style="font-size:14px;">تقویم تیمی</h2></div><div class="team-cal" id="teamCalendar"></div></div></div>
-      
-      <div class="page" id="page-licenses"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg></div><div><h2>لایسنس‌ها</h2></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="openLicenseForm()">+ لایسنس</button></div></div><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="licSearch" placeholder="جستجو..." oninput="renderLicenses()"></div></div><div id="licensesContent"></div></div></div>
-      
-      <div class="page" id="page-assigned"><div class="panel-card"><div id="assignedContent"></div></div></div>
-      
-      <div class="page" id="page-mywork"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><h2>کارهای روزانه من</h2><div class="sub">فقط خودتان این کارها را می‌بینید</div></div></div><div class="toolbar"><select class="filter-select" id="mwFilterSelect" onchange="mwFilter=this.value;renderMyWork()"><option value="all">همه</option><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="mwSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openMyWorkForm()">+</button></div></div><div id="myWorkContent"></div><div class="pagination" id="mwPaginationWrap"><div class="total">تعداد: <span id="mwTotal">۰</span></div><div class="pages" id="mwPagination"></div></div></div></div>
-      
-      <div class="page" id="page-dashboard"><div class="stats-grid" id="dashStats"></div><div class="widgets-grid" id="widgetsGrid"></div></div>
-      
-      <div class="page" id="page-attendance"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><h2>ساعت کاری من</h2><div class="sub">سوابق خودتان — کاملاً خصوصی</div></div></div><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="attSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openAttendanceForm()">+</button></div></div><div id="attContent"></div><div class="pagination" id="attPaginationWrap"><div class="total">تعداد: <span id="attTotal">۰</span></div><div class="pages" id="attPagination"></div></div></div></div>
-      
-      <div class="page" id="page-home"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div><h2>کار در خانه من</h2><div class="sub">سوابق خودتان — کاملاً خصوصی</div></div></div><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="homeSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openHomeForm()">+</button></div></div><div id="homeContent"></div><div class="pagination" id="homePaginationWrap"><div class="total">تعداد: <span id="homeTotal">۰</span></div><div class="pages" id="homePagination"></div></div></div></div>
-      
-      <div class="page" id="page-tasks"><div class="panel-card"><div class="toolbar"><select class="filter-select" id="taskTypeFilter" onchange="renderTasks()"><option value="">همه</option><option>کارهای آی تی</option><option>پشتیبانی سایت</option><option>بروشورها</option><option>طراحی‌ها</option><option>موارد متفرقه</option></select><select class="filter-select" id="taskStatusFilter" onchange="renderTasks()"><option value="">همه</option><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="taskSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openTaskForm()">+</button></div></div><div id="taskContent"></div><div class="pagination" id="taskPaginationWrap"><div class="total">تعداد: <span id="taskTotal">۰</span></div><div class="pages" id="taskPagination"></div></div></div></div>
-      
-      <div class="page" id="page-kanban"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="12"/></svg></div><div><h2>کانبان</h2></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="openTaskForm()">+ کار</button></div></div><div class="kanban-board" id="kanbanBoard"></div></div></div>
-      
-      <div class="page" id="page-jobs"><div class="jobs-stats" id="jobsStats"></div><div class="panel-card"><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="jobsSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openTaskForm()">+</button></div></div><div id="jobsContent"></div></div></div>
-      
-      <div class="page" id="page-devices"><div class="stats-grid" id="devStats"></div><div class="panel-card"><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="devSearch" placeholder="جستجو..." oninput="devPage=1;renderDevices()"></div><select class="filter-select" id="devCatFilter" onchange="devPage=1;renderDevices()"><option value="">همه دسته‌ها</option><option>لپ‌تاپ</option><option>کیس</option><option>مانیتور</option><option>پرینتر</option><option>اسکنر</option><option>روتر</option><option>سوئیچ</option><option>ماوس</option><option>کیبورد</option><option>هارد</option><option>فلش</option><option>سایر</option></select><select class="filter-select" id="devStatusFilter" onchange="devPage=1;renderDevices()"><option value="">همه</option><option value="active">فعال</option><option value="repair">در تعمیر</option><option value="retired">اسقاط</option></select><div class="action-btns"><button class="btn btn-primary btn-sm" onclick="openDeviceForm()">+</button></div></div><div id="devContent"></div><div class="pagination" id="devPaginationWrap"><div class="total">تعداد: <span id="devTotal">۰</span></div><div class="pages" id="devPagination"></div></div></div></div>
-      
-      <div class="page" id="page-systems"><div class="panel-card"><div class="toolbar"><select class="filter-select" id="sysFilterDept" onchange="renderSystems()"><option value="">همه بخش‌ها</option></select><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="sysSearch" placeholder="جستجو..." oninput="renderSystems()"></div><div class="action-btns"><button class="btn btn-ghost btn-sm" onclick="quickAddDept()">+ بخش</button><button class="round-btn primary" onclick="openSystemForm()">+</button></div></div><div id="sysContent"></div><div class="pagination" id="sysPaginationWrap"><div class="total">تعداد: <span id="sysTotal">۰</span></div><div class="pages" id="sysPagination"></div></div></div></div>
-      
-      <div class="page" id="page-departments"><div class="panel-card"><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="deptSearch" placeholder="جستجو..." oninput="renderDepts()"></div><div class="action-btns"><button class="round-btn primary" onclick="quickAddDept()">+</button></div></div><div id="deptList"></div></div></div>
-      
-      <div class="page" id="page-users"><div class="panel-card"><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="usersSearch" placeholder="جستجو..." oninput="renderUsers()"></div><div class="action-btns"><button class="round-btn primary" onclick="openUserForm()">+ کاربر</button></div></div><div id="usersContent"></div></div></div>
-      
-      <div class="page" id="page-user-report"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg></div><div><h2>گزارش عملکرد</h2></div></div><div id="userReportSummary"></div></div></div>
-      
-      <div class="page" id="page-activity"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div><h2>لاگ فعالیت‌ها</h2></div><div class="actions"><select class="filter-select" id="activityFilter" onchange="renderActivity()"><option value="">همه</option><option value="create">ایجاد</option><option value="update">ویرایش</option><option value="delete">حذف</option><option value="login">ورود</option><option value="assign">محول</option></select><button class="btn btn-danger btn-sm" onclick="clearActivity()">پاک کردن</button></div></div><div class="activity-list" id="activityList"></div></div></div>
-      
-      <div class="page" id="page-settings">
-        <div class="panel-card">
-          <div class="card-head">
-            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-            <div><h2>تنظیمات کامل</h2><div class="sub">پیکربندی جامع پنل — همگام با Supabase</div></div>
-          </div>
-        </div>
-        <div class="settings-tabs" id="settingsTabs">
-          <button class="settings-tab active" data-tab="appearance" onclick="switchSettingsTab('appearance')">🎨 ظاهر</button>
-          <button class="settings-tab" data-tab="notifications" onclick="switchSettingsTab('notifications')">🔔 اعلان‌ها</button>
-          <button class="settings-tab" data-tab="security" onclick="switchSettingsTab('security')">🔒 امنیت</button>
-          <button class="settings-tab" data-tab="account" onclick="switchSettingsTab('account')">👤 حساب</button>
-          <button class="settings-tab" data-tab="dashboard" onclick="switchSettingsTab('dashboard')">📊 داشبورد</button>
-          <button class="settings-tab" data-tab="locale" onclick="switchSettingsTab('locale')">🌐 زبان</button>
-          <button class="settings-tab" data-tab="backup" onclick="switchSettingsTab('backup')">💾 پشتیبان</button>
-          <button class="settings-tab" data-tab="reports" onclick="switchSettingsTab('reports')">📈 گزارش</button>
-          <button class="settings-tab" data-tab="integrations" onclick="switchSettingsTab('integrations')">🔗 یکپارچه‌سازی</button>
-          <button class="settings-tab" data-tab="system" onclick="switchSettingsTab('system')">🔧 سیستم</button>
-        </div>
-
-        <div class="settings-pane active" id="settings-appearance">
-          <div class="panel-card">
-            <div class="card-head"><h2>🎨 رنگ برند</h2></div>
-            <div class="color-picker">
-              <div class="color-dot purple" onclick="setColor('purple')" data-color="purple" title="بنفش"></div>
-              <div class="color-dot blue" onclick="setColor('blue')" data-color="blue" title="آبی"></div>
-              <div class="color-dot green" onclick="setColor('green')" data-color="green" title="سبز"></div>
-              <div class="color-dot orange" onclick="setColor('orange')" data-color="orange" title="نارنجی"></div>
-              <div class="color-dot pink" onclick="setColor('pink')" data-color="pink" title="صورتی"></div>
-            </div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🌓 حالت نمایش</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">تم تاریک</div><div class="setting-hint">حالت شبانه</div></div><div class="toggle-switch" id="themeToggle" onclick="toggleThemeFromSettings()"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">حالت فشرده</div></div><div class="toggle-switch" id="compactToggle" onclick="toggleCompactMode()"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">انیمیشن‌ها</div></div><div class="toggle-switch active" id="animToggle" onclick="toggleAnimations()"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">نوار کناری جمع‌شده</div></div><div class="toggle-switch" id="sidebarCollapseToggle" onclick="toggleSetting('sidebarCollapseToggle')"><div class="toggle-knob"></div></div></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🔤 فونت و چیدمان</h2></div>
-            <div class="form-group"><label>اندازه فونت</label><select id="fontSizeSelect" onchange="setFontSize(this.value)"><option value="small">کوچک</option><option value="normal" selected>عادی</option><option value="large">بزرگ</option><option value="xlarge">خیلی بزرگ</option></select></div>
-            <div class="form-group" style="margin-top:14px;"><label>وزن فونت</label><select id="fontWeightSelect" onchange="setFontWeight(this.value)"><option value="300">نازک</option><option value="400" selected>عادی</option><option value="600">نیمه‌ضخیم</option><option value="800">ضخیم</option></select></div>
-            <div class="form-group" style="margin-top:14px;"><label>فاصله خطوط</label><select id="lineHeightSelect" onchange="setLineHeight(this.value)"><option value="1.4">فشرده</option><option value="1.6" selected>عادی</option><option value="1.9">باز</option></select></div>
-            <div class="form-group" style="margin-top:14px;"><label>موقعیت نوار کناری</label><select id="sidebarPositionSelect" onchange="setSidebarPosition(this.value)"><option value="right" selected>سمت راست</option><option value="left">سمت چپ</option></select></div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-notifications">
-          <div class="panel-card">
-            <div class="card-head"><h2>🔔 انواع اعلان</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">کارهای محول جدید</div></div><div class="toggle-switch active" id="notifTasks" onclick="toggleSetting('notifTasks')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">تیکت‌های جدید</div></div><div class="toggle-switch active" id="notifTickets" onclick="toggleSetting('notifTickets')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">پیام‌های چت</div></div><div class="toggle-switch active" id="notifChat" onclick="toggleSetting('notifChat')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">هشدار لایسنس</div></div><div class="toggle-switch active" id="notifLicenses" onclick="toggleSetting('notifLicenses')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">کاربران آنلاین</div></div><div class="toggle-switch" id="notifOnline" onclick="toggleSetting('notifOnline')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">جلسات</div></div><div class="toggle-switch" id="notifMeetings" onclick="toggleSetting('notifMeetings')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">یادآوری مهلت‌ها</div></div><div class="toggle-switch active" id="notifDeadlines" onclick="toggleSetting('notifDeadlines')"><div class="toggle-knob"></div></div></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🔊 صدا و دسکتاپ</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">صدای اعلان</div></div><div class="toggle-switch" id="soundToggle" onclick="toggleSetting('soundToggle')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">اعلان دسکتاپ</div></div><div class="toggle-switch" id="desktopNotifToggle" onclick="requestDesktopNotifications()"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">Badge مرورگر</div></div><div class="toggle-switch" id="badgeToggle" onclick="toggleSetting('badgeToggle')"><div class="toggle-knob"></div></div></div>
-            <button class="btn btn-ghost btn-sm" style="margin-top:14px;" onclick="testNotification()">🔔 تست اعلان</button>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🌙 ساعات سکوت</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">فعال</div></div><div class="toggle-switch" id="quietHoursToggle" onclick="toggleSetting('quietHoursToggle')"><div class="toggle-knob"></div></div></div>
-            <div class="form-rows form-row-2" style="margin-top:14px;">
-              <div class="form-group"><label>از ساعت</label><input type="time" id="quietFrom" value="22:00" onchange="setSetting('quietFrom',this.value);toast('✅ ذخیره شد','success')"></div>
-              <div class="form-group"><label>تا ساعت</label><input type="time" id="quietTo" value="07:00" onchange="setSetting('quietTo',this.value);toast('✅ ذخیره شد','success')"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-security">
-          <div class="panel-card">
-            <div class="card-head"><h2>⏱️ جلسه</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">خروج خودکار</div></div><select id="sessionTimeoutSelect2" onchange="setSessionTimeout(this.value)" style="width:auto;min-width:130px;padding:8px 32px 8px 12px;"><option value="5">۵ دقیقه</option><option value="10">۱۰ دقیقه</option><option value="15" selected>۱۵ دقیقه</option><option value="30">۳۰ دقیقه</option><option value="60">۶۰ دقیقه</option><option value="0">غیرفعال</option></select></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">قفل پس از عدم فعالیت</div></div><div class="toggle-switch" id="autoLockToggle" onclick="toggleSetting('autoLockToggle')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">نمایش آخرین ورود</div></div><div class="toggle-switch active" id="showLastLogin" onclick="toggleSetting('showLastLogin')"><div class="toggle-knob"></div></div></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🔐 رمز عبور</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">تغییر دوره‌ای رمز</div><div class="setting-hint">یادآوری هر ۹۰ روز</div></div><div class="toggle-switch" id="passwordRotationToggle" onclick="toggleSetting('passwordRotationToggle')"><div class="toggle-knob"></div></div></div>
-            <div style="margin-top:14px;"><button class="btn btn-warning btn-sm" onclick="openProfileForm()">🔑 تغییر رمز</button></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📱 دستگاه‌ها و نشست‌ها</h2></div>
-            <div id="activeDevicesList" style="margin-bottom:12px;"></div>
-            <button class="btn btn-danger btn-sm" onclick="logoutAllDevices()">🚪 خروج از همه دستگاه‌ها</button>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📋 آخرین ورودها</h2></div>
-            <div id="settingsLoginHistory" style="max-height:300px;overflow-y:auto;"></div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-account">
-          <div class="panel-card">
-            <div class="card-head"><h2>👤 پروفایل</h2></div>
-            <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-              <div class="user-card-avatar" id="settingsAccountAvatar" style="width:72px;height:72px;font-size:26px;"></div>
-              <div><div id="settingsAccountName" style="font-size:16px;font-weight:700;"></div><div id="settingsAccountRole" style="font-size:12px;color:var(--text-muted);"></div></div>
-            </div>
-            <button class="btn btn-primary btn-sm" onclick="openProfileForm()">✎ ویرایش پروفایل</button>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📧 اطلاعات تماس</h2></div>
-            <div class="form-group"><label>شماره موبایل</label><input type="text" id="settingsPhoneInput" readonly></div>
-            <div class="form-group" style="margin-top:14px;"><label>نام گیت‌هاب</label><input type="text" id="settingsGithubInput" onchange="setSetting('github',this.value);toast('✅ ذخیره شد','success')"></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📊 فعالیت من</h2></div>
-            <div class="stats-grid" id="settingsAccountStats"></div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-dashboard">
-          <div class="panel-card">
-            <div class="card-head"><h2>📊 ویجت‌های داشبورد</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">📈 آمار کلی</div></div><div class="toggle-switch active" id="widgetStats" onclick="toggleSetting('widgetStats')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">🕐 فعالیت‌های اخیر</div></div><div class="toggle-switch active" id="widgetActivity" onclick="toggleSetting('widgetActivity')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">✅ کارهای من</div></div><div class="toggle-switch active" id="widgetTasks" onclick="toggleSetting('widgetTasks')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">🔥 Heatmap</div></div><div class="toggle-switch active" id="widgetHeatmap" onclick="toggleSetting('widgetHeatmap')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">🕐 ساعات این ماه</div></div><div class="toggle-switch active" id="widgetHours" onclick="toggleSetting('widgetHours')"><div class="toggle-knob"></div></div></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">🎫 تیکت‌های باز</div></div><div class="toggle-switch active" id="widgetTickets" onclick="toggleSetting('widgetTickets')"><div class="toggle-knob"></div></div></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🎯 صفحه پیش‌فرض</h2></div>
-            <div class="form-group"><label>هنگام ورود</label><select id="defaultPageSelect" onchange="setDefaultPage(this.value)"><option value="">اولین صفحه مجاز</option><option value="dashboard">داشبورد</option><option value="mywork">کارهای روزانه</option><option value="jobs">کارها</option><option value="tasks">کارهای محول</option><option value="systems">سیستم‌ها</option><option value="chat">گفتگو</option></select></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📋 خلاصه بالای صفحه</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">نمایش بنر خلاصه</div></div><div class="toggle-switch active" id="summaryBannerToggle" onclick="toggleSetting('summaryBannerToggle')"><div class="toggle-knob"></div></div></div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-locale">
-          <div class="panel-card">
-            <div class="card-head"><h2>🌐 زبان</h2></div>
-            <div class="form-group"><label>زبان پنل</label><select id="languageSelect" onchange="setLanguage(this.value)"><option value="fa" selected>فارسی</option><option value="en">English</option></select></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📅 تاریخ و تقویم</h2></div>
-            <div class="form-group"><label>تقویم</label><select onchange="setSetting('calendar',this.value);toast('✅ ذخیره شد','success')"><option value="jalali" selected>شمسی (جلالی)</option><option value="gregorian">میلادی</option></select></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">اعداد فارسی</div></div><div class="toggle-switch active" id="faNumbersToggle" onclick="toggleSetting('faNumbersToggle')"><div class="toggle-knob"></div></div></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🕐 ساعت و منطقه زمانی</h2></div>
-            <div class="form-group"><label>منطقه زمانی</label><select onchange="setSetting('timezone',this.value);toast('✅ ذخیره شد','success')"><option value="Asia/Tehran" selected>تهران (UTC+3:30)</option><option value="Asia/Dubai">دبی (UTC+4)</option><option value="Europe/London">لندن (UTC+0)</option><option value="America/New_York">نیویورک (UTC-5)</option></select></div>
-            <div class="form-group" style="margin-top:14px;"><label>فرمت ساعت</label><select onchange="setSetting('timeFormat',this.value);toast('✅ ذخیره شد','success')"><option value="24" selected>۲۴ ساعته</option><option value="12">۱۲ ساعته</option></select></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>💰 واحد پول و اندازه</h2></div>
-            <div class="form-group"><label>واحد پول</label><select onchange="setSetting('currency',this.value);toast('✅ ذخیره شد','success')"><option value="IRR" selected>ریال ایران</option><option value="IRT">تومان</option><option value="USD">دلار</option><option value="EUR">یورو</option></select></div>
-            <div class="form-group" style="margin-top:14px;"><label>واحد اندازه</label><select onchange="setSetting('units',this.value);toast('✅ ذخیره شد','success')"><option value="metric" selected>متریک (KB, MB)</option><option value="binary">باینری (KiB, MiB)</option></select></div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-backup">
-          <div class="panel-card">
-            <div class="card-head"><h2>💾 پشتیبان دستی</h2></div>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <button class="btn btn-primary" onclick="exportData()">📥 دانلود پشتیبان</button>
-              <button class="btn btn-warning" onclick="document.getElementById('importFile').click()">📤 بازیابی</button>
-              <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-            </div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>⏰ پشتیبان خودکار (در Supabase)</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">پشتیبان خودکار روزانه</div></div><div class="toggle-switch" id="autoBackupToggle" onclick="toggleSetting('autoBackupToggle')"><div class="toggle-knob"></div></div></div>
-            <div style="margin-top:14px;">
-              <button class="btn btn-ghost btn-sm" onclick="createAutoBackupNow()">💾 ایجاد فوری</button>
-              <button class="btn btn-ghost btn-sm" onclick="showAutoBackups()">📂 مشاهده پشتیبان‌ها</button>
-            </div>
-            <div id="autoBackupsList" style="margin-top:14px;"></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>⚠️ منطقه خطر</h2></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="btn btn-warning" onclick="clearCacheOnly()">🧹 پاک‌سازی کش</button>
-              <button class="btn btn-danger" onclick="resetAll()">🔥 بازنشانی کامل</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-reports">
-          <div class="panel-card">
-            <div class="card-head"><h2>📈 بازه پیش‌فرض</h2></div>
-            <div class="form-group"><label>دوره گزارش</label><select onchange="setSetting('reportPeriod',this.value);toast('✅ ذخیره شد','success')"><option value="week">هفته</option><option value="month" selected>ماه</option><option value="quarter">فصل</option><option value="year">سال</option></select></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📊 نوع نمودار</h2></div>
-            <div class="form-group"><label>نمودار پیش‌فرض</label><select onchange="setSetting('chartType',this.value);toast('✅ ذخیره شد','success')"><option value="bar" selected>میله‌ای</option><option value="line">خطی</option><option value="pie">دایره‌ای</option></select></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📤 خروجی گزارش</h2></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="btn btn-primary btn-sm" onclick="exportReportCSV()">📄 CSV</button>
-              <button class="btn btn-danger btn-sm" onclick="exportReportPDF()">📕 PDF</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-integrations">
-          <div class="panel-card">
-            <div class="card-head"><h2>🐙 گیت‌هاب</h2></div>
-            <div class="form-group"><label>نام کاربری پیش‌فرض</label><input type="text" id="githubDefaultInput" placeholder="username" style="direction:ltr;text-align:right;" onchange="setSetting('github',this.value);toast('✅ ذخیره شد','success')"></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>☁️ Supabase</h2></div>
-            <div class="detail-rows">
-              <div class="detail-row"><div class="lbl">وضعیت</div><div class="val rtl" id="supabaseStatus">—</div></div>
-              <div class="detail-row"><div class="lbl">URL</div><div class="val" id="supabaseUrl">—</div></div>
-            </div>
-            <button class="btn btn-info btn-sm" style="margin-top:12px;" onclick="testSupabaseConnection()">🔌 تست اتصال</button>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🔗 Webhook</h2></div>
-            <div class="form-group"><label>URL</label><input type="text" id="webhookUrlInput" placeholder="https://..." style="direction:ltr;text-align:right;" onchange="setSetting('webhookUrl',this.value);toast('✅ ذخیره شد','success')"></div>
-            <div class="setting-row" style="margin-top:14px;"><div><div style="font-weight:600;">فعال</div></div><div class="toggle-switch" id="webhookToggle" onclick="toggleSetting('webhookToggle')"><div class="toggle-knob"></div></div></div>
-            <button class="btn btn-ghost btn-sm" style="margin-top:14px;" onclick="testWebhook()">🧪 تست</button>
-          </div>
-        </div>
-
-        <div class="settings-pane" id="settings-system">
-          <div class="panel-card">
-            <div class="card-head"><h2>ℹ️ اطلاعات سیستم</h2></div>
-            <div class="detail-rows" id="systemInfoRows"></div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🔄 بروزرسانی</h2></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="btn btn-info btn-sm" onclick="location.reload()">🔄 بارگذاری مجدد</button>
-              <button class="btn btn-ghost btn-sm" onclick="syncInBackground()">☁️ همگام‌سازی</button>
-              <button class="btn btn-ghost btn-sm" onclick="checkConnectionStatus()">📶 بررسی اتصال</button>
-            </div>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>📋 لاگ خطاها</h2></div>
-            <div id="errorLogsList" style="max-height:250px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:11px;direction:ltr;text-align:right;"></div>
-            <button class="btn btn-danger btn-sm" style="margin-top:12px;" onclick="clearErrorLogs()">🧹 پاک کردن</button>
-          </div>
-          <div class="panel-card">
-            <div class="card-head"><h2>🎯 حالت دیباگ</h2></div>
-            <div class="setting-row"><div><div style="font-weight:600;">فعال‌سازی</div></div><div class="toggle-switch" id="debugToggle" onclick="toggleSetting('debugToggle')"><div class="toggle-knob"></div></div></div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="page" id="page-report"><div class="panel-card"><div class="toolbar"><input type="text" id="reportMonth" readonly placeholder="انتخاب ماه..." onclick="openCal('reportMonth', this, true)" style="padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;background:var(--bg-card);color:var(--text);font-family:inherit;font-size:13px;min-width:180px;outline:none;cursor:pointer;"><button class="btn btn-primary" onclick="calcReport()">محاسبه</button></div></div><div class="stats-grid" id="reportStats"></div><div class="panel-card"><div class="card-head"><h2>نمودار</h2></div><div style="position:relative;height:280px;padding:10px 0;"><canvas id="reportChart"></canvas></div></div><div class="panel-card"><div class="card-head"><h2>تفکیک</h2></div><div id="taskReportContent"></div></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ MODALS & OVERLAYS ═══════════ -->
-<div class="cmdk-overlay" id="cmdkOverlay" onclick="if(event.target.id==='cmdkOverlay')closeCmdk()"><div class="cmdk"><div class="cmdk-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="cmdkInput" placeholder="جستجو..." oninput="renderCmdk()" onkeydown="cmdkKeydown(event)"><span class="kbd">ESC</span></div><div class="cmdk-results" id="cmdkResults"></div><div class="cmdk-footer"><span><span class="kbd-sm">↑↓</span> حرکت</span><span><span class="kbd-sm">↵</span> انتخاب</span></div></div></div>
-
-<div class="modal-overlay" id="qrModal"><div class="modal"><h3>📱 QR</h3><div class="qr-container"><img id="qrImg" src="" alt="QR"></div><div class="qr-info" id="qrInfo"></div><div class="modal-actions"><button class="btn btn-ghost" onclick="document.getElementById('qrModal').classList.remove('show')">بستن</button></div></div></div>
-
-<div class="sys-detail-overlay" id="sysDetailOverlay" onclick="if(event.target.id==='sysDetailOverlay')closeSystemDetail()"><div class="sys-detail-modal"><div class="sys-detail-header"><div class="header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg></div><div class="header-info"><h3 id="sdName">نام سیستم</h3><div class="meta" id="sdMeta"></div></div><div class="header-actions"><button class="sys-detail-edit-btn" onclick="editFromDetail()">ویرایش</button><button class="sys-detail-close" onclick="closeSystemDetail()">×</button></div></div><div class="sys-detail-body" id="sdBody"></div></div></div>
-
-<div class="fullpage-modal" id="ticketFormModal"><div class="fp-header"><button class="save-btn" onclick="saveTicket()">ذخیره</button><h2><span id="ticketFormTitle">تیکت</span></h2><button class="close-btn" onclick="closeTicketForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="tkTitle"></div><div class="form-group"><label>دسته</label><select id="tkCategory"><option>مشکل سخت‌افزاری</option><option>مشکل نرم‌افزاری</option><option>شبکه و اینترنت</option><option>پرینتر</option><option>ایمیل</option><option>سایر</option></select></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>اولویت</label><select id="tkPriority"><option value="urgent">🔴 فوری</option><option value="normal" selected>🟡 عادی</option><option value="low">🟢 کم</option></select></div><div class="form-group"><label>واگذار به</label><select id="tkAssignedTo"><option value="">— بدون —</option></select></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات <span class="req">*</span></label><textarea id="tkDesc"></textarea></div></div></div><div class="form-section"><div class="form-section-title">وضعیت</div><div class="status-radio-group"><label class="status-radio pending"><input type="radio" name="tkStatus" value="open" checked><div class="sr-label"><div class="sr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="sr-text">باز</div></div></label><label class="status-radio inprogress"><input type="radio" name="tkStatus" value="inprogress"><div class="sr-label"><div class="sr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="sr-text">در حال بررسی</div></div></label><label class="status-radio done"><input type="radio" name="tkStatus" value="closed"><div class="sr-label"><div class="sr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="sr-text">بسته</div></div></label></div></div></div></div>
-
-<div class="fullpage-modal" id="licenseFormModal"><div class="fp-header"><button class="save-btn" onclick="saveLicense()">ذخیره</button><h2><span id="licenseFormTitle">لایسنس</span></h2><button class="close-btn" onclick="document.getElementById('licenseFormModal').classList.remove('show')">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>نام <span class="req">*</span></label><input type="text" id="lcName"></div><div class="form-group"><label>تعداد</label><input type="number" id="lcQty" value="1" min="1"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>خرید</label><input type="text" id="lcBuyDate" readonly onclick="openCal('lcBuyDate', this)"></div><div class="form-group"><label>انقضا <span class="req">*</span></label><input type="text" id="lcExpireDate" readonly onclick="openCal('lcExpireDate', this)"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>محل نصب</label><input type="text" id="lcLocation"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>کلید</label><textarea id="lcKey" style="direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;"></textarea></div></div></div></div></div>
-
-<div class="fullpage-modal" id="leaveFormModal"><div class="fp-header"><button class="save-btn" onclick="saveLeave()">ثبت</button><h2><span>مرخصی</span></h2><button class="close-btn" onclick="document.getElementById('leaveFormModal').classList.remove('show')">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>نوع</label><select id="lvType"><option>استحقاقی</option><option>استعلاجی</option><option>بدون حقوق</option></select></div><div class="form-group"><label>روز</label><input type="number" id="lvDays" value="1" min="1"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>از</label><input type="text" id="lvFrom" readonly onclick="openCal('lvFrom', this)"></div><div class="form-group"><label>تا</label><input type="text" id="lvTo" readonly onclick="openCal('lvTo', this)"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="lvReason"></textarea></div></div></div></div></div>
-
-<div class="fullpage-modal" id="userFormModal"><div class="fp-header"><button class="save-btn" onclick="saveUser()">ذخیره</button><h2><span id="userFormTitle">کاربر</span></h2><button class="close-btn" onclick="closeUserForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-section-title">اطلاعات</div><div class="form-rows form-row-2"><div class="form-group"><label>نام <span class="req">*</span></label><input type="text" id="ufName"></div><div class="form-group"><label>موبایل <span class="req">*</span></label><input type="text" id="ufPhone" style="direction:ltr;text-align:right;"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>رمز <span class="req">*</span></label><input type="text" id="ufPassword"></div><div class="form-group"><label>مرخصی سالانه</label><input type="number" id="ufLeaveBalance" value="26" min="0"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>نام کاربری گیت‌هاب</label><input type="text" id="ufGithub" style="direction:ltr;text-align:right;"></div></div></div><div class="form-section"><div class="form-section-title">سطح دسترسی</div><div class="role-radio-group"><label class="role-radio admin"><input type="radio" name="ufRole" value="admin"><div class="rr-label"><div class="rr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="rr-text">مدیر</div></div></label><label class="role-radio manager"><input type="radio" name="ufRole" value="manager" checked><div class="rr-label"><div class="rr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/></svg></div><div class="rr-text">سرپرست</div></div></label><label class="role-radio user"><input type="radio" name="ufRole" value="user"><div class="rr-label"><div class="rr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="rr-text">کاربر</div></div></label><label class="role-radio viewer"><input type="radio" name="ufRole" value="viewer"><div class="rr-label"><div class="rr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="rr-text">مشاهده</div></div></label></div></div><div class="form-section"><div class="form-section-title">🎯 دسترسی‌ها</div><div class="perm-list" id="ufPermsList"></div></div></div></div>
-
-<div class="fullpage-modal" id="profileFormModal"><div class="fp-header"><button class="save-btn" onclick="saveProfile()">ذخیره</button><h2><span>پروفایل</span></h2><button class="close-btn" onclick="closeProfileForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-section-title">عکس</div><div class="avatar-upload"><div class="avatar-preview" id="profileAvatarPreview" onclick="document.getElementById('profileAvatarInput').click()"><span>م</span></div><input type="file" id="profileAvatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)"><div style="display:flex;gap:8px;"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('profileAvatarInput').click()">آپلود</button><button class="btn btn-danger btn-sm" onclick="removeAvatar()">حذف</button></div></div></div><div class="form-section"><div class="form-section-title">اطلاعات</div><div class="form-rows form-row-2"><div class="form-group"><label>نام</label><input type="text" id="pfName"></div><div class="form-group"><label>موبایل</label><input type="text" id="pfPhone" readonly disabled></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>نام کاربری گیت‌هاب</label><input type="text" id="pfGithub" style="direction:ltr;text-align:right;"></div></div></div><div class="form-section"><div class="form-section-title">تغییر رمز</div><div class="form-rows form-row-3"><div class="form-group"><label>فعلی</label><input type="password" id="pfCurrentPass"></div><div class="form-group"><label>جدید</label><input type="password" id="pfNewPass"></div><div class="form-group"><label>تکرار</label><input type="password" id="pfConfirmPass"></div></div></div></div></div>
-
-<div class="fullpage-modal" id="taskFormModal"><div class="fp-header"><button class="save-btn" onclick="saveTask()">ذخیره</button><h2><span id="taskFormTitle">کار محول</span></h2><button class="close-btn" onclick="closeTaskForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-3"><div class="form-group"><label>نوع</label><select id="taskType"><option>کارهای آی تی</option><option>پشتیبانی سایت</option><option>بروشورها</option><option>طراحی‌ها</option><option>موارد متفرقه</option></select></div><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="taskTitle"></div><div class="form-group"><label>تاریخ <span class="req">*</span></label><input type="text" id="taskDate" readonly onclick="openCal('taskDate', this)"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>شروع</label><input type="time" id="taskStart"></div><div class="form-group"><label>پایان</label><input type="time" id="taskEnd"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>محول به <span class="req">*</span></label><select id="taskAssignedTo"></select></div><div class="form-group"><label>برچسب (با کاما)</label><input type="text" id="taskTags" placeholder="فوری, شبکه, طراحی"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="taskNotes"></textarea></div></div></div><div class="form-section"><div class="form-section-title">وضعیت</div><div class="status-radio-group"><label class="status-radio pending"><input type="radio" name="taskStatus" value="pending"><div class="sr-label"><div class="sr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="sr-text">انجام نشده</div></div></label><label class="status-radio inprogress"><input type="radio" name="taskStatus" value="inprogress"><div class="sr-label"><div class="sr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="sr-text">در حال انجام</div></div></label><label class="status-radio done"><input type="radio" name="taskStatus" value="done"><div class="sr-label"><div class="sr-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="sr-text">انجام شده</div></div></label></div></div></div></div>
-
-<div class="fullpage-modal" id="sysFormModal"><div class="fp-header"><button class="save-btn" onclick="saveSystem()">ذخیره</button><h2><span id="sysFormTitle">سیستم</span></h2><button class="close-btn" onclick="closeSystemForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-section-title">📦 اطلاعات پایه</div><div class="form-rows form-row-3"><div class="form-group"><label>بخش <span class="req">*</span></label><select id="sfDeptId"></select></div><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="sfTitle"></div><div class="form-group"><label>نوع</label><select id="sfSysType"><option>کیس</option><option>مانیتور</option><option>لپ‌تاپ</option><option>سرور</option><option>سایر</option></select></div></div></div><div class="form-section" style="background:linear-gradient(135deg,rgba(108,71,201,.08),rgba(6,182,212,.05));border:2px solid var(--primary);"><div class="form-section-title" style="color:var(--primary);font-size:14px;">🔐 دسترسی ریموت</div><div class="form-rows form-row-3"><div class="form-group"><label>نوع</label><select id="sfRemoteType"><option value="">—</option><option>AnyDesk</option><option>RustDesk</option><option>TeamViewer</option><option>Chrome Remote</option><option>VNC</option><option>سایر</option></select></div><div class="form-group"><label>کد / ID</label><input type="text" id="sfRemoteCode" style="font-family:'JetBrains Mono',monospace;direction:ltr;text-align:right;"></div><div class="form-group"><label>رمز</label><input type="text" id="sfRemotePass" style="font-family:'JetBrains Mono',monospace;direction:ltr;text-align:right;"></div></div></div><div class="form-section"><div class="form-section-title">🖥️ سخت‌افزار</div><div class="form-rows form-row-3"><div class="form-group"><label>CPU برند</label><select id="sfCpuBrand"><option value="">—</option><option>Intel</option><option>AMD</option></select></div><div class="form-group"><label>CPU مدل</label><input type="text" id="sfCpuModel"></div><div class="form-group"><label>RAM نوع</label><select id="sfRamType"><option value="">—</option><option>DDR3</option><option>DDR4</option><option>DDR5</option></select></div><div class="form-group"><label>RAM حجم</label><input type="text" id="sfRamSize"></div><div class="form-group"><label>حافظه نوع</label><select id="sfDiskType"><option value="">—</option><option>HDD</option><option>SSD SATA</option><option>SSD NVMe</option></select></div><div class="form-group"><label>حافظه حجم</label><input type="text" id="sfDiskSize"></div></div></div><div class="form-section"><div class="form-section-title">🌐 شبکه</div><div class="form-rows form-row-3"><div class="form-group"><label>IP</label><input type="text" id="sfIP" style="direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;"></div><div class="form-group"><label>MAC</label><input type="text" id="sfMAC" style="direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;"></div><div class="form-group"><label>Hostname</label><input type="text" id="sfHostname"></div></div></div><div class="form-section"><div class="form-section-title">توضیحات</div><div class="form-group"><textarea id="sfNotes"></textarea></div></div></div></div>
-
-<div class="fullpage-modal" id="mwFormModal"><div class="fp-header"><button class="save-btn" onclick="saveMyWork()">ذخیره</button><h2><span id="mwFormTitle">کار من</span></h2><button class="close-btn" onclick="closeMyWorkForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="mwTitle"></div><div class="form-group"><label>وضعیت</label><select id="mwStatus"><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>اولویت</label><select id="mwPriority"><option value="high">بالا</option><option value="med">متوسط</option><option value="low">پایین</option></select></div><div class="form-group"><label>مهلت</label><input type="text" id="mwDeadline" readonly onclick="openCal('mwDeadline', this)"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>برچسب (با کاما)</label><input type="text" id="mwTags"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="mwDesc"></textarea></div></div></div></div></div>
-
-<div class="fullpage-modal" id="meetingFormModal"><div class="fp-header"><button class="save-btn" onclick="saveMeeting()">ذخیره</button><h2><span>جلسه</span></h2><button class="close-btn" onclick="document.getElementById('meetingFormModal').classList.remove('show')">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="mtTitle"></div><div class="form-group"><label>تاریخ <span class="req">*</span></label><input type="text" id="mtDate" readonly onclick="openCal('mtDate', this)"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>ساعت شروع</label><input type="time" id="mtStart"></div><div class="form-group"><label>ساعت پایان</label><input type="time" id="mtEnd"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>شرکت‌کنندگان</label><select id="mtAttendees" multiple style="height:100px;"></select></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="mtDesc"></textarea></div></div></div></div></div>
-
-<div class="fullpage-modal" id="attFormModal"><div class="fp-header"><button class="save-btn" onclick="saveAttendance()">ذخیره</button><h2><span>ورود/خروج</span></h2><button class="close-btn" onclick="document.getElementById('attFormModal').classList.remove('show')">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-3"><div class="form-group"><label>تاریخ</label><input type="text" id="attDate" readonly onclick="openCal('attDate', this)"></div><div class="form-group"><label>ورود</label><input type="time" id="attIn"></div><div class="form-group"><label>خروج</label><input type="time" id="attOut"></div></div></div></div></div>
-
-<div class="fullpage-modal" id="homeFormModal"><div class="fp-header"><button class="save-btn" onclick="saveHome()">ذخیره</button><h2><span>کار در خانه</span></h2><button class="close-btn" onclick="document.getElementById('homeFormModal').classList.remove('show')">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-3"><div class="form-group"><label>تاریخ</label><input type="text" id="homeDate" readonly onclick="openCal('homeDate', this)"></div><div class="form-group"><label>شروع</label><input type="time" id="homeStart"></div><div class="form-group"><label>پایان</label><input type="time" id="homeEnd"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><input type="text" id="homeDesc"></div></div></div></div></div>
-
-<div class="fullpage-modal" id="deviceFormModal"><div class="fp-header"><button class="save-btn" onclick="saveDevice()">ذخیره</button><h2><span id="deviceFormTitle">وسیله IT</span></h2><button class="close-btn" onclick="closeDeviceForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-section-title">📦 اطلاعات پایه</div><div class="form-rows form-row-3"><div class="form-group"><label>نام <span class="req">*</span></label><input type="text" id="devName"></div><div class="form-group"><label>دسته</label><select id="devCategory"><option>لپ‌تاپ</option><option>کیس</option><option>مانیتور</option><option>پرینتر</option><option>اسکنر</option><option>روتر</option><option>سوئیچ</option><option>ماوس</option><option>کیبورد</option><option>هارد</option><option>فلش</option><option>سایر</option></select></div><div class="form-group"><label>برند / مدل</label><input type="text" id="devBrand"></div></div><div class="form-rows form-row-3" style="margin-top:14px;"><div class="form-group"><label>سریال</label><input type="text" id="devSerial"></div><div class="form-group"><label>تعداد</label><input type="number" id="devQty" value="1" min="1"></div><div class="form-group"><label>وضعیت</label><select id="devStatus"><option value="active">فعال</option><option value="repair">در تعمیر</option><option value="retired">اسقاط</option></select></div></div></div><div class="form-section"><div class="form-section-title">📍 محل و تحویل</div><div class="form-rows form-row-3"><div class="form-group"><label>محل</label><input type="text" id="devLocation"></div><div class="form-group"><label>تحویل به</label><select id="devAssignedTo"><option value="">— انتخاب —</option></select></div><div class="form-group"><label>تاریخ خرید</label><input type="text" id="devDate" readonly onclick="openCal('devDate', this)"></div></div></div><div class="form-section"><div class="form-section-title">توضیحات</div><div class="form-group"><textarea id="devNote"></textarea></div></div></div></div>
-
-<div class="modal-overlay" id="quickDeptModal"><div class="modal"><h3>➕ بخش جدید</h3><div class="form-group"><label>نام بخش</label><input type="text" id="quickDeptName" autofocus></div><div class="modal-actions"><button class="btn btn-primary" onclick="confirmQuickDept()">افزودن</button><button class="btn btn-ghost" onclick="closeQuickDept()">انصراف</button></div></div></div>
-
-<div class="modal-overlay" id="chatModal"><div class="modal lg"><div id="chatModalContent"></div></div></div>
-
-<div class="modal-overlay" id="confirmModal"><div class="modal"><h3 id="confirmTitle">تأیید</h3><p id="confirmText">مطمئن؟</p><div class="modal-actions"><button class="btn btn-danger" id="confirmBtn">بله</button><button class="btn btn-ghost" onclick="closeConfirm()">انصراف</button></div></div></div>
-
-<div class="modal-overlay" id="editMsgModal">
-  <div class="modal">
-    <h3>✎ ویرایش پیام</h3>
-    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">متن جدید را وارد کنید:</p>
-    <textarea id="editMsgText" placeholder="متن پیام..." style="width:100%;min-height:100px;padding:11px 13px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);border-radius:10px;font-family:inherit;font-size:13.5px;resize:vertical;outline:none;"></textarea>
-    <div class="modal-actions">
-      <button class="btn btn-primary" onclick="confirmEditMessage()">💾 ذخیره</button>
-      <button class="btn btn-ghost" onclick="closeEditMsg()">انصراف</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="reactionModal">
-  <div class="modal" style="max-width:380px;">
-    <h3>😊 انتخاب ری‌اکشن</h3>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0 8px;font-size:30px;line-height:1;">
-      <span style="cursor:pointer;" onclick="pickReaction('👍')">👍</span>
-      <span style="cursor:pointer;" onclick="pickReaction('❤️')">❤️</span>
-      <span style="cursor:pointer;" onclick="pickReaction('😂')">😂</span>
-      <span style="cursor:pointer;" onclick="pickReaction('😮')">😮</span>
-      <span style="cursor:pointer;" onclick="pickReaction('😢')">😢</span>
-      <span style="cursor:pointer;" onclick="pickReaction('🔥')">🔥</span>
-      <span style="cursor:pointer;" onclick="pickReaction('🎉')">🎉</span>
-    </div>
-    <div class="modal-actions" style="justify-content:center;">
-      <button class="btn btn-ghost" onclick="document.getElementById('reactionModal').classList.remove('show')">بستن</button>
-    </div>
-  </div>
-</div>
-
-<div class="session-modal-overlay" id="sessionModal"><div class="session-modal"><div class="session-modal-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h3>⏰ نشست در حال انقضاست</h3><div class="session-modal-actions"><button class="btn btn-primary" onclick="extendSession()">تمدید</button><button class="btn btn-ghost" onclick="confirmLogout()">خروج</button></div></div></div>
-
-<div class="pomodoro-widget" id="pomodoroWidget">
-  <div class="pomo-label">⏱️ پومودورو (25 دقیقه)</div>
-  <div class="pomo-time" id="pomoTime">25:00</div>
-  <div class="pomo-actions">
-    <button class="btn btn-primary btn-sm" onclick="pomodoroToggle()" id="pomoToggleBtn">شروع</button>
-    <button class="btn btn-ghost btn-sm" onclick="pomodoroReset()">ریست</button>
-    <button class="btn btn-ghost btn-sm" onclick="togglePomodoro()">×</button>
-  </div>
-</div>
-
-<div class="session-timer" id="sessionTimer" style="display:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="time" id="sessionTime">15:00</span></div>
-
-<div class="calendar-popup" id="calPopup"></div>
-<div class="toast-container" id="toastBox"></div>
 <script>
 /* ═══════════════════════════════════════════════════════════════
    IT PANEL PRO v7.3
-   ✅ تنظیمات پیشرفته با Supabase (همگام بین دستگاه‌ها)
-   ✅ ویرایش/حذف دوطرفه چت
-   ✅ شمارش دقیق کاربران آنلاین
-   ✅ آمار داینامیک صفحه ورود
-   ✅ پیام خوش‌آمد با اسم و دستاورد
    ═══════════════════════════════════════════════════════════════ */
 
 const ADMIN_PHONE = '09900153578';
@@ -3177,104 +1917,135 @@ function renderDepts(){
   if(s)list=list.filter(d=>d.name.includes(s));
   const c=document.getElementById('deptList');
   
+  const palettes = [
+    {c1:'#6c47c9', c2:'#8a5cf6'},
+    {c1:'#06b6d4', c2:'#3b82f6'},
+    {c1:'#10b981', c2:'#059669'},
+    {c1:'#f59e0b', c2:'#ea580c'},
+    {c1:'#ec4899', c2:'#db2777'},
+    {c1:'#8b5cf6', c2:'#a855f7'},
+    {c1:'#ef4444', c2:'#dc2626'},
+    {c1:'#14b8a6', c2:'#0d9488'},
+  ];
+  
   if(!list.length){
-    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3></div>';
+    c.innerHTML=`<div class="dept-grid"><div class="dept-empty-pro">
+      <div class="ico">${ICONS.empty}</div>
+      <h3>هنوز بخشی نساخته‌ای</h3>
+      <p>اولین بخش رو بساز تا سیستم‌ها رو سازمان‌دهی کنی</p>
+      <button class="btn btn-primary btn-lg" onclick="quickAddDept()">+ ساخت اولین بخش</button>
+    </div></div>`;
     return;
   }
   
-  const accStyles = `
-    <style>
-      .dept-acc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:box-shadow .2s;}
-      .dept-acc-card:hover{box-shadow:var(--shadow);}
-      .dept-acc-head{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;user-select:none;transition:background .2s;}
-      .dept-acc-head:hover{background:var(--bg);}
-      .dept-acc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 12px rgba(108,71,201,.3);}
-      .dept-acc-icon svg{width:22px!important;height:22px!important;}
-      .dept-acc-info{flex:1;min-width:0;}
-      .dept-acc-info h3{font-size:15px;font-weight:700;margin-bottom:3px;}
-      .dept-acc-info .sub{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;}
-      .dept-acc-badge{background:var(--primary-soft);color:var(--primary);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;}
-      .dept-acc-arrow{width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--text-muted);display:grid;place-items:center;transition:transform .3s,background .2s;flex-shrink:0;}
-      .dept-acc-card.open .dept-acc-arrow{transform:rotate(180deg);background:var(--primary-soft);color:var(--primary);}
-      .dept-acc-actions{display:flex;gap:4px;flex-shrink:0;}
-      .dept-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
-      .dept-acc-card.open .dept-acc-body{max-height:2000px;}
-      .dept-acc-body-inner{padding:0 18px 16px;border-top:1px dashed var(--border);padding-top:14px;}
-      .sys-list{display:flex;flex-direction:column;gap:8px;}
-      .sys-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;transition:all .2s;}
-      .sys-item:hover{border-color:var(--primary);background:var(--primary-soft);}
-      .sys-item-icon{width:32px;height:32px;border-radius:8px;background:var(--bg-card);color:var(--primary);display:grid;place-items:center;flex-shrink:0;}
-      .sys-item-icon svg{width:16px!important;height:16px!important;}
-      .sys-item-info{flex:1;min-width:0;}
-      .sys-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
-      .sys-item-info .meta{font-size:11px;color:var(--text-muted);display:flex;gap:10px;flex-wrap:wrap;}
-      .sys-item-actions{display:flex;gap:4px;flex-shrink:0;}
-      .sys-item-actions .btn{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:13px;}
-      .dept-empty-sys{text-align:center;padding:20px;color:var(--text-muted);font-size:12.5px;background:var(--bg);border-radius:10px;border:1px dashed var(--border);}
-      @media(max-width:640px){
-        .dept-acc-head{padding:14px;}
-        .dept-acc-icon{width:36px;height:36px;}
-        .sys-item{padding:9px 11px;}
-      }
-    </style>
-  `;
-  
-  const cardsHtml = list.map(d => {
+  const cardsHtml = list.map((d, idx) => {
+    const pal = palettes[idx % palettes.length];
     const systems = d.systems || [];
-    const sysCount = systems.length;
+    const remoteCount = systems.filter(x => x.remoteCode || x.remoteType).length;
+    const netCount = systems.filter(x => x.ip || x.mac).length;
     
-    const sysHtml = sysCount > 0
-      ? '<div class="sys-list">' + systems.map(s => `
-          <div class="sys-item">
-            <div class="sys-item-icon">${ICONS.monitor}</div>
-            <div class="sys-item-info">
-              <h4>${escapeHtml(s.title||s.name||'بدون نام')}</h4>
-              <div class="meta">
-                <span>🔧 ${escapeHtml(s.type||'سیستم')}</span>
-                ${s.ip ? `<span>🌐 ${escapeHtml(s.ip)}</span>` : ''}
-                ${s.remoteCode ? `<span>🔐 ${escapeHtml(s.remoteCode)}</span>` : ''}
-              </div>
-            </div>
-            <div class="sys-item-actions">
-              <button class="btn btn-info" onclick="event.stopPropagation();showSystemDetail(${d.id},${s.id})" title="مشاهده">👁️</button>
-              <button class="btn btn-warning" onclick="event.stopPropagation();editSystem(${d.id},${s.id})" title="ویرایش">✎</button>
-              <button class="btn btn-danger" onclick="event.stopPropagation();delSystem(${d.id},${s.id})" title="حذف">×</button>
-            </div>
-          </div>
-        `).join('') + '</div>'
-      : '<div class="dept-empty-sys">هنوز سیستمی به این بخش اضافه نشده است.</div>';
+    let previewHtml = '';
+    if(systems.length > 0){
+      previewHtml = '<div class="dept-systems-preview">';
+      systems.slice(0,3).forEach(sys => {
+        previewHtml += `<span class="dept-sys-chip"><span class="dot"></span>${escapeHtml((sys.title||sys.name||'سیستم').slice(0,18))}</span>`;
+      });
+      if(systems.length > 3){
+        previewHtml += `<span class="dept-sys-chip more">+${faNum(systems.length-3)}</span>`;
+      }
+      previewHtml += '</div>';
+    }
     
-    return `
-      <div class="dept-acc-card" id="dept-card-${d.id}">
-        <div class="dept-acc-head" onclick="toggleDeptCard(${d.id})">
-          <div class="dept-acc-icon">${ICONS.box}</div>
-          <div class="dept-acc-info">
+    return `<div class="dept-card-pro" style="--dept-color-1:${pal.c1};--dept-color-2:${pal.c2};" onclick="openSystemFormForDept(${d.id})">
+      <div class="dept-blob"></div>
+      <div class="dept-blob b2"></div>
+      <div class="dept-body-pro">
+        <div class="dept-header-pro">
+          <div class="dept-icon-pro">${ICONS.box}</div>
+          <div class="dept-title-pro">
             <h3>${escapeHtml(d.name)}</h3>
-            <div class="sub">
-              <span class="dept-acc-badge">${faNum(sysCount)} سیستم</span>
-            </div>
+            <div class="sub"><span class="dept-live-dot"></span><span>${faNum(systems.length)} سیستم</span></div>
           </div>
-          <div class="dept-acc-actions">
-            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openSystemFormForDept(${d.id})" title="افزودن سیستم">+</button>
-            <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delDept(${d.id})" title="حذف بخش">×</button>
-          </div>
-          <div class="dept-acc-arrow">▼</div>
         </div>
-        <div class="dept-acc-body">
-          <div class="dept-acc-body-inner">
-            ${sysHtml}
-          </div>
+        <div class="dept-stats-pro">
+          <div class="dept-stat-item"><div class="val">${faNum(systems.length)}</div><div class="lbl">کل</div></div>
+          <div class="dept-stat-item"><div class="val">${faNum(remoteCount)}</div><div class="lbl">ریموت</div></div>
+          <div class="dept-stat-item"><div class="val">${faNum(netCount)}</div><div class="lbl">شبکه</div></div>
+        </div>
+        ${previewHtml}
+        <div class="dept-actions-pro">
+          <button class="btn btn-add" onclick="event.stopPropagation();openSystemFormForDept(${d.id})">+ سیستم جدید</button>
+          <button class="btn btn-view" onclick="event.stopPropagation();viewDeptSystems(${d.id})">👁️ مشاهده</button>
+          <button class="btn btn-del" onclick="event.stopPropagation();delDept(${d.id})">${ICONS.trash}</button>
         </div>
       </div>
-    `;
+    </div>`;
   }).join('');
   
-  c.innerHTML = accStyles + cardsHtml;
+  c.innerHTML = `<div class="dept-grid">${cardsHtml}</div>`;
 }
 
-function toggleDeptCard(id){
-  const card = document.getElementById('dept-card-' + id);
-  if(card) card.classList.toggle('open');
+function viewDeptSystems(deptId){
+  const dept = DB.get('departments').find(d => d.id === deptId);
+  if(!dept) return toast('بخش پیدا نشد','error');
+  
+  const systems = dept.systems || [];
+  let overlay = document.getElementById('deptViewOverlay');
+  if(overlay) overlay.remove();
+  
+  overlay = document.createElement('div');
+  overlay.id = 'deptViewOverlay';
+  overlay.className = 'fullpage-modal show';
+  overlay.onclick = (e) => { if(e.target === overlay) overlay.remove(); };
+  
+  const sysListHtml = systems.length > 0
+    ? systems.map(s => `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:11px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex-shrink:0;">
+            ${ICONS.monitor}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:700;margin-bottom:3px;">${escapeHtml(s.title||s.name||'بدون نام')}</div>
+            <div style="font-size:11.5px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap;">
+              <span>🔧 ${escapeHtml(s.type||'سیستم')}</span>
+              ${s.ip ? `<span>🌐 ${escapeHtml(s.ip)}</span>` : ''}
+              ${s.remoteCode ? `<span>🔐 ${escapeHtml(s.remoteCode)}</span>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button class="btn btn-info btn-sm" onclick="event.stopPropagation();overlay2Close();showSystemDetail(${dept.id},${s.id})">👁️</button>
+            <button class="btn btn-warning btn-sm" onclick="event.stopPropagation();overlay2Close();editSystem(${dept.id},${s.id})">✎</button>
+            <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delSystem(${dept.id},${s.id});setTimeout(()=>viewDeptSystems(${dept.id}),150)">×</button>
+          </div>
+        </div>
+      `).join('')
+    : `<div class="empty-state" style="padding:40px 20px;">
+         <div style="font-size:52px;margin-bottom:10px;">📭</div>
+         <p style="margin-bottom:16px;">هنوز سیستمی به این بخش اضافه نشده</p>
+         <button class="btn btn-primary" onclick="overlay2Close();openSystemFormForDept(${dept.id})">+ افزودن اولین سیستم</button>
+       </div>`;
+  
+  overlay.innerHTML = `
+    <div class="fp-header">
+      <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;">
+        ${ICONS.box}
+      </div>
+      <div>
+        <h2 style="margin:0;font-size:17px;font-weight:800;">${escapeHtml(dept.name)}</h2>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${faNum(systems.length)} سیستم</div>
+      </div>
+      <button class="save-btn" onclick="overlay2Close();openSystemFormForDept(${dept.id})">+ سیستم جدید</button>
+      <button class="close-btn" onclick="overlay2Close()">×</button>
+    </div>
+    <div class="fp-body" style="max-width:900px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px;">
+        ${sysListHtml}
+      </div>
+    </div>
+  `;
+  
+  window.overlay2Close = () => { const el = document.getElementById('deptViewOverlay'); if(el) el.remove(); };
+  document.body.appendChild(overlay);
 }
 
 function openSystemFormForDept(deptId){
@@ -3846,7 +2617,7 @@ function toggleSetting(id) {
   el.classList.toggle('active');
   const key = id.replace('Toggle', '').replace('Widget','widget');
   setSetting(key, el.classList.contains('active'));
-  applyAllSettings();
+  updateToggleStates(); // Fix: update UI only, don't call applyAllSettings to avoid infinite loops
 }
 
 function toggleThemeFromSettings() {
@@ -3920,9 +2691,9 @@ function updateToggleStates() {
     notifOnline: getSetting('notifOnline', false),
     notifMeetings: getSetting('notifMeetings', false),
     notifDeadlines: getSetting('notifDeadlines', true),
-    soundToggle: getSetting('soundToggle', false),
+    soundToggle: getSetting('sound', false), // Fix: map soundToggle to 'sound'
     desktopNotifToggle: getSetting('desktopNotif', false),
-    badgeToggle: getSetting('badgeToggle', false),
+    badgeToggle: getSetting('badge', false), // Fix: map badgeToggle to 'badge'
     quietHoursToggle: getSetting('quietHours', false),
     autoLockToggle: getSetting('autoLock', false),
     showLastLogin: getSetting('showLastLogin', true),
@@ -3968,9 +2739,8 @@ function testNotification() {
   if (getSetting('desktopNotif', false) && Notification.permission === 'granted') {
     new Notification('پنل مدیریت', { body: '🔔 اعلان تست موفق' });
   }
-  if (getSetting('soundToggle', false)) playNotifSound();
+  if (getSetting('sound', false)) playNotifSound(); // Fix: use 'sound' key
 }
-
 
 let audioCtx = null;
 let audioUnlocked = false;
@@ -3987,7 +2757,7 @@ document.addEventListener('click', unlockAudio, { once: true });
 document.addEventListener('touchstart', unlockAudio, { once: true });
 
 function playNotifSound() {
-  if (!getSetting('soundToggle', false)) return;
+  if (!getSetting('sound', false)) return; // Fix: use 'sound' key
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -4009,8 +2779,6 @@ function playNotifSound() {
       osc.stop(startTime + duration);
     });
   } catch(e) { console.warn('[AUDIO] Play failed:', e); }
-}
-
 }
 
 function renderSettingsLoginHistory() {
