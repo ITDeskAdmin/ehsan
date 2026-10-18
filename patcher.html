@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>اصلاح‌کننده خودکار پنل</title>
+<style>
+  body { font-family: Tahoma, sans-serif; background: #f5f7fb; padding: 40px; text-align: center; }
+  .box { background: #fff; max-width: 600px; margin: 0 auto; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  h2 { color: #6c47c9; margin-bottom: 20px; }
+  input[type="file"] { display: block; margin: 20px auto; padding: 10px; border: 2px dashed #6c47c9; border-radius: 10px; width: 100%; cursor: pointer; }
+  button { background: #6c47c9; color: #fff; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; transition: 0.2s; }
+  button:hover { background: #5838a8; }
+  .status { margin-top: 20px; font-weight: bold; color: #10b981; }
+  .error { color: #ef4444; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>🪄 اصلاح‌کننده خودکار پنل</h2>
+  <p>فایل ۴۰۰۰ خطی خود را انتخاب کنید تا صدا و منوی موبایل به‌صورت خودکار اصلاح شوند.</p>
+  <input type="file" id="fileInput" accept=".html">
+  <button onclick="patchFile()">اعمال تغییرات و دانلود فایل نهایی</button>
+  <div id="status" class="status"></div>
+</div>
+
+<script>
+async function patchFile() {
+  const fileInput = document.getElementById('fileInput');
+  const status = document.getElementById('status');
+  
+  if (!fileInput.files.length) {
+    status.className = 'status error';
+    status.textContent = '⚠️ لطفاً ابتدا فایل خود را انتخاب کنید.';
+    return;
+  }
+
+  status.className = 'status';
+  status.textContent = '⏳ در حال پردازش...';
+
+  const file = fileInput.files[0];
+  let html = await file.text();
+  let changes = 0;
+
+  // ۱. اصلاح CSS منوی موبایل
+  const oldCssRegex = /@media\s*\(max-width:\s*900px\)\s*\{[^}]*\.sidebar\s*\{[^}]*transform:[^}]*\}[^}]*\.menu-btn\s*\{[^}]*\}[^}]*\}/i;
+  const newCss = `
+.menu-btn { display: none; background: var(--bg-card); border: 1px solid var(--border); color: var(--text); cursor: pointer; padding: 8px; border-radius: 10px; width: 40px; height: 40px; place-items: center; z-index: 45; box-shadow: var(--shadow-sm); }
+.menu-btn svg { width: 22px!important; height: 22px!important; }
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-right: 0; }
+  .menu-btn { display: grid; }
+  .topbar { padding: 0 10px; gap: 8px; }
+  .greeting { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+  .greeting small { display: none; }
+  .topbar-actions { gap: 4px; }
+  .icon-btn { width: 34px; height: 34px; }
+  .icon-btn svg { width: 16px!important; height: 16px!important; }
+}`;
+  if (oldCssRegex.test(html)) {
+    html = html.replace(oldCssRegex, newCss);
+    changes++;
+  } else {
+    // اگر دقیقاً پیدا نشد، به آخر استایل اضافه می‌کنیم
+    html = html.replace('</style>', newCss + '\n</style>');
+    changes++;
+  }
+
+  // ۲. اصلاح صدای اعلان
+  const oldAudioRegex = /function playNotifSound\(\)\s*\{[\s\S]*?\}\s*(?=\n)/;
+  const newAudio = `
+let audioCtx = null;
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().then(() => { audioUnlocked = true; });
+    } else { audioUnlocked = true; }
+  } catch(e) {}
+}
+document.addEventListener('click', unlockAudio, { once: true });
+document.addEventListener('touchstart', unlockAudio, { once: true });
+
+function playNotifSound() {
+  if (!getSetting('soundToggle', false)) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const notes = [880, 1046.50, 1318.51];
+    const duration = 0.12;
+    const gap = 0.06;
+    notes.forEach((freq, i) => {
+      const startTime = audioCtx.currentTime + i * (duration + gap);
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.15, startTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    });
+  } catch(e) { console.warn('[AUDIO] Play failed:', e); }
+}
+`;
+  if (oldAudioRegex.test(html)) {
+    html = html.replace(oldAudioRegex, newAudio);
+    changes++;
+  }
+
+  // ۳. اتصال صدا به تیکت‌ها
+  const oldTicketRegex = /if\s*\(payload\.new\.key\s*===\s*['"]tickets['"]\)\s*updateNotifBadge\(\);/;
+  const newTicket = `if (payload.new.key === 'tickets') {
+  updateNotifBadge();
+  playNotifSound();
+  if (getSetting('desktopNotif', false) && Notification.permission === 'granted') {
+    new Notification('🎫 تیکت جدید', { body: 'یک تیکت جدید در سیستم ثبت شد.' });
+  }
+}`;
+  if (oldTicketRegex.test(html)) {
+    html = html.replace(oldTicketRegex, newTicket);
+    changes++;
+  }
+
+  // ۴. اطمینان از دکمه همبرگری
+  const menuBtnRegex = /<button class="menu-btn"[^>]*>[\s\S]*?<\/button>/;
+  const newMenuBtn = `<button class="menu-btn" onclick="toggleSidebar()" aria-label="منو">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>`;
+  if (menuBtnRegex.test(html)) {
+    html = html.replace(menuBtnRegex, newMenuBtn);
+    changes++;
+  }
+
+  // ۵. دانلود فایل نهایی
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index_fixed.html';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  status.className = 'status';
+  status.textContent = `✅ با موفقیت انجام شد! (${changes} تغییر اعمال شد). فایل index_fixed.html دانلود شد.`;
+}
+</script>
+</body>
+</html>
