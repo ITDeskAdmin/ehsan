@@ -3463,45 +3463,136 @@ function renderDepts(){
   if(s)list=list.filter(d=>d.name.includes(s));
   const c=document.getElementById('deptList');
   
+  const palettes = [
+    {c1:'#6c47c9', c2:'#8a5cf6'},
+    {c1:'#06b6d4', c2:'#3b82f6'},
+    {c1:'#10b981', c2:'#059669'},
+    {c1:'#f59e0b', c2:'#ea580c'},
+    {c1:'#ec4899', c2:'#db2777'},
+    {c1:'#8b5cf6', c2:'#a855f7'},
+    {c1:'#ef4444', c2:'#dc2626'},
+    {c1:'#14b8a6', c2:'#0d9488'},
+  ];
+  
   if(!list.length){
-    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3></div>';
+    c.innerHTML=`<div class="dept-grid"><div class="dept-empty-pro">
+      <div class="ico">${ICONS.empty}</div>
+      <h3>هنوز بخشی نساخته‌ای</h3>
+      <p>اولین بخش رو بساز تا سیستم‌ها رو سازمان‌دهی کنی</p>
+      <button class="btn btn-primary btn-lg" onclick="quickAddDept()">+ ساخت اولین بخش</button>
+    </div></div>`;
     return;
   }
   
-  const accStyles = `
-    <style>
-      .dept-acc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:box-shadow .2s;}
-      .dept-acc-card:hover{box-shadow:var(--shadow);}
-      .dept-acc-head{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;user-select:none;transition:background .2s;}
-      .dept-acc-head:hover{background:var(--bg);}
-      .dept-acc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 12px rgba(108,71,201,.3);}
-      .dept-acc-icon svg{width:22px!important;height:22px!important;}
-      .dept-acc-info{flex:1;min-width:0;}
-      .dept-acc-info h3{font-size:15px;font-weight:700;margin-bottom:3px;}
-      .dept-acc-info .sub{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;}
-      .dept-acc-badge{background:var(--primary-soft);color:var(--primary);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;}
-      .dept-acc-arrow{width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--text-muted);display:grid;place-items:center;transition:transform .3s,background .2s;flex-shrink:0;}
-      .dept-acc-card.open .dept-acc-arrow{transform:rotate(180deg);background:var(--primary-soft);color:var(--primary);}
-      .dept-acc-actions{display:flex;gap:4px;flex-shrink:0;}
-      .dept-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
-      .dept-acc-card.open .dept-acc-body{max-height:2000px;}
-      .dept-acc-body-inner{padding:0 18px 16px;border-top:1px dashed var(--border);padding-top:14px;}
-      .sys-list{display:flex;flex-direction:column;gap:8px;}
-      .sys-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;transition:all .2s;}
-      .sys-item:hover{border-color:var(--primary);background:var(--primary-soft);}
-      .sys-item-icon{width:32px;height:32px;border-radius:8px;background:var(--bg-card);color:var(--primary);display:grid;place-items:center;flex-shrink:0;}
-      .sys-item-icon svg{width:16px!important;height:16px!important;}
-      .sys-item-info{flex:1;min-width:0;}
-      .sys-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
-      .sys-item-info .meta{font-size:11px;color:var(--text-muted);display:flex;gap:10px;flex-wrap:wrap;}
-      .sys-item-actions{display:flex;gap:4px;flex-shrink:0;}
-      .sys-item-actions .btn{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:13px;}
-      .dept-empty-sys{text-align:center;padding:20px;color:var(--text-muted);font-size:12.5px;background:var(--bg);border-radius:10px;border:1px dashed var(--border);}
-      @media(max-width:640px){
-        .dept-acc-head{padding:14px;}
-        .dept-acc-icon{width:36px;height:36px;}
-        .sys-item{padding:9px 11px;}
+  const cardsHtml = list.map((d, idx) => {
+    const pal = palettes[idx % palettes.length];
+    const systems = d.systems || [];
+    const remoteCount = systems.filter(x => x.remoteCode || x.remoteType).length;
+    const netCount = systems.filter(x => x.ip || x.mac).length;
+    
+    let previewHtml = '';
+    if(systems.length > 0){
+      previewHtml = '<div class="dept-systems-preview">';
+      systems.slice(0,3).forEach(sys => {
+        previewHtml += `<span class="dept-sys-chip"><span class="dot"></span>${escapeHtml((sys.title||sys.name||'سیستم').slice(0,18))}</span>`;
+      });
+      if(systems.length > 3){
+        previewHtml += `<span class="dept-sys-chip more">+${faNum(systems.length-3)}</span>`;
       }
+      previewHtml += '</div>';
+    }
+    
+    return `<div class="dept-card-pro" style="--dept-color-1:${pal.c1};--dept-color-2:${pal.c2};" onclick="openSystemFormForDept(${d.id})">
+      <div class="dept-blob"></div>
+      <div class="dept-blob b2"></div>
+      <div class="dept-body-pro">
+        <div class="dept-header-pro">
+          <div class="dept-icon-pro">${ICONS.box}</div>
+          <div class="dept-title-pro">
+            <h3>${escapeHtml(d.name)}</h3>
+            <div class="sub"><span class="dept-live-dot"></span><span>${faNum(systems.length)} سیستم</span></div>
+          </div>
+        </div>
+        <div class="dept-stats-pro">
+          <div class="dept-stat-item"><div class="val">${faNum(systems.length)}</div><div class="lbl">کل</div></div>
+          <div class="dept-stat-item"><div class="val">${faNum(remoteCount)}</div><div class="lbl">ریموت</div></div>
+          <div class="dept-stat-item"><div class="val">${faNum(netCount)}</div><div class="lbl">شبکه</div></div>
+        </div>
+        ${previewHtml}
+        <div class="dept-actions-pro">
+          <button class="btn btn-add" onclick="event.stopPropagation();openSystemFormForDept(${d.id})">+ سیستم جدید</button>
+          <button class="btn btn-view" onclick="event.stopPropagation();viewDeptSystems(${d.id})">👁️ مشاهده</button>
+          <button class="btn btn-del" onclick="event.stopPropagation();delDept(${d.id})">${ICONS.trash}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  
+  c.innerHTML = `<div class="dept-grid">${cardsHtml}</div>`;
+}
+
+function viewDeptSystems(deptId){
+  const dept = DB.get('departments').find(d => d.id === deptId);
+  if(!dept) return toast('بخش پیدا نشد','error');
+  
+  const systems = dept.systems || [];
+  let overlay = document.getElementById('deptViewOverlay');
+  if(overlay) overlay.remove();
+  
+  overlay = document.createElement('div');
+  overlay.id = 'deptViewOverlay';
+  overlay.className = 'fullpage-modal show';
+  overlay.onclick = (e) => { if(e.target === overlay) overlay.remove(); };
+  
+  const sysListHtml = systems.length > 0
+    ? systems.map(s => `
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:11px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;flex-shrink:0;">
+            ${ICONS.monitor}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:700;margin-bottom:3px;">${escapeHtml(s.title||s.name||'بدون نام')}</div>
+            <div style="font-size:11.5px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap;">
+              <span>🔧 ${escapeHtml(s.type||'سیستم')}</span>
+              ${s.ip ? `<span>🌐 ${escapeHtml(s.ip)}</span>` : ''}
+              ${s.remoteCode ? `<span>🔐 ${escapeHtml(s.remoteCode)}</span>` : ''}
+            </div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button class="btn btn-info btn-sm" onclick="event.stopPropagation();overlay2Close();showSystemDetail(${dept.id},${s.id})">👁️</button>
+            <button class="btn btn-warning btn-sm" onclick="event.stopPropagation();overlay2Close();editSystem(${dept.id},${s.id})">✎</button>
+            <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delSystem(${dept.id},${s.id});setTimeout(()=>viewDeptSystems(${dept.id}),150)">×</button>
+          </div>
+        </div>
+      `).join('')
+    : `<div class="empty-state" style="padding:40px 20px;">
+         <div style="font-size:52px;margin-bottom:10px;">📭</div>
+         <p style="margin-bottom:16px;">هنوز سیستمی به این بخش اضافه نشده</p>
+         <button class="btn btn-primary" onclick="overlay2Close();openSystemFormForDept(${dept.id})">+ افزودن اولین سیستم</button>
+       </div>`;
+  
+  overlay.innerHTML = `
+    <div class="fp-header">
+      <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;">
+        ${ICONS.box}
+      </div>
+      <div>
+        <h2 style="margin:0;font-size:17px;font-weight:800;">${escapeHtml(dept.name)}</h2>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${faNum(systems.length)} سیستم</div>
+      </div>
+      <button class="save-btn" onclick="overlay2Close();openSystemFormForDept(${dept.id})">+ سیستم جدید</button>
+      <button class="close-btn" onclick="overlay2Close()">×</button>
+    </div>
+    <div class="fp-body" style="max-width:900px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px;">
+        ${sysListHtml}
+      </div>
+    </div>
+  `;
+  
+  window.overlay2Close = () => { const el = document.getElementById('deptViewOverlay'); if(el) el.remove(); };
+  document.body.appendChild(overlay);
+}
     </style>
   `;
   
