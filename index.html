@@ -650,6 +650,21 @@ body[data-layout="spacious"] .panel-card{padding:24px;}
   .toolbar .filter-select{min-width:0;flex:1;}
   .pomodoro-widget{width:calc(100% - 40px);right:20px;left:20px;}
 }
+
+.menu-btn { display: none; background: var(--bg-card); border: 1px solid var(--border); color: var(--text); cursor: pointer; padding: 8px; border-radius: 10px; width: 40px; height: 40px; place-items: center; z-index: 45; box-shadow: var(--shadow-sm); }
+.menu-btn svg { width: 22px!important; height: 22px!important; }
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-right: 0; }
+  .menu-btn { display: grid; }
+  .topbar { padding: 0 10px; gap: 8px; }
+  .greeting { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; }
+  .greeting small { display: none; }
+  .topbar-actions { gap: 4px; }
+  .icon-btn { width: 34px; height: 34px; }
+  .icon-btn svg { width: 16px!important; height: 16px!important; }
+}
 </style>
 </head>
 <body>
@@ -810,7 +825,13 @@ body[data-layout="spacious"] .panel-card{padding:24px;}
 
   <div class="main">
     <header class="topbar">
-      <button class="menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button class="menu-btn" onclick="toggleSidebar()" aria-label="منو">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
       <div class="greeting" id="pageTitle">داشبورد<small id="todayDate"></small></div>
       <div class="topbar-actions">
         <button class="icon-btn" onclick="toggleFocusMode()" title="حالت تمرکز" id="focusBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg></button>
@@ -3155,11 +3176,113 @@ function renderDepts(){
   let list=DB.get('departments');
   if(s)list=list.filter(d=>d.name.includes(s));
   const c=document.getElementById('deptList');
-  if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3></div>';return;}
-  c.innerHTML=list.map(d=>{
-    const sh=(d.systems&&d.systems.length)?d.systems.map(s=>'<div style="display:flex;align-items:center;gap:8px;padding:11px;background:var(--bg-card);border-radius:9px;margin-bottom:6px;font-size:12.5px;"><span class="badge badge-purple">'+(s.type||'سیستم')+'</span><span style="flex:1;font-weight:600;">'+escapeHtml(s.title||s.name)+'</span><button class="btn btn-info btn-sm" onclick="showSystemDetail('+d.id+','+s.id+')">👁️</button><button class="btn btn-warning btn-sm" onclick="editSystem('+d.id+','+s.id+')">✎</button><button class="btn btn-danger btn-sm" onclick="delSystem('+d.id+','+s.id+')">×</button></div>').join(''):'<div style="text-align:center;padding:14px;color:var(--text-muted);">سیستمی نیست</div>';
-    return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:11px;border-bottom:1px solid var(--border);"><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;">'+ICONS.box+'</div><h3 style="font-size:14px;font-weight:700;flex:1;">'+escapeHtml(d.name)+'</h3><span class="badge badge-blue">'+faNum((d.systems||[]).length)+'</span><button class="btn btn-danger btn-sm" onclick="delDept('+d.id+')">×</button></div>'+sh+'</div>';
+  
+  if(!list.length){
+    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3></div>';
+    return;
+  }
+  
+  const accStyles = `
+    <style>
+      .dept-acc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:box-shadow .2s;}
+      .dept-acc-card:hover{box-shadow:var(--shadow);}
+      .dept-acc-head{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;user-select:none;transition:background .2s;}
+      .dept-acc-head:hover{background:var(--bg);}
+      .dept-acc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 12px rgba(108,71,201,.3);}
+      .dept-acc-icon svg{width:22px!important;height:22px!important;}
+      .dept-acc-info{flex:1;min-width:0;}
+      .dept-acc-info h3{font-size:15px;font-weight:700;margin-bottom:3px;}
+      .dept-acc-info .sub{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;}
+      .dept-acc-badge{background:var(--primary-soft);color:var(--primary);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;}
+      .dept-acc-arrow{width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--text-muted);display:grid;place-items:center;transition:transform .3s,background .2s;flex-shrink:0;}
+      .dept-acc-card.open .dept-acc-arrow{transform:rotate(180deg);background:var(--primary-soft);color:var(--primary);}
+      .dept-acc-actions{display:flex;gap:4px;flex-shrink:0;}
+      .dept-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+      .dept-acc-card.open .dept-acc-body{max-height:2000px;}
+      .dept-acc-body-inner{padding:0 18px 16px;border-top:1px dashed var(--border);padding-top:14px;}
+      .sys-list{display:flex;flex-direction:column;gap:8px;}
+      .sys-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;transition:all .2s;}
+      .sys-item:hover{border-color:var(--primary);background:var(--primary-soft);}
+      .sys-item-icon{width:32px;height:32px;border-radius:8px;background:var(--bg-card);color:var(--primary);display:grid;place-items:center;flex-shrink:0;}
+      .sys-item-icon svg{width:16px!important;height:16px!important;}
+      .sys-item-info{flex:1;min-width:0;}
+      .sys-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+      .sys-item-info .meta{font-size:11px;color:var(--text-muted);display:flex;gap:10px;flex-wrap:wrap;}
+      .sys-item-actions{display:flex;gap:4px;flex-shrink:0;}
+      .sys-item-actions .btn{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:13px;}
+      .dept-empty-sys{text-align:center;padding:20px;color:var(--text-muted);font-size:12.5px;background:var(--bg);border-radius:10px;border:1px dashed var(--border);}
+      @media(max-width:640px){
+        .dept-acc-head{padding:14px;}
+        .dept-acc-icon{width:36px;height:36px;}
+        .sys-item{padding:9px 11px;}
+      }
+    </style>
+  `;
+  
+  const cardsHtml = list.map(d => {
+    const systems = d.systems || [];
+    const sysCount = systems.length;
+    
+    const sysHtml = sysCount > 0
+      ? '<div class="sys-list">' + systems.map(s => `
+          <div class="sys-item">
+            <div class="sys-item-icon">${ICONS.monitor}</div>
+            <div class="sys-item-info">
+              <h4>${escapeHtml(s.title||s.name||'بدون نام')}</h4>
+              <div class="meta">
+                <span>🔧 ${escapeHtml(s.type||'سیستم')}</span>
+                ${s.ip ? `<span>🌐 ${escapeHtml(s.ip)}</span>` : ''}
+                ${s.remoteCode ? `<span>🔐 ${escapeHtml(s.remoteCode)}</span>` : ''}
+              </div>
+            </div>
+            <div class="sys-item-actions">
+              <button class="btn btn-info" onclick="event.stopPropagation();showSystemDetail(${d.id},${s.id})" title="مشاهده">👁️</button>
+              <button class="btn btn-warning" onclick="event.stopPropagation();editSystem(${d.id},${s.id})" title="ویرایش">✎</button>
+              <button class="btn btn-danger" onclick="event.stopPropagation();delSystem(${d.id},${s.id})" title="حذف">×</button>
+            </div>
+          </div>
+        `).join('') + '</div>'
+      : '<div class="dept-empty-sys">هنوز سیستمی به این بخش اضافه نشده است.</div>';
+    
+    return `
+      <div class="dept-acc-card" id="dept-card-${d.id}">
+        <div class="dept-acc-head" onclick="toggleDeptCard(${d.id})">
+          <div class="dept-acc-icon">${ICONS.box}</div>
+          <div class="dept-acc-info">
+            <h3>${escapeHtml(d.name)}</h3>
+            <div class="sub">
+              <span class="dept-acc-badge">${faNum(sysCount)} سیستم</span>
+            </div>
+          </div>
+          <div class="dept-acc-actions">
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openSystemFormForDept(${d.id})" title="افزودن سیستم">+</button>
+            <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delDept(${d.id})" title="حذف بخش">×</button>
+          </div>
+          <div class="dept-acc-arrow">▼</div>
+        </div>
+        <div class="dept-acc-body">
+          <div class="dept-acc-body-inner">
+            ${sysHtml}
+          </div>
+        </div>
+      </div>
+    `;
   }).join('');
+  
+  c.innerHTML = accStyles + cardsHtml;
+}
+
+function toggleDeptCard(id){
+  const card = document.getElementById('dept-card-' + id);
+  if(card) card.classList.toggle('open');
+}
+
+function openSystemFormForDept(deptId){
+  openSystemForm();
+  setTimeout(()=>{
+    const el = document.getElementById('sfDeptId');
+    if(el) el.value = deptId;
+  }, 100);
 }
 function delDept(id){confirmAction('حذف بخش','همه سیستم‌ها حذف می‌شوند',()=>{DB.set('departments',DB.get('departments').filter(d=>d.id!==id));updateDeptSelects();renderDepts();renderSystems();updateLoginStats();toast('حذف شد','success');});}
 function delSystem(deptId,sysId){confirmAction('حذف سیستم','حذف شود؟',()=>{const list=DB.get('departments');const d=list.find(x=>x.id===deptId);if(d)d.systems=d.systems.filter(s=>s.id!==sysId);DB.set('departments',list);renderDepts();renderSystems();updateLoginStats();toast('حذف شد','success');});}
@@ -3848,18 +3971,47 @@ function testNotification() {
   if (getSetting('soundToggle', false)) playNotifSound();
 }
 
-function playNotifSound() {
+
+let audioCtx = null;
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    osc.start(); osc.stop(ctx.currentTime + 0.3);
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().then(() => { audioUnlocked = true; });
+    } else { audioUnlocked = true; }
   } catch(e) {}
 }
+document.addEventListener('click', unlockAudio, { once: true });
+document.addEventListener('touchstart', unlockAudio, { once: true });
+
+function playNotifSound() {
+  if (!getSetting('soundToggle', false)) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const notes = [880, 1046.50, 1318.51];
+    const duration = 0.12;
+    const gap = 0.06;
+    notes.forEach((freq, i) => {
+      const startTime = audioCtx.currentTime + i * (duration + gap);
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.15, startTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    });
+  } catch(e) { console.warn('[AUDIO] Play failed:', e); }
+}
+
+
 
 function renderSettingsLoginHistory() {
   const me = getCurrentUser(); if (!me) return;
