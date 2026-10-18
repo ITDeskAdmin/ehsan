@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Patcher — اصلاح بخش‌ها (نسخه امن)</title>
+<style>
+  body { font-family: Tahoma, sans-serif; background: #f5f7fb; padding: 40px; text-align: center; margin: 0; }
+  .box { background: #fff; max-width: 700px; margin: 0 auto; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  h2 { color: #6c47c9; margin-bottom: 20px; }
+  input[type="file"] { display: block; margin: 20px auto; padding: 10px; border: 2px dashed #6c47c9; border-radius: 10px; width: 100%; cursor: pointer; }
+  button { background: #6c47c9; color: #fff; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; transition: 0.2s; }
+  button:hover { background: #5838a8; }
+  .status { margin-top: 20px; font-weight: bold; color: #10b981; }
+  .error { color: #ef4444; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>🪄 Patcher — نسخه امن (بدون خطای جاوااسکریپت)</h2>
+  <p style="font-size: 13px; color: #6b7692;">این نسخه به جای خراب کردن کد، تابع جدید را با روش امن تزریق می‌کند.</p>
+
+  <input type="file" id="fileInput" accept=".html">
+  <button onclick="patchFile()">🚀 اعمال تغییرات و دانلود</button>
+  <div id="status" class="status"></div>
+</div>
+
+<script>
+async function patchFile() {
+  const fileInput = document.getElementById('fileInput');
+  const status = document.getElementById('status');
+
+  if (!fileInput.files.length) {
+    status.className = 'status error';
+    status.textContent = '⚠️ لطفاً فایل را انتخاب کنید.';
+    return;
+  }
+
+  status.className = 'status';
+  status.textContent = '⏳ در حال پردازش...';
+
+  const file = fileInput.files[0];
+  let html = await file.text();
+  let changes = [];
+
+  // کد جدید تابع renderDepts (بدون بک‌تیک تو در تو، استفاده از escapeHtml و رشته‌های معمولی)
+  const newRenderDepts = `
+/* ═══ RENDER DEPTS (Accordion Version - SAFE) ═══ */
+function renderDepts(){
+  const s=(document.getElementById('deptSearch').value||'').trim();
+  let list=DB.get('departments');
+  if(s)list=list.filter(d=>d.name.includes(s));
+  const c=document.getElementById('deptList');
+  
+  if(!list.length){
+    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.empty+'</div><h3>بخشی نیست</h3></div>';
+    return;
+  }
+  
+  var accStyles = '<style>' +
+    '.dept-acc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:box-shadow .2s;}' +
+    '.dept-acc-card:hover{box-shadow:var(--shadow);}' +
+    '.dept-acc-head{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;user-select:none;transition:background .2s;}' +
+    '.dept-acc-head:hover{background:var(--bg);}' +
+    '.dept-acc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 12px rgba(108,71,201,.3);}' +
+    '.dept-acc-icon svg{width:22px!important;height:22px!important;}' +
+    '.dept-acc-info{flex:1;min-width:0;}' +
+    '.dept-acc-info h3{font-size:15px;font-weight:700;margin-bottom:3px;}' +
+    '.dept-acc-info .sub{font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;}' +
+    '.dept-acc-badge{background:var(--primary-soft);color:var(--primary);padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;}' +
+    '.dept-acc-arrow{width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--text-muted);display:grid;place-items:center;transition:transform .3s,background .2s;flex-shrink:0;}' +
+    '.dept-acc-card.open .dept-acc-arrow{transform:rotate(180deg);background:var(--primary-soft);color:var(--primary);}' +
+    '.dept-acc-actions{display:flex;gap:4px;flex-shrink:0;}' +
+    '.dept-acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}' +
+    '.dept-acc-card.open .dept-acc-body{max-height:2000px;}' +
+    '.dept-acc-body-inner{padding:0 18px 16px;border-top:1px dashed var(--border);padding-top:14px;}' +
+    '.sys-list{display:flex;flex-direction:column;gap:8px;}' +
+    '.sys-item{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;transition:all .2s;}' +
+    '.sys-item:hover{border-color:var(--primary);background:var(--primary-soft);}' +
+    '.sys-item-icon{width:32px;height:32px;border-radius:8px;background:var(--bg-card);color:var(--primary);display:grid;place-items:center;flex-shrink:0;}' +
+    '.sys-item-icon svg{width:16px!important;height:16px!important;}' +
+    '.sys-item-info{flex:1;min-width:0;}' +
+    '.sys-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}' +
+    '.sys-item-info .meta{font-size:11px;color:var(--text-muted);display:flex;gap:10px;flex-wrap:wrap;}' +
+    '.sys-item-actions{display:flex;gap:4px;flex-shrink:0;}' +
+    '.sys-item-actions .btn{width:30px;height:30px;padding:0;display:grid;place-items:center;font-size:13px;}' +
+    '.dept-empty-sys{text-align:center;padding:20px;color:var(--text-muted);font-size:12.5px;background:var(--bg);border-radius:10px;border:1px dashed var(--border);}' +
+    '@media(max-width:640px){.dept-acc-head{padding:14px;}.dept-acc-icon{width:36px;height:36px;}.sys-item{padding:9px 11px;}}' +
+    '</style>';
+  
+  var cardsHtml = list.map(function(d) {
+    var systems = d.systems || [];
+    var sysCount = systems.length;
+    
+    var sysHtml = '';
+    if (sysCount > 0) {
+      sysHtml = '<div class="sys-list">' + systems.map(function(s) {
+        var meta = '<span>🔧 ' + escapeHtml(s.type||'سیستم') + '</span>';
+        if (s.ip) meta += '<span>🌐 ' + escapeHtml(s.ip) + '</span>';
+        if (s.remoteCode) meta += '<span>🔐 ' + escapeHtml(s.remoteCode) + '</span>';
+        
+        return '<div class="sys-item">' +
+          '<div class="sys-item-icon">' + ICONS.monitor + '</div>' +
+          '<div class="sys-item-info">' +
+            '<h4>' + escapeHtml(s.title||s.name||'بدون نام') + '</h4>' +
+            '<div class="meta">' + meta + '</div>' +
+          '</div>' +
+          '<div class="sys-item-actions">' +
+            '<button class="btn btn-info" onclick="event.stopPropagation();showSystemDetail(' + d.id + ',' + s.id + ')" title="مشاهده">👁️</button>' +
+            '<button class="btn btn-warning" onclick="event.stopPropagation();editSystem(' + d.id + ',' + s.id + ')" title="ویرایش">✎</button>' +
+            '<button class="btn btn-danger" onclick="event.stopPropagation();delSystem(' + d.id + ',' + s.id + ')" title="حذف">×</button>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>';
+    } else {
+      sysHtml = '<div class="dept-empty-sys">هنوز سیستمی به این بخش اضافه نشده است.</div>';
+    }
+    
+    return '<div class="dept-acc-card" id="dept-card-' + d.id + '">' +
+      '<div class="dept-acc-head" onclick="toggleDeptCard(' + d.id + ')">' +
+        '<div class="dept-acc-icon">' + ICONS.box + '</div>' +
+        '<div class="dept-acc-info">' +
+          '<h3>' + escapeHtml(d.name) + '</h3>' +
+          '<div class="sub"><span class="dept-acc-badge">' + faNum(sysCount) + ' سیستم</span></div>' +
+        '</div>' +
+        '<div class="dept-acc-actions">' +
+          '<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openSystemFormForDept(' + d.id + ')" title="افزودن سیستم">+</button>' +
+          '<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();delDept(' + d.id + ')" title="حذف بخش">×</button>' +
+        '</div>' +
+        '<div class="dept-acc-arrow">▼</div>' +
+      '</div>' +
+      '<div class="dept-acc-body">' +
+        '<div class="dept-acc-body-inner">' + sysHtml + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  
+  c.innerHTML = accStyles + cardsHtml;
+}
+
+function toggleDeptCard(id){
+  var card = document.getElementById('dept-card-' + id);
+  if(card) card.classList.toggle('open');
+}
+
+function openSystemFormForDept(deptId){
+  openSystemForm();
+  setTimeout(function(){
+    var el = document.getElementById('sfDeptId');
+    if(el) el.value = deptId;
+  }, 150);
+}
+`;
+
+  // ترفند امن: به جای replace کردن کل تابع، تابع قدیمی را غیرفعال و تابع جدید را اضافه می‌کنیم
+  const oldFuncRegex = /function\s+renderDepts\s*\(\)\s*\{/;
+  if (oldFuncRegex.test(html)) {
+    // تغییر نام تابع قدیمی به renderDepts_old
+    html = html.replace(oldFuncRegex, 'function renderDepts_old() {');
+    // اضافه کردن تابع جدید قبل از </script>
+    html = html.replace('</script>\n</body>', newRenderDepts + '\n</script>\n</body>');
+    changes.push('✅ تابع جدید با موفقیت و بدون خطا اضافه شد');
+  } else {
+    status.className = 'status error';
+    status.textContent = '⚠️ تابع renderDepts در فایل پیدا نشد. آیا فایل درست را انتخاب کردید؟';
+    return;
+  }
+
+  // دانلود
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index_fixed.html';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  status.className = 'status';
+  status.innerHTML = `✅ فایل <strong>index_fixed.html</strong> دانلود شد.<br>` + changes.join('<br>');
+}
+</script>
+</body>
+</html>
