@@ -512,10 +512,43 @@
     .dm-unread-pill { background: #fee2e2; color: var(--danger); font-size: 10.5px; font-weight: 800; min-width: 20px; height: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 6px; }
     .online-dot { position: absolute; bottom: 0; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--success); border: 3px solid var(--bg-card); z-index: 2; }
 
+    /* 🔧 FIX: Mobile Keyboard Gap & Full Screen Chat */
     @media(max-width: 768px) {
-        .chat-container { height: calc(100dvh - 130px); max-height: calc(100dvh - 130px); }
-        .chat-input-area { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); }
-        .chat-input-pill input { font-size: 16px !important; }
+        .page#page-chat, .page#page-dm { 
+            position: fixed; 
+            top: 58px; /* ارتفاع هدر بالای صفحه */
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            z-index: 50; 
+            background: var(--bg); 
+            overflow: hidden;
+        }
+        
+        .page#page-chat .panel-card, .page#page-dm .panel-card { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            border-radius: 0; 
+            border: none; 
+            box-shadow: none;
+        }
+        
+        .chat-container { 
+            height: 100% !important; 
+            max-height: 100% !important; 
+            border-radius: 0; 
+            border: none; 
+        }
+        
+        .chat-input-area { 
+            padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); 
+            background: var(--bg-card); 
+        }
+        
+        .chat-input-pill input { 
+            font-size: 16px !important; /* جلوگیری از زوم شدن iOS */
+        }
     }
 
     /* ═══════════ OTHER MODULES ═══════════ */
