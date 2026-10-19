@@ -73,11 +73,11 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* ═══════════ CRITICAL LAYOUT FIX ═══════════ */
+    /* ═══════════ CRITICAL LAYOUT FIX (FLEXBOX) ═══════════ */
     html, body {
-        height: 100%;
+        height: 100vh;
         height: 100dvh;
-        overflow: hidden; /* جلوگیری از اسکرول کل صفحه */
+        overflow: hidden; /* جلوگیری از اسکرول شدن کل صفحه */
     }
 
     body {
@@ -310,7 +310,7 @@
     .lfs-footer { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, .06); display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; color: #4b5263; }
     .login-theme-btn { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, .06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, .1); color: #f5f7fb; cursor: pointer; display: grid; place-items: center; transition: all .25s; z-index: 10; }
 
-    /* ═══════════ APP LAYOUT ═══════════ */
+    /* ═══════════ APP LAYOUT (FLEXBOX FULL HEIGHT) ═══════════ */
     .app { display: none; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; }
     .app.show { display: flex; }
 
@@ -371,20 +371,20 @@
     .notif-item .n-title { font-size: 12.5px; font-weight: 600; }
     .notif-empty { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 12.5px; }
 
-    .content { flex: 1; padding: 22px; overflow-y: auto; display: flex; flex-direction: column; }
-    .page { display: none; }
-    .page.active { display: block; }
+    .content { flex: 1; padding: 22px; overflow-y: auto; display: flex; flex-direction: column; min-height: 0; }
     
-    /* 🔧 CRITICAL: Flex layout for chat pages so they fill the screen */
-    .page#page-chat.active, .page#page-dm.active {
-        display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 0;
-    }
-    .page#page-chat .panel-card, .page#page-dm .panel-card {
-        flex: 1; display: flex; flex-direction: column; min-height: 0; margin-bottom: 0; padding: 0; border-radius: var(--radius); overflow: hidden;
+    /* 🔧 CRITICAL FIX: Page and Panel layout for full height */
+    .page { display: none; flex: 1; min-height: 0; flex-direction: column; }
+    .page.active { display: flex; }
+    
+    .panel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-sm); margin-bottom: 18px; overflow: hidden; }
+    
+    /* Chat page specific overrides */
+    .page#page-chat .panel-card, .page#page-dm .panel-card { 
+        flex: 1; display: flex; flex-direction: column; min-height: 0; margin-bottom: 0; padding: 0; 
     }
 
-    .panel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-sm); margin-bottom: 18px; overflow: hidden; }
-    .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; flex-shrink: 0; }
     .card-head h2 { font-size: 15px; font-weight: 700; }
     .card-head .sub { font-size: 12px; color: var(--text-muted); }
     .card-head .actions { margin-right: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
@@ -442,7 +442,7 @@
     .search-box svg { width: 15px !important; height: 15px !important; color: var(--text-muted); flex-shrink: 0; }
     .search-box input { border: none; background: transparent; outline: none; color: var(--text); font-family: inherit; font-size: 12.5px; width: 100%; }
 
-    .table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); flex-shrink: 0; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th { background: #1c2331; color: #fff; font-weight: 600; font-size: 12px; padding: 13px; text-align: right; white-space: nowrap; }
     [data-theme="dark"] thead th { background: #0a0f1a; }
@@ -451,7 +451,7 @@
     tbody tr:hover td { background: var(--bg); }
     .row-num { background: var(--bg); font-weight: 700; color: var(--text-muted); text-align: center; width: 50px; }
 
-    .pagination { display: flex; align-items: center; justify-content: space-between; padding: 14px 4px 4px; font-size: 12.5px; color: var(--text-muted); flex-wrap: wrap; gap: 10px; }
+    .pagination { display: flex; align-items: center; justify-content: space-between; padding: 14px 4px 4px; font-size: 12.5px; color: var(--text-muted); flex-wrap: wrap; gap: 10px; flex-shrink: 0; }
     .pagination .pages { display: flex; gap: 4px; align-items: center; }
     .page-btn { min-width: 34px; height: 34px; padding: 0 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 12.5px; font-weight: 600; }
     .page-btn:hover:not(:disabled) { background: var(--primary-soft); color: var(--primary); border-color: var(--primary); }
@@ -471,7 +471,7 @@
     .status-badge.open { background: var(--info-soft); color: var(--info); border-color: var(--info); }
     .status-badge.closed { background: var(--success-soft); color: var(--success); border-color: var(--success); }
 
-    /* ═══════════ CHAT & DM (FLEX LAYOUT FIX) ═══════════ */
+    /* ═══════════ CHAT & DM (FLEX LAYOUT) ═══════════ */
     .chat-container { 
         flex: 1; 
         display: flex; 
@@ -491,6 +491,7 @@
         flex-direction: column; 
         gap: 12px; 
         background: var(--bg); 
+        min-height: 0; 
     }
     
     .chat-bubble { max-width: 85%; display: flex; flex-direction: column; position: relative; margin-bottom: 2px; }
@@ -537,7 +538,7 @@
     
     .chat-bubble.me .bubble-meta { color: rgba(255, 255, 255, 0.8); }
     
-    /* 🔧 FIX: Hide action buttons until hover/click */
+    /* Actions (Hidden by default) */
     .chat-bubble .msg-actions { 
         position: absolute; 
         top: -14px; 
@@ -575,7 +576,7 @@
     
     .chat-bubble .bubble-text img.chat-img { max-width: 100%; border-radius: 10px; cursor: zoom-in; display: block; margin-bottom: 4px; }
 
-    /* Chat Input Area (Image 2 style) */
+    /* Chat Input Area */
     .chat-input-area { 
         flex-shrink: 0; 
         padding: 10px 16px; 
@@ -636,7 +637,7 @@
     .chat-send-btn:hover { transform: scale(1.05); background: var(--primary-hover); }
     .chat-send-btn svg { width: 20px; height: 20px; transform: rotate(180deg); margin-right: 2px; }
 
-    /* DM User List (Image 1 style) */
+    /* DM User List */
     .dm-list-container { display: flex; flex-direction: column; height: 100%; background: var(--bg); overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; padding: 12px; }
     .dm-list-container::-webkit-scrollbar { display: none; }
     .dm-user-card { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
@@ -653,27 +654,37 @@
     .dm-unread-pill { background: #fee2e2; color: var(--danger); font-size: 10.5px; font-weight: 800; min-width: 20px; height: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 6px; }
     .online-dot { position: absolute; bottom: 0; left: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--success); border: 3px solid var(--bg-card); z-index: 2; }
 
-    /* 🔧 MOBILE KEYBOARD & FULL SCREEN FIX */
+    /* 🔧 FIX: Mobile Keyboard Gap & Full Screen */
     @media(max-width: 900px) {
         .content { padding: 0; }
-        .page#page-chat.active, .page#page-dm.active {
-            position: fixed;
-            top: 58px; /* ارتفاع هدر موبایل */
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 50;
-            background: var(--bg);
-            padding: 0;
+        .page#page-chat.active, .page#page-dm.active { 
+            position: fixed; 
+            top: 58px; /* ارتفاع هدر */
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            z-index: 50; 
+            background: var(--bg); 
+            padding: 0; 
         }
-        .page#page-chat .panel-card, .page#page-dm .panel-card {
-            border-radius: 0;
-            border: none;
-            box-shadow: none;
+        .page#page-chat .panel-card, .page#page-dm .panel-card { 
+            border-radius: 0; 
+            border: none; 
+            box-shadow: none; 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
         }
-        .chat-container { border-radius: 0; border: none; }
-        .chat-input-area { padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); }
-        .chat-input-pill input { font-size: 16px !important; /* جلوگیری از زوم iOS */ }
+        .chat-container { 
+            border-radius: 0; 
+            border: none; 
+        }
+        .chat-input-area { 
+            padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); 
+        }
+        .chat-input-pill input { 
+            font-size: 16px !important; 
+        }
     }
 
     /* ═══════════ OTHER MODULES ═══════════ */
