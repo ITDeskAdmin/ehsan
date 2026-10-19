@@ -1437,7 +1437,6 @@ function setupRealtimeSubscriptions() {
       if (payload.new && payload.new.key) {
         if (payload.new.key === 'users') return;
         if (payload.new.key.startsWith('user_settings_') || payload.new.key.startsWith('auto_backup_')) return;
-        // ⚡ FIX: typing/read keys نباید renderDm رو صدا بزنن (علت پرش)
         if (payload.new.key.startsWith('dm_typing_') || payload.new.key.startsWith('dm_read_')) return;
         try { localStorage.setItem(payload.new.key, JSON.stringify(payload.new.value)); } catch(e) {}
         debouncedRefresh();
@@ -1686,17 +1685,21 @@ function performLogout(){
   location.reload();
 }
 
-/* ═══ ⚡ خروج فوری بدون تایید ═══ */
+/* ═══ 🔧 FIX #3 — خروج فوری بهبودیافته (پاکسازی کامل + location.replace) ═══ */
 function quickLogout() {
   try { clearTimeout(sessionTimerId); } catch(e) {}
   try { clearTimeout(sessionWarnId); } catch(e) {}
   try { clearInterval(sessionCountdownId); } catch(e) {}
   try { clearInterval(_dmPollTimer); } catch(e) {}
+  try { clearTimeout(_typingTimer); } catch(e) {}
+  try { clearTimeout(_settingsSaveTimer); } catch(e) {}
   try { if (presenceChannel && presenceChannel.untrack) presenceChannel.untrack(); } catch(e) {}
   try { if (_settingsChannel && window.supabaseClient) window.supabaseClient.removeChannel(_settingsChannel); } catch(e) {}
   try { logActivity('login', 'خروج از سیستم'); } catch(e) {}
+  try { _settingsCache = {}; } catch(e) {}
+  try { sessionStorage.removeItem('welcomeShown'); } catch(e) {}
   clearCurrentUser();
-  location.reload();
+  location.replace(location.pathname);
 }
 
 function doLogout(){
@@ -1814,7 +1817,8 @@ function applyPermissions(){
   if (onlineBtn) onlineBtn.style.display = (user.username === ADMIN_PHONE) ? 'flex' : 'none';
   const nb = document.getElementById('notifBtn');
   if (user.role === 'admin' || user.role === 'manager') nb.style.display = 'grid'; else nb.style.display = 'none';
-  const fv = document.querySelector('.nav-item:not(.hidden)');
+  /* 🔧 FIX #1b — فقط nav-item های دارای data-page را برای فعال‌سازی اولیه در نظر بگیر */
+  const fv = document.querySelector('.nav-item[data-page]:not(.hidden)');
   if (fv) {
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1913,10 +1917,11 @@ function statusBadge(status){const label=STATUS_LABELS[status]||status;const cls
 
 const PAGE_TITLES={mywork:'کارهای روزانه من',dashboard:'داشبورد',attendance:'ساعت کاری من',home:'کار در خانه من',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد','chat':'گفتگوی تیمی','dm':'چت خصوصی','online-users':'کاربران آنلاین','achievements':'دستاوردها','sessions':'تاریخچه ورود','tools':'ابزارها','github':'گیت‌هاب','calendar':'تقویم','meetings':'جلسات'};
 
-document.querySelectorAll('.nav-item').forEach(btn=>{
-  btn.onclick = async () => {
+/* 🔧 FIX #1 + #2 — محدود کردن سلکتور به data-page و استفاده از addEventListener */
+document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
+  btn.addEventListener('click', async () => {
     const page = btn.dataset.page;
-    if (!page) return; // دکمه خروج dataset.page نداره
+    if (!page) return;
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
@@ -1950,7 +1955,7 @@ document.querySelectorAll('.nav-item').forEach(btn=>{
     if(page==='meetings')renderMeetings();
     if(page==='settings'){highlightColor();updateToggleStates();}
     if(window.innerWidth<=900)closeSidebar();
-  };
+  });
 });
 function updateDate(){const[jy,jm,jd]=todayJalali();const dn=faDaysFull[jWeekDay(jy,jm,jd)];const el=document.getElementById('todayDate');if(el)el.textContent=dn+'، '+faNum(jd)+' '+faMonths[jm-1]+' '+faNum(jy);}
 
@@ -2016,7 +2021,6 @@ function stopDmPolling() {
   if (_dmPollTimer) { clearInterval(_dmPollTimer); _dmPollTimer = null; }
 }
 
-/* ⚡ pollDmState — بدون رندر مجدد (رفع پرش) */
 async function pollDmState() {
   if (!currentDmUserId || !window.supabaseClient) return;
   const me = getCurrentUser(); if (!me) return;
@@ -2041,7 +2045,6 @@ async function pollDmState() {
     
     const isTyping = typingVal && typingVal.isTyping && (Date.now() - (typingVal.timestamp || 0) < 5000);
     
-    // ⚡ فقط typing bubble رو آپدیت کن — بدون رندر کل چت
     const msgContainer = document.getElementById('dmMessages');
     if (msgContainer) {
       const typingBubble = msgContainer.querySelector('.typing-bubble');
@@ -2057,7 +2060,6 @@ async function pollDmState() {
       }
     }
     
-    // ⚡ tickها رو بدون رندر مجدد آپدیت کن
     if (readVal) {
       localStorage.setItem(readKey, JSON.stringify(readVal));
       document.querySelectorAll('.chat-bubble.me').forEach(bubble => {
@@ -2073,7 +2075,6 @@ async function pollDmState() {
       });
     }
     
-    // ⚡ آپدیت هدر وضعیت
     const headerStatus = document.querySelector('.dm-header-status');
     if (headerStatus) {
       const otherOnline = onlineUsersMap.has(String(other));
@@ -2137,7 +2138,6 @@ function renderDmConversation(container, me) {
   const dmCtx = dmKey(me.id, other.id);
   const msgs = getDmMessages(me.id, other.id).slice(-200);
   
-  // Mark all msgs from other as read
   const readKey = `dm_read_${me.id}_${other.id}`;
   const readData = {};
   msgs.forEach(m => { if (String(m.userId) === String(other.id)) readData[m.id] = Date.now(); });
@@ -2205,7 +2205,6 @@ function renderDmConversation(container, me) {
     </div>
   </div>`;
   
-  // ⚡ دکمه برگشت + حفظ موقعیت اسکرول
   setTimeout(() => {
     const backBtn = document.getElementById('dmBackBtn');
     if (backBtn) {
@@ -2306,7 +2305,6 @@ function updateDmBadge() {
   if (badge) { if (total > 0) { badge.style.display = 'inline-block'; badge.textContent = faNum(total); } else badge.style.display = 'none'; }
 }
 
-/* ═══ Chat message renderer ═══ */
 function compressChatImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -2468,7 +2466,6 @@ async function handleTeamImage(event) {
   } catch(e) { toast('خطا','error'); }
 }
 
-/* ═══ Achievements / Sessions / Tools ═══ */
 function renderAchievements(){
   const me = getCurrentUser(); if(!me) return;
   const data = { tasks: DB.get('tasks').filter(t=>t.assignedFromId===me.id), messages: DB.get('internal_messages').filter(m=>m.userId===me.id), tickets: DB.get('tickets').filter(t=>t.createdBy===me.id), attendance: DB.get('attendance').filter(a=>a.userId===me.id) };
@@ -3559,7 +3556,6 @@ let lastActivityReset=0;
 function onUserActivity(){const now=Date.now();if(now-lastActivityReset<3000)return;lastActivityReset=now;if(sessionWarningActive||sessionTimeout===0)return;clearTimeout(sessionTimerId);clearTimeout(sessionWarnId);sessionDeadline=Date.now()+sessionTimeout;sessionWarnId=setTimeout(showSessionWarning,sessionTimeout-sessionWarnAt);sessionTimerId=setTimeout(doAutoLogout,sessionTimeout);}
 activityEvents.forEach(ev=>document.addEventListener(ev,onUserActivity,{passive:true}));
 
-/* ═══ Settings ═══ */
 let _settingsCache = {};
 let _settingsLoaded = false;
 let _settingsChannel = null;
@@ -3623,7 +3619,6 @@ window.addEventListener('error', (e) => { try { const logs = JSON.parse(localSto
 
 async function initAdvancedSettings() { await loadSettingsFromServer(); applyAllSettings(); subscribeToSettingsChanges(); }
 
-/* ═══ Welcome ═══ */
 function showWelcomeMessage(){
   const me = getCurrentUser(); if(!me) return;
   if (sessionStorage.getItem('welcomeShown') === '1') return;
@@ -3645,7 +3640,6 @@ function showWelcomeMessage(){
   overlay.onclick = e => { if (e.target === overlay) closeWelcome(); };
 }
 
-/* ═══ Init ═══ */
 async function initApp(){
   updateSidebarUser(); applyPermissions(); setupRealtimeSubscriptions();
   const bindInput=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('input',fn);};
