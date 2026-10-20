@@ -511,6 +511,8 @@ tbody tr:hover td{background:var(--bg);}
   display: flex;
   flex-direction: column;
   height: calc(100dvh - 140px); 
+  max-width: 900px; /* این خط اضافه شود */
+  margin: 0 auto;   /* این خط اضافه شود */
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -2296,24 +2298,46 @@ function renderDmUserList(container, me) {
   const items = users.map(u => {
     const msgs = getDmMessages(me.id, u.id);
     const seen = localStorage.getItem(dmSeenKey(me.id, u.id)) || '1970-01-01';
-    const unread = msgs.filter(m => m.userId !== me.id && m.timestamp > seen).length;
+    const unread = msgs.filter(m => String(m.userId) !== String(me.id) && (m.timestamp || '') > seen).length;
     const last = msgs.length ? msgs[msgs.length - 1] : null;
     
+    // اصلاح استخراج زمان (اگر time بود از آن، وگرنه از timestamp)
     let timeStr = '';
-    if (last) { timeStr = new Date(last.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }); }
+    if (last) {
+      if (last.time) {
+        timeStr = last.time;
+      } else if (last.timestamp) {
+        try {
+          timeStr = new Date(last.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+        } catch(e) {}
+      }
+    }
+    
+    // پیش‌نمایش پیام
     let preview = 'بدون پیام';
-    if (last) { preview = last.image ? '📷 عکس' : escapeHtml(last.text).slice(0, 40); }
+    if (last) {
+      if (last.image) preview = '📷 عکس';
+      else if (last.text) preview = escapeHtml(last.text).slice(0, 40);
+    }
     
     const isOnline = onlineUsersMap.has(String(u.id));
     const initial = (u.displayName || 'ک').charAt(0);
     const avatarHtml = u.avatar ? `<img src="${u.avatar}">` : initial;
 
+    // چیدمان جدید با Flexbox برای جلوگیری از به‌هم‌ریختگی
     return `<div class="dm-user-item" onclick="openDm(${u.id})">
         <div class="dm-avatar-new">${avatarHtml}${isOnline ? '<span class="dm-online-dot"></span>' : ''}</div>
         <div class="dm-user-info">
-          <div class="dm-user-top"><strong>${escapeHtml(u.displayName)}</strong><span class="dm-user-time">${timeStr}</span></div>
-          <div class="dm-user-bottom"><span class="dm-last-msg">${preview}</span>${unread > 0 ? `<span class="dm-unread-badge">${faNum(unread)}</span>` : ''}</div>
-        </div></div>`;
+          <div class="dm-user-top">
+            <strong>${escapeHtml(u.displayName)}</strong>
+            ${timeStr ? `<span class="dm-user-time">${timeStr}</span>` : ''}
+          </div>
+          <div class="dm-user-bottom">
+            <span class="dm-last-msg">${preview}</span>
+            ${unread > 0 ? `<span class="dm-unread-badge">${faNum(unread)}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
   }).join('');
 
   container.innerHTML = `<div style="display:flex;flex-direction:column;height:100%;">
@@ -3083,14 +3107,34 @@ function saveAttendance(){
 function renderAttendance(){
   const me=getCurrentUser(); if(!me)return;
   const s=(document.getElementById('attSearch').value||'').trim();
-  let list=DB.get('attendance').filter(r=>r.userId===me.id).sort((a,b)=>b.date.localeCompare(a.date));
-  if(s)list=list.filter(r=>r.date.includes(s));
+  
+  let list=DB.get('attendance').filter(r=>r.userId===me.id);
+  
+  // مرتب‌سازی ایمن از جدیدترین به قدیمی‌ترین
+  list.sort((a, b) => {
+    const dateA = String(a.date || '');
+    const dateB = String(b.date || '');
+    return dateB.localeCompare(dateA);
+  });
+
+  if(s)list=list.filter(r=>(r.date||'').includes(s));
+  
   const c=document.getElementById('attContent');
   const pw=document.getElementById('attPaginationWrap');
-  if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.clock+'</div><h3>ثبتی برای شما نیست</h3><button class="btn btn-primary btn-lg" onclick="openAttendanceForm()">ثبت اولین رکورد</button></div>';pw.style.display='none';return;}
+  
+  if(!list.length){
+    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.clock+'</div><h3>ثبتی برای شما نیست</h3><button class="btn btn-primary btn-lg" onclick="openAttendanceForm()">ثبت اولین رکورد</button></div>';
+    pw.style.display='none';
+    return;
+  }
+  
   pw.style.display='flex';
   const{pageList,start,total,totalPages}=paginate(list,attPage,10);
-  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+r.date+'</strong></td><td><span class="badge badge-green">'+r.start+'</span></td><td><span class="badge badge-red">'+r.end+'</span></td><td><strong>'+formatHours(r.hours)+'</strong></td><td><button class="btn btn-danger btn-sm" onclick="delAttendanceRecord('+r.id+')">×</button></td></tr>').join('')+'</tbody></table></div>';
+  
+  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th></tr></thead><tbody>' + 
+    pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+(r.date||'—')+'</strong></td><td><span class="badge badge-green">'+(r.start||'—')+'</span></td><td><span class="badge badge-red">'+(r.end||'—')+'</span></td><td><strong>'+formatHours(r.hours||0)+'</strong></td><td><button class="btn btn-danger btn-sm" onclick="delAttendanceRecord('+r.id+')">×</button></td></tr>').join('') + 
+    '</tbody></table></div>';
+    
   document.getElementById('attTotal').textContent=faNum(total);
   renderPages('attPagination',attPage,totalPages,'gotoAttPage');
 }
@@ -3129,14 +3173,34 @@ function saveHome(){
 function renderHome(){
   const me=getCurrentUser(); if(!me)return;
   const s=(document.getElementById('homeSearch').value||'').trim();
-  let list=DB.get('home').filter(r=>r.userId===me.id).sort((a,b)=>b.date.localeCompare(a.date));
-  if(s)list=list.filter(r=>r.date.includes(s));
+  
+  let list=DB.get('home').filter(r=>r.userId===me.id);
+  
+  // مرتب‌سازی ایمن از جدیدترین به قدیمی‌ترین
+  list.sort((a, b) => {
+    const dateA = String(a.date || '');
+    const dateB = String(b.date || '');
+    return dateB.localeCompare(dateA);
+  });
+
+  if(s)list=list.filter(r=>(r.date||'').includes(s));
+  
   const c=document.getElementById('homeContent');
   const pw=document.getElementById('homePaginationWrap');
-  if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.home+'</div><h3>ثبتی برای شما نیست</h3><button class="btn btn-primary btn-lg" onclick="openHomeForm()">ثبت اولین رکورد</button></div>';pw.style.display='none';return;}
+  
+  if(!list.length){
+    c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.home+'</div><h3>ثبتی برای شما نیست</h3><button class="btn btn-primary btn-lg" onclick="openHomeForm()">ثبت اولین رکورد</button></div>';
+    pw.style.display='none';
+    return;
+  }
+  
   pw.style.display='flex';
   const{pageList,start,total,totalPages}=paginate(list,homePage,10);
-  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+r.date+'</strong></td><td><span class="badge badge-green">'+r.start+'</span></td><td><span class="badge badge-red">'+r.end+'</span></td><td><strong>'+formatHours(r.hours)+'</strong></td><td>'+(r.desc||'—')+'</td><td><button class="btn btn-danger btn-sm" onclick="delHomeRecord('+r.id+')">×</button></td></tr>').join('')+'</tbody></table></div>';
+  
+  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody>' + 
+    pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+(r.date||'—')+'</strong></td><td><span class="badge badge-green">'+(r.start||'—')+'</span></td><td><span class="badge badge-red">'+(r.end||'—')+'</span></td><td><strong>'+formatHours(r.hours||0)+'</strong></td><td>'+(r.desc||'—')+'</td><td><button class="btn btn-danger btn-sm" onclick="delHomeRecord('+r.id+')">×</button></td></tr>').join('') + 
+    '</tbody></table></div>';
+    
   document.getElementById('homeTotal').textContent=faNum(total);
   renderPages('homePagination',homePage,totalPages,'gotoHomePage');
 }
