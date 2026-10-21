@@ -985,6 +985,23 @@ tbody tr:hover td{background:var(--bg);}
   .chat-input-area{padding: 8px 10px; padding-bottom: max(8px, env(safe-area-inset-bottom));}
   .chat-input-wrapper input[type="text"]{font-size: 16px !important;}
 }
+/* در موبایل کانتینر چت بین نوار بالا و لبه پایین صفحه پین می‌شود تا ورودی پیام همیشه کامل دیده شود */
+@media(max-width:900px){
+  body.chat-page-active .chat-container{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--chat-top, 64px);
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    height: auto !important;
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    z-index: 35;
+  }
+}
 
 .ticket-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer;}
 .ticket-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;}
@@ -2537,6 +2554,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('page-'+page).classList.add('active');
+    document.body.classList.toggle('chat-page-active', page==='chat'||page==='dm');
     document.getElementById('pageTitle').innerHTML = PAGE_TITLES[page] + '<small id="todayDate"></small>';
     updateDate();
     if(page==='dashboard'){renderDashboard();renderWidgets();}
@@ -3122,13 +3140,21 @@ function pickReaction(emoji){ document.getElementById('reactionModal').classList
 function viewChatImage(src) { const w = window.open('', '_blank'); if (w) { w.document.write(`<html><body style="margin:0;background:#000;display:grid;place-items:center;height:100vh"><img src="${src}" style="max-width:100%;max-height:100%"></body></html>`); w.document.close(); } }
 
 // تنظیم دقیق ارتفاع کانتینر چت بر اساس فضای واقعی موجود (کلیدواژه، نوار آدرس موبایل، چرخش)
+// در موبایل به‌جای محاسبه، کانتینر با CSS بین نوار بالا و پایین صفحه پین می‌شود (کلاس chat-page-active)
+function updateChatTopVar() {
+  const tb = document.querySelector('.topbar');
+  document.documentElement.style.setProperty('--chat-top', (tb ? tb.offsetHeight : 0) + 'px');
+}
 function fitChatContainers() {
+  updateChatTopVar();
   document.querySelectorAll('.chat-container').forEach(c => {
+    c.style.height = '';
     const page = c.closest('.page');
     if (page && !page.classList.contains('active')) { c.style.height = ''; return; }
+    if (window.innerWidth <= 900) return; // در موبایل CSS ثابت (fixed) مدیریت می‌کند
     const vv = window.visualViewport;
     const top = c.getBoundingClientRect().top;
-    let h = (vv ? vv.height : window.innerHeight) - top - 8;
+    let h = (vv ? vv.height + (vv.offsetTop || 0) : window.innerHeight) - top - 8;
     h = Math.min(h, window.innerHeight - 64);
     c.style.height = (h > 200 && top > 0) ? Math.round(h) + 'px' : '';
   });
