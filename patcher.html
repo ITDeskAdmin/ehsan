@@ -891,31 +891,9 @@ tbody tr:hover td{background:var(--bg);}
 .dm-header-icons svg { width: 20px; height: 20px; cursor: pointer; }
 .dm-user-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer; background: var(--bg-card); transition: background 0.2s; }
 .dm-user-item:hover { background: var(--bg); }
-.dm-avatar-new { 
-  width: 54px; 
-  height: 54px; 
-  border-radius: 50%; 
-  background: linear-gradient(135deg, #c084fc, #ec4899); 
-  color: #fff; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  font-size: 24px; 
-  font-weight: 800; 
-  position: relative; 
-  flex-shrink: 0; 
-  overflow: hidden; /* جلوگیری از بیرون زدگی عکس */
-}
-.dm-avatar-new img { 
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  border-radius: 50%; 
-  display: block;
-}.dm-online-dot { position: absolute; bottom: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #10b981; border: 2px solid var(--bg-card); }
+.dm-avatar-new { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #c084fc, #ec4899); color: #fff; display: grid; place-items: center; font-size: 24px; font-weight: 800; position: relative; flex-shrink: 0; }
+.dm-avatar-new img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.dm-online-dot { position: absolute; bottom: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #10b981; border: 2px solid var(--bg-card); }
 .dm-user-info { flex: 1; min-width: 0; }
 .dm-user-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .dm-user-top strong { font-size: 14.5px; font-weight: 700; color: var(--text); }
@@ -1914,7 +1892,7 @@ function setupRealtimeSubscriptions() {
     .on('presence', { event: 'sync' }, syncPresence)
     .on('presence', { event: 'join' }, syncPresence)
     .on('presence', { event: 'leave' }, syncPresence)
-         .subscribe(async (status) => {
+    .subscribe(async (status) => {
       if (status === 'SUBSCRIBED' && me) {
         try {
           await presenceChannel.track({
@@ -1922,13 +1900,12 @@ function setupRealtimeSubscriptions() {
             display_name: me.displayName,
             username: me.username,
             role: me.role,
-            avatar: me.avatar, // <--- مشکل اصلی اینجاست
+            avatar: me.avatar,
             online_at: new Date().toISOString()
           });
         } catch(e) {}
       }
     });
-}
 }
 
 function updateOnlineBadge() {
