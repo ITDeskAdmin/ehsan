@@ -143,7 +143,6 @@ select{appearance:none!important;-webkit-appearance:none!important;-moz-appearan
 [data-theme="light"] .login-error{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.22);color:#dc2626;}
 [data-theme="light"] .login-theme-btn{background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.08);color:#1a2233;box-shadow:0 4px 12px -2px rgba(0,0,0,.08);}
 [data-theme="light"] .login-theme-btn:hover{background:rgba(138,92,246,.1);border-color:rgba(138,92,246,.35);color:#6c47c9;}
-
 .app{display:none;min-height:100vh;}
 .app.show{display:flex;}
 
@@ -296,17 +295,19 @@ body.sidebar-collapsed .smart-toggle-btn svg { transform: rotate(180deg); }
     width: 280px !important;
     transform: translateX(100%);
     transition: transform 0.3s ease;
-    z-index: 1000 !important; /* بالاتر از لایه تاریک */
+    z-index: 1000 !important;
   }
   
   .sidebar.open {
     transform: translateX(0);
   }
 
-  /* لایه تاریک پشت منو */
+  /* ✅ لایه تاریک پشت منو - اصلاح‌شده با position:fixed */
   .sidebar-overlay {
+    position: fixed;
+    inset: 0;
     display: block !important;
-    z-index: 999 !important; /* زیر سایدبار */
+    z-index: 999 !important;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s, visibility 0.3s;
@@ -718,6 +719,43 @@ tbody tr:hover td{background:var(--bg);}
 .feed-text{font-size:12.5px;flex:1;}
 .feed-time{font-size:10.5px;color:var(--text-muted);margin-top:2px;}
 
+/* ═══ STAFF REPORT — CSS جدید ═══ */
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.staff-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.staff-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--primary);}
+.staff-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px -6px rgba(0,0,0,.15);border-color:var(--primary);}
+.staff-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.staff-card-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-size:18px;font-weight:800;flex-shrink:0;overflow:hidden;}
+.staff-card-avatar img{width:100%;height:100%;object-fit:cover;}
+.staff-card-name{font-size:14px;font-weight:700;margin-bottom:2px;display:block;color:var(--text);}
+.staff-card-phone{font-size:11.5px;color:var(--text-muted);direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;}
+.staff-card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px;background:var(--bg-card);border-radius:10px;margin-bottom:12px;}
+.staff-stat-item{text-align:center;}
+.staff-stat-item .val{font-size:18px;font-weight:900;font-family:'JetBrains Mono',monospace;line-height:1.1;}
+.staff-stat-item .lbl{font-size:9.5px;color:var(--text-muted);margin-top:2px;font-weight:600;}
+.staff-stat-item.total .val{color:var(--primary);}
+.staff-stat-item.done .val{color:var(--success);}
+.staff-stat-item.pending .val{color:var(--danger);}
+.staff-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px dashed var(--border);}
+.staff-card-arrow{color:var(--primary);font-size:18px;}
+.staff-detail-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding:16px;background:linear-gradient(135deg,rgba(108,71,201,.08),rgba(6,182,212,.05));border:1.5px solid var(--primary);border-radius:14px;}
+.staff-detail-back{width:38px;height:38px;border-radius:10px;background:var(--bg);border:1px solid var(--border);cursor:pointer;display:grid;place-items:center;color:var(--text);flex-shrink:0;}
+.staff-detail-back:hover{background:var(--primary-soft);color:var(--primary);border-color:var(--primary);}
+.staff-detail-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#8a5cf6);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800;flex-shrink:0;overflow:hidden;}
+.staff-detail-avatar img{width:100%;height:100%;object-fit:cover;}
+.staff-detail-info{flex:1;min-width:0;}
+.staff-detail-info h2{font-size:18px;font-weight:800;margin-bottom:4px;}
+.staff-detail-meta{font-size:12px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.staff-detail-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
+.staff-detail-stat{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden;}
+.staff-detail-stat::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%;background:var(--primary);}
+.staff-detail-stat.done::before{background:var(--success);}
+.staff-detail-stat.inprogress::before{background:var(--warning);}
+.staff-detail-stat.pending::before{background:var(--danger);}
+.staff-detail-stat.high::before{background:var(--danger);}
+.staff-detail-stat .val{font-size:22px;font-weight:900;font-family:'JetBrains Mono',monospace;}
+.staff-detail-stat .lbl{font-size:11px;color:var(--text-muted);margin-top:4px;font-weight:600;}
+@media(max-width:640px){.staff-grid{grid-template-columns:1fr;}.staff-detail-head{padding:12px;gap:10px;}.staff-detail-avatar{width:50px;height:50px;font-size:18px;}.staff-detail-info h2{font-size:15px;}}
 /* ═══ CHAT — FIXED FOR MOBILE KEYBOARD & SCROLL ═══ */
 .chat-container {
   display: flex;
@@ -904,7 +942,7 @@ tbody tr:hover td{background:var(--bg);}
   font-weight: 800; 
   position: relative; 
   flex-shrink: 0; 
-  overflow: hidden; /* جلوگیری از بیرون زدگی عکس */
+  overflow: hidden;
 }
 .dm-avatar-new img { 
   position: absolute; 
@@ -1103,27 +1141,9 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
 .dept-empty-pro h3{font-size:17px;font-weight:800;margin-bottom:6px;}
 .dept-empty-pro p{font-size:13px;color:var(--text-muted);margin-bottom:18px;}
 @media(max-width:640px){.dept-grid{grid-template-columns:1fr;}.dept-body-pro{padding:16px 14px 14px;}.dept-icon-pro{width:46px;height:46px;}.dept-icon-pro svg{width:22px!important;height:22px!important;}.dept-stat-item .val{font-size:17px;}}
-
-.dm-header-status{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-muted);margin-top:2px;}
-.dm-status-dot{width:8px;height:8px;border-radius:50%;background:#6b7692;flex-shrink:0;transition:all .3s;}
-.dm-status-dot.online{background:var(--success);box-shadow:0 0 8px var(--success);animation:pulseDot 1.8s ease-in-out infinite;}
-.dm-status-dot.typing{background:var(--info);box-shadow:0 0 8px var(--info);animation:typingPulse 1s ease-in-out infinite;}
-@keyframes typingPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:.6;}}
-.dm-typing-text{color:var(--info);font-weight:600;font-style:italic;}
-.msg-tick{display:inline-flex;align-items:center;margin-right:3px;font-size:11px;line-height:1;transition:color .25s;letter-spacing:-1px;}
-.msg-tick.sent{color:rgba(255,255,255,.7);}
-.msg-tick.read{color:#06b6d4;}
-.chat-bubble.other .msg-tick.sent{color:var(--text-muted);}
-.chat-bubble.other .msg-tick.read{color:var(--info);}
-.typing-bubble{align-self:flex-start;display:flex;align-items:center;gap:5px;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;border-bottom-right-radius:2px;width:fit-content;animation:fadeIn .2s;}
-.typing-bubble span{width:7px;height:7px;border-radius:50%;background:var(--text-muted);animation:typingBounce 1.4s infinite;}
-.typing-bubble span:nth-child(2){animation-delay:.2s;}
-.typing-bubble span:nth-child(3){animation-delay:.4s;}
-@keyframes typingBounce{0%,60%,100%{transform:translateY(0);opacity:.5;}30%{transform:translateY(-6px);opacity:1;}}
 </style>
 </head>
 <body>
-
 <!-- ═══════════ LOGIN ═══════════ -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-form-side">
@@ -1279,6 +1299,18 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
       <button class="nav-item" data-page="user-report" data-perm="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg><span>گزارش عملکرد</span></button>
       <button class="nav-item" data-page="activity" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><span>لاگ فعالیت</span></button>
       <button class="nav-item" data-page="users" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>کاربران</span></button>
+      
+      <!-- ✅ دکمه جدید گزارش پرسنل -->
+      <button class="nav-item" data-page="staff-report" id="navStaffReport" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <line x1="17" y1="11" x2="22" y2="11"/>
+          <line x1="19.5" y1="8.5" x2="19.5" y2="13.5"/>
+        </svg>
+        <span>گزارش پرسنل</span>
+      </button>
+      
       <button class="nav-item" id="nav-online-users" style="display:none;" data-page="online-users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg><span>کاربران آنلاین</span><span class="badge-num" id="onlineUsersBadge" style="background:var(--success);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;padding:0;margin-right:auto;">۰</span></button>
       <button class="nav-item" data-page="sessions" data-perm="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 6v6l4 2"/></svg><span>تاریخچه ورود</span></button>
       <button class="nav-item" data-page="tools" data-perm="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>ابزارها</span></button>
@@ -1371,7 +1403,7 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
       
       <div class="page" id="page-assigned"><div class="panel-card"><div id="assignedContent"></div></div></div>
       
-      <div class="page" id="page-mywork"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><h2>کارهای روزانه من</h2><div class="sub">فقط خودتان این کارها را می‌بینید</div></div></div><div class="toolbar"><select class="filter-select" id="mwFilterSelect" onchange="mwFilter=this.value;renderMyWork()"><option value="all">همه</option><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="mwSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openMyWorkForm()">+</button></div></div><div id="myWorkContent"></div><div class="pagination" id="mwPaginationWrap"><div class="total">تعداد: <span id="mwTotal">۰</span></div><div class="pages" id="mwPagination"></div></div></div></div>
+      <div class="page" id="page-mywork"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><h2 id="mwTitle">کارهای روزانه من</h2><div class="sub" id="mwSubtitle">فقط خودتان این کارها را می‌بینید</div></div></div><div class="toolbar"><select class="filter-select" id="mwUserFilter" onchange="mwPage=1;renderMyWork()" style="display:none;"><option value="all">همه کاربران</option><option value="me">فقط خودم</option></select><select class="filter-select" id="mwFilterSelect" onchange="mwFilter=this.value;renderMyWork()"><option value="all">همه</option><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="mwSearch" placeholder="جستجو..."></div><div class="action-btns"><button class="round-btn primary" onclick="openMyWorkForm()">+</button></div></div><div id="myWorkContent"></div><div class="pagination" id="mwPaginationWrap"><div class="total">تعداد: <span id="mwTotal">۰</span></div><div class="pages" id="mwPagination"></div></div></div></div>
       
       <div class="page" id="page-dashboard"><div class="stats-grid" id="dashStats"></div><div class="widgets-grid" id="widgetsGrid"></div></div>
       
@@ -1392,6 +1424,28 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
       <div class="page" id="page-departments"><div class="panel-card"><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="deptSearch" placeholder="جستجو..." oninput="renderDepts()"></div><div class="action-btns"><button class="round-btn primary" onclick="quickAddDept()">+</button></div></div><div id="deptList"></div></div></div>
       
       <div class="page" id="page-users"><div class="panel-card"><div class="toolbar"><div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="usersSearch" placeholder="جستجو..." oninput="renderUsers()"></div><div class="action-btns"><button class="round-btn primary" onclick="openUserForm()">+ کاربر</button></div></div><div id="usersContent"></div></div></div>
+      
+      <!-- ✅ صفحه جدید گزارش پرسنل -->
+      <div class="page" id="page-staff-report">
+        <div class="panel-card" id="staffListPanel">
+          <div class="card-head">
+            <div class="card-icon" style="background:var(--info-soft);color:var(--info);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="17" y1="11" x2="22" y2="11"/>
+                <line x1="19.5" y1="8.5" x2="19.5" y2="13.5"/>
+              </svg>
+            </div>
+            <div>
+              <h2>گزارش کارهای روزانه پرسنل</h2>
+              <div class="sub">با کلیک روی هر نفر، گزارش کامل کارهاش را ببینید</div>
+            </div>
+          </div>
+          <div id="staffListContent"></div>
+        </div>
+        <div id="staffDetailPanel"></div>
+      </div>
       
       <div class="page" id="page-user-report"><div class="panel-card"><div class="card-head"><div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg></div><div><h2>گزارش عملکرد</h2></div></div><div id="userReportSummary"></div></div></div>
       
@@ -1672,7 +1726,7 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
 
 <div class="fullpage-modal" id="sysFormModal"><div class="fp-header"><button class="save-btn" onclick="saveSystem()">ذخیره</button><h2><span id="sysFormTitle">سیستم</span></h2><button class="close-btn" onclick="closeSystemForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-section-title">📦 اطلاعات پایه</div><div class="form-rows form-row-3"><div class="form-group"><label>بخش <span class="req">*</span></label><select id="sfDeptId"></select></div><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="sfTitle"></div><div class="form-group"><label>نوع</label><select id="sfSysType"><option>کیس</option><option>مانیتور</option><option>لپ‌تاپ</option><option>سرور</option><option>سایر</option></select></div></div></div><div class="form-section" style="background:linear-gradient(135deg,rgba(108,71,201,.08),rgba(6,182,212,.05));border:2px solid var(--primary);"><div class="form-section-title" style="color:var(--primary);font-size:14px;">🔐 دسترسی ریموت</div><div class="form-rows form-row-3"><div class="form-group"><label>نوع</label><select id="sfRemoteType"><option value="">—</option><option>AnyDesk</option><option>RustDesk</option><option>TeamViewer</option><option>Chrome Remote</option><option>VNC</option><option>سایر</option></select></div><div class="form-group"><label>کد / ID</label><input type="text" id="sfRemoteCode" style="font-family:'JetBrains Mono',monospace;direction:ltr;text-align:right;"></div><div class="form-group"><label>رمز</label><input type="text" id="sfRemotePass" style="font-family:'JetBrains Mono',monospace;direction:ltr;text-align:right;"></div></div></div><div class="form-section"><div class="form-section-title">🖥️ سخت‌افزار</div><div class="form-rows form-row-3"><div class="form-group"><label>CPU برند</label><select id="sfCpuBrand"><option value="">—</option><option>Intel</option><option>AMD</option></select></div><div class="form-group"><label>CPU مدل</label><input type="text" id="sfCpuModel"></div><div class="form-group"><label>RAM نوع</label><select id="sfRamType"><option value="">—</option><option>DDR3</option><option>DDR4</option><option>DDR5</option></select></div><div class="form-group"><label>RAM حجم</label><input type="text" id="sfRamSize"></div><div class="form-group"><label>حافظه نوع</label><select id="sfDiskType"><option value="">—</option><option>HDD</option><option>SSD SATA</option><option>SSD NVMe</option></select></div><div class="form-group"><label>حافظه حجم</label><input type="text" id="sfDiskSize"></div></div></div><div class="form-section"><div class="form-section-title">🌐 شبکه</div><div class="form-rows form-row-3"><div class="form-group"><label>IP</label><input type="text" id="sfIP" style="direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;"></div><div class="form-group"><label>MAC</label><input type="text" id="sfMAC" style="direction:ltr;text-align:right;font-family:'JetBrains Mono',monospace;"></div><div class="form-group"><label>Hostname</label><input type="text" id="sfHostname"></div></div></div><div class="form-section"><div class="form-section-title">توضیحات</div><div class="form-group"><textarea id="sfNotes"></textarea></div></div></div></div>
 
-<div class="fullpage-modal" id="mwFormModal"><div class="fp-header"><button class="save-btn" onclick="saveMyWork()">ذخیره</button><h2><span id="mwFormTitle">کار من</span></h2><button class="close-btn" onclick="closeMyWorkForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="mwTitle"></div><div class="form-group"><label>وضعیت</label><select id="mwStatus"><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>اولویت</label><select id="mwPriority"><option value="high">بالا</option><option value="med">متوسط</option><option value="low">پایین</option></select></div><div class="form-group"><label>مهلت</label><input type="text" id="mwDeadline" readonly onclick="openCal('mwDeadline', this)"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>برچسب (با کاما)</label><input type="text" id="mwTags"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="mwDesc"></textarea></div></div></div></div></div>
+<div class="fullpage-modal" id="mwFormModal"><div class="fp-header"><button class="save-btn" onclick="saveMyWork()">ذخیره</button><h2><span id="mwFormTitle">کار من</span></h2><button class="close-btn" onclick="closeMyWorkForm()">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="mwTitleInput"></div><div class="form-group"><label>وضعیت</label><select id="mwStatus"><option value="pending">انجام نشده</option><option value="inprogress">در حال انجام</option><option value="done">انجام شده</option></select></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>اولویت</label><select id="mwPriority"><option value="high">بالا</option><option value="med">متوسط</option><option value="low">پایین</option></select></div><div class="form-group"><label>مهلت</label><input type="text" id="mwDeadline" readonly onclick="openCal('mwDeadline', this)"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>برچسب (با کاما)</label><input type="text" id="mwTags"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="mwDesc"></textarea></div></div></div></div></div>
 
 <div class="fullpage-modal" id="meetingFormModal"><div class="fp-header"><button class="save-btn" onclick="saveMeeting()">ذخیره</button><h2><span>جلسه</span></h2><button class="close-btn" onclick="document.getElementById('meetingFormModal').classList.remove('show')">×</button></div><div class="fp-body"><div class="form-section"><div class="form-rows form-row-2"><div class="form-group"><label>عنوان <span class="req">*</span></label><input type="text" id="mtTitle"></div><div class="form-group"><label>تاریخ <span class="req">*</span></label><input type="text" id="mtDate" readonly onclick="openCal('mtDate', this)"></div></div><div class="form-rows form-row-2" style="margin-top:14px;"><div class="form-group"><label>ساعت شروع</label><input type="time" id="mtStart"></div><div class="form-group"><label>ساعت پایان</label><input type="time" id="mtEnd"></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>شرکت‌کنندگان</label><select id="mtAttendees" multiple style="height:100px;"></select></div></div><div class="form-rows" style="margin-top:14px;"><div class="form-group"><label>توضیحات</label><textarea id="mtDesc"></textarea></div></div></div></div></div>
 
@@ -1736,7 +1790,7 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
 <div class="toast-container" id="toastBox"></div>
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   IT PANEL PRO v9.1 — FIXED CHAT + QUICK LOGOUT
+   IT PANEL PRO v9.2 — STAFF REPORT + FIXES
    ═══════════════════════════════════════════════════════════════ */
 
 const ADMIN_PHONE = '09900153578';
@@ -1848,6 +1902,7 @@ function clearCurrentUser() {
 
 let onlineUsersMap = new Map();
 let presenceChannel = null;
+let _presenceHeartbeat = null;
 let _refreshTimeout = null;
 function debouncedRefresh() { clearTimeout(_refreshTimeout); _refreshTimeout = setTimeout(refreshCurrentPageData, 400); }
 
@@ -1888,9 +1943,43 @@ function setupRealtimeSubscriptions() {
       }
     }).subscribe();
   
+  // ═══ PRESENCE ═══
   const me = getCurrentUser();
   if (!me) return;
-  presenceChannel = window.supabaseClient.channel('online_users_room', { config: { presence: { key: String(me.id) } } });
+  
+  if (me.id == null || isNaN(me.id)) {
+    console.warn('[PRESENCE] Invalid user id:', me.id);
+    return;
+  }
+  
+  if (presenceChannel) {
+    try {
+      if (_presenceHeartbeat) clearInterval(_presenceHeartbeat);
+      window.supabaseClient.removeChannel(presenceChannel);
+    } catch(e) {}
+    presenceChannel = null;
+  }
+  
+  const userId = String(me.id);
+  const presencePayload = {
+    user_id: userId,
+    display_name: me.displayName || 'کاربر',
+    username: me.username || '',
+    role: me.role || 'user',
+    avatar: me.avatar || null
+  };
+  
+  presenceChannel = window.supabaseClient.channel('online_users_room', {
+    config: { presence: { key: userId } }
+  });
+  
+  const trackNow = () => {
+    if (!presenceChannel) return;
+    presenceChannel
+      .track({ ...presencePayload, online_at: new Date().toISOString() })
+      .then(() => console.log('[PRESENCE] ✅ Tracked as', userId))
+      .catch(e => console.warn('[PRESENCE] ❌ track failed:', e));
+  };
   
   const syncPresence = () => {
     try {
@@ -1900,7 +1989,9 @@ function setupRealtimeSubscriptions() {
         const items = (state[uid] || []).filter(it => it && it.user_id != null);
         if (!items.length) return;
         let best = items[0];
-        items.forEach(it => { if (new Date(it.online_at || 0) > new Date(best.online_at || 0)) best = it; });
+        items.forEach(it => {
+          if (new Date(it.online_at || 0) > new Date(best.online_at || 0)) best = it;
+        });
         unique.set(String(best.user_id), best);
       });
       onlineUsersMap.clear();
@@ -1915,20 +2006,29 @@ function setupRealtimeSubscriptions() {
     .on('presence', { event: 'sync' }, syncPresence)
     .on('presence', { event: 'join' }, syncPresence)
     .on('presence', { event: 'leave' }, syncPresence)
-    .subscribe(async (status) => {
-      if (status === 'SUBSCRIBED' && me) {
-        try {
-          await presenceChannel.track({
-            user_id: String(me.id),
-            display_name: me.displayName,
-            username: me.username,
-            role: me.role,
-            avatar: me.avatar,
-            online_at: new Date().toISOString()
-          });
-        } catch(e) {}
+    .subscribe(async (status, err) => {
+      console.log('[PRESENCE] Status:', status, err || '');
+      if (status === 'SUBSCRIBED') {
+        await trackNow();
+        setTimeout(trackNow, 1500);
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        console.warn('[PRESENCE] Reconnecting in 3s...');
+        setTimeout(() => {
+          try { presenceChannel.subscribe(); } catch(e) {}
+        }, 3000);
       }
     });
+  
+  if (_presenceHeartbeat) clearInterval(_presenceHeartbeat);
+  _presenceHeartbeat = setInterval(() => {
+    if (!presenceChannel) return;
+    if (presenceChannel.state === 'joined') {
+      trackNow();
+    } else {
+      console.log('[PRESENCE] Heartbeat: reconnecting...');
+      try { presenceChannel.subscribe(); } catch(e) {}
+    }
+  }, 30000);
 }
 
 function updateOnlineBadge() {
@@ -1955,7 +2055,7 @@ function renderOnlineUsers() {
 function refreshCurrentPageData() {
   const activePage = document.querySelector('.page.active'); if (!activePage) return;
   const pid = activePage.id.replace('page-', '');
-  const fns = {devices:renderDevices,systems:renderSystems,departments:renderDepts,tickets:renderTickets,jobs:renderJobs,users:renderUsers,activity:renderActivity,'user-report':renderUserReport,leave:renderLeave,licenses:renderLicenses,mywork:renderMyWork,attendance:renderAttendance,home:renderHome,tasks:renderTasks,kanban:renderKanban,chat:renderChat,dm:renderDm,'online-users':renderOnlineUsers,'achievements':renderAchievements,'sessions':renderSessions,'tools':renderTools,'calendar':renderCalendar,'meetings':renderMeetings,dashboard:()=>{renderDashboard();renderWidgets();}};
+  const fns = {devices:renderDevices,systems:renderSystems,departments:renderDepts,tickets:renderTickets,jobs:renderJobs,users:renderUsers,activity:renderActivity,'user-report':renderUserReport,'staff-report':renderStaffList,leave:renderLeave,licenses:renderLicenses,mywork:renderMyWork,attendance:renderAttendance,home:renderHome,tasks:renderTasks,kanban:renderKanban,chat:renderChat,dm:renderDm,'online-users':renderOnlineUsers,'achievements':renderAchievements,'sessions':renderSessions,'tools':renderTools,'calendar':renderCalendar,'meetings':renderMeetings,dashboard:()=>{renderDashboard();renderWidgets();}};
   if (fns[pid]) fns[pid]();
 }
 
@@ -2101,6 +2201,7 @@ function performLogout(){
   try { clearTimeout(sessionTimerId); } catch(e) {}
   try { clearTimeout(sessionWarnId); } catch(e) {}
   try { clearInterval(sessionCountdownId); } catch(e) {}
+  try { if (_presenceHeartbeat) clearInterval(_presenceHeartbeat); } catch(e) {}
   try { if (presenceChannel && presenceChannel.untrack) presenceChannel.untrack(); } catch(e) {}
   try { if (_settingsChannel && window.supabaseClient) window.supabaseClient.removeChannel(_settingsChannel); } catch(e) {}
   clearCurrentUser();
@@ -2114,6 +2215,7 @@ function quickLogout() {
   try { clearInterval(_dmPollTimer); } catch(e) {}
   try { clearTimeout(_typingTimer); } catch(e) {}
   try { clearTimeout(_settingsSaveTimer); } catch(e) {}
+  try { if (_presenceHeartbeat) clearInterval(_presenceHeartbeat); } catch(e) {}
   try { if (presenceChannel && presenceChannel.untrack) presenceChannel.untrack(); } catch(e) {}
   try { if (_settingsChannel && window.supabaseClient) window.supabaseClient.removeChannel(_settingsChannel); } catch(e) {}
   try { logActivity('login', 'خروج از سیستم'); } catch(e) {}
@@ -2288,6 +2390,13 @@ function applyPermissions(){
   if (onlineBtn) onlineBtn.style.display = (user.username === ADMIN_PHONE) ? 'flex' : 'none';
   const nb = document.getElementById('notifBtn');
   if (user.role === 'admin' || user.role === 'manager') nb.style.display = 'grid'; else nb.style.display = 'none';
+  
+  // ✅ نمایش دکمه گزارش پرسنل فقط برای مدیر/سرپرست
+  const staffBtn = document.getElementById('navStaffReport');
+  if (staffBtn) {
+    staffBtn.style.display = (user.role === 'admin' || user.role === 'manager') ? 'flex' : 'none';
+  }
+  
   const fv = document.querySelector('.nav-item[data-page]:not(.hidden)');
   if (fv) {
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
@@ -2385,7 +2494,7 @@ function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;',
 const STATUS_LABELS={pending:'انجام نشده',inprogress:'در حال انجام',done:'انجام شده',open:'باز',closed:'بسته'};
 function statusBadge(status){const label=STATUS_LABELS[status]||status;const cls=status||'pending';return '<span class="status-badge '+cls+'">'+label+'</span>';}
 
-const PAGE_TITLES={mywork:'کارهای روزانه من',dashboard:'داشبورد',attendance:'ساعت کاری من',home:'کار در خانه من',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد','chat':'گفتگوی تیمی','dm':'چت خصوصی','online-users':'کاربران آنلاین','achievements':'دستاوردها','sessions':'تاریخچه ورود','tools':'ابزارها','github':'گیت‌هاب','calendar':'تقویم','meetings':'جلسات'};
+const PAGE_TITLES={mywork:'کارهای روزانه من',dashboard:'داشبورد',attendance:'ساعت کاری من',home:'کار در خانه من',tasks:'کارهای محول',jobs:'کارها',devices:'وسایل IT',systems:'سیستم‌ها',departments:'بخش‌ها',users:'کاربران','staff-report':'گزارش پرسنل',report:'گزارش ماهانه',assigned:'کارهای محول به من',activity:'لاگ فعالیت',settings:'تنظیمات',kanban:'کانبان',tickets:'تیکت‌ها',licenses:'لایسنس‌ها',leave:'مرخصی من','user-report':'گزارش عملکرد','chat':'گفتگوی تیمی','dm':'چت خصوصی','online-users':'کاربران آنلاین','achievements':'دستاوردها','sessions':'تاریخچه ورود','tools':'ابزارها','github':'گیت‌هاب','calendar':'تقویم','meetings':'جلسات'};
 
 document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
   btn.addEventListener('click', async () => {
@@ -2401,6 +2510,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     if(page==='systems')renderSystems();
     if(page==='jobs')renderJobs();
     if(page==='users')renderUsers();
+    if(page==='staff-report'){currentStaffId=null;renderStaffList();}
     if(page==='assigned')renderAssigned();
     if(page==='activity')renderActivity();
     if(page==='kanban')renderKanban();
@@ -2431,6 +2541,7 @@ function updateDate(){const[jy,jm,jd]=todayJalali();const dn=faDaysFull[jWeekDay
 function paginate(list,page,perPage){const total=list.length;const totalPages=Math.max(1,Math.ceil(total/perPage));if(page>totalPages)page=totalPages;const start=(page-1)*perPage;return{pageList:list.slice(start,start+perPage),start,total,totalPages};}
 function renderPages(id,cur,tot,fn){const c=document.getElementById(id);if(!c)return;let h='<button class="page-btn" onclick="'+fn+'('+(cur-1)+')" '+(cur===1?'disabled':'')+'>‹</button>';for(let p=1;p<=tot;p++){if(tot>7&&p>3&&p<tot-1&&Math.abs(p-cur)>1){if(p===4)h+='<span style="padding:0 4px">...</span>';continue;}h+='<button class="page-btn '+(p===cur?'active':'')+'" onclick="'+fn+'('+p+')">'+faNum(p)+'</button>';}h+='<button class="page-btn" onclick="'+fn+'('+(cur+1)+')" '+(cur===tot?'disabled':'')+'>›</button>';c.innerHTML=h;}
 
+// ═══ DM — اصلاح کامل UNREAD ═══
 let currentDmUserId = null;
 let _typingTimer = null;
 let _dmPollTimer = null;
@@ -2442,17 +2553,38 @@ function getDmMessages(a, b) { return DB.get(dmKey(a, b)) || []; }
 function setDmMessages(a, b, list) { DB.set(dmKey(a, b), list); }
 function dmSeenKey(meId, otherId) { return `dm_seen_${meId}_${otherId}`; }
 
+// ✅ تابع جدید برای محاسبه seen
+function getDmSeen(meId, otherId) {
+  const key = dmSeenKey(meId, otherId);
+  let seen = localStorage.getItem(key);
+  if (seen === null) {
+    const msgs = getDmMessages(meId, otherId);
+    let latestTime = null;
+    msgs.forEach(m => {
+      if (m.timestamp) {
+        const t = new Date(m.timestamp).getTime();
+        if (!isNaN(t) && (!latestTime || t > latestTime)) latestTime = t;
+      }
+    });
+    seen = latestTime ? new Date(latestTime).toISOString() : new Date().toISOString();
+    localStorage.setItem(key, seen);
+  }
+  return seen;
+}
+
 function openDm(userId) {
   currentDmUserId = userId;
   const me = getCurrentUser();
   const msgs = getDmMessages(me.id, userId);
   
-  const lastMsgFromOther = msgs.filter(m => String(m.userId) === String(userId)).pop();
-  if (lastMsgFromOther && lastMsgFromOther.timestamp) {
-    localStorage.setItem(dmSeenKey(me.id, userId), lastMsgFromOther.timestamp);
-  } else {
-    localStorage.setItem(dmSeenKey(me.id, userId), new Date().toISOString());
-  }
+  let latestTime = null;
+  msgs.forEach(m => {
+    if (m.timestamp) {
+      const t = new Date(m.timestamp).getTime();
+      if (!isNaN(t) && (!latestTime || t > latestTime)) latestTime = t;
+    }
+  });
+  localStorage.setItem(dmSeenKey(me.id, userId), latestTime ? new Date(latestTime).toISOString() : new Date().toISOString());
   
   const readKey = `dm_read_${me.id}_${userId}`;
   const readData = {};
@@ -2582,18 +2714,15 @@ function renderDmUserList(container, me) {
 
   const items = users.map(u => {
     const msgs = getDmMessages(me.id, u.id);
-    const seen = localStorage.getItem(dmSeenKey(me.id, u.id)) || '1970-01-01';
+    const seen = getDmSeen(me.id, u.id);
     const unread = msgs.filter(m => String(m.userId) !== String(me.id) && new Date(m.timestamp || 0) > new Date(seen)).length;
     const last = msgs.length ? msgs[msgs.length - 1] : null;
     
     let timeStr = '';
     if (last) {
-      if (last.time) {
-        timeStr = last.time;
-      } else if (last.timestamp) {
-        try {
-          timeStr = new Date(last.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
-        } catch(e) {}
+      if (last.time) timeStr = last.time;
+      else if (last.timestamp) {
+        try { timeStr = new Date(last.timestamp).toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }); } catch(e) {}
       }
     }
     
@@ -2610,22 +2739,13 @@ function renderDmUserList(container, me) {
     return `<div class="dm-user-item" onclick="openDm(${u.id})">
         <div class="dm-avatar-new">${avatarHtml}${isOnline ? '<span class="dm-online-dot"></span>' : ''}</div>
         <div class="dm-user-info">
-          <div class="dm-user-top">
-            <strong>${escapeHtml(u.displayName)}</strong>
-            ${timeStr ? `<span class="dm-user-time">${timeStr}</span>` : ''}
-          </div>
-          <div class="dm-user-bottom">
-            <span class="dm-last-msg">${preview}</span>
-            ${unread > 0 ? `<span class="dm-unread-badge">${faNum(unread)}</span>` : ''}
-          </div>
+          <div class="dm-user-top"><strong>${escapeHtml(u.displayName)}</strong>${timeStr ? `<span class="dm-user-time">${timeStr}</span>` : ''}</div>
+          <div class="dm-user-bottom"><span class="dm-last-msg">${preview}</span>${unread > 0 ? `<span class="dm-unread-badge">${faNum(unread)}</span>` : ''}</div>
         </div>
       </div>`;
   }).join('');
 
-  container.innerHTML = `<div style="display:flex;flex-direction:column;height:100%;">
-      <div class="dm-header-new"><h2>چت خصوصی</h2><div class="dm-header-icons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div style="flex:1;overflow-y:auto;">${items}</div>
-    </div>`;
+  container.innerHTML = `<div style="display:flex;flex-direction:column;height:100%;"><div class="dm-header-new"><h2>چت خصوصی</h2><div class="dm-header-icons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div><div style="flex:1;overflow-y:auto;">${items}</div></div>`;
 }
 
 function renderDmConversation(container, me) {
@@ -2634,9 +2754,15 @@ function renderDmConversation(container, me) {
   
   const msgs = getDmMessages(me.id, other.id).slice(-200);
   
-  const lastMsgFromOther = msgs.filter(m => String(m.userId) === String(other.id)).pop();
-  if (lastMsgFromOther && lastMsgFromOther.timestamp) {
-    localStorage.setItem(dmSeenKey(me.id, other.id), lastMsgFromOther.timestamp);
+  let latestTime = null;
+  msgs.forEach(m => {
+    if (m.timestamp) {
+      const t = new Date(m.timestamp).getTime();
+      if (!isNaN(t) && (!latestTime || t > latestTime)) latestTime = t;
+    }
+  });
+  if (latestTime) {
+    localStorage.setItem(dmSeenKey(me.id, other.id), new Date(latestTime).toISOString());
   }
   
   const readKey = `dm_read_${me.id}_${other.id}`;
@@ -2789,7 +2915,7 @@ function updateDmBadge() {
   let total = 0;
   DB.getUsersCache().filter(u => u.id !== me.id).forEach(u => {
     const msgs = getDmMessages(me.id, u.id);
-    const seen = localStorage.getItem(dmSeenKey(me.id, u.id)) || '1970-01-01';
+    const seen = getDmSeen(me.id, u.id);
     total += msgs.filter(m => String(m.userId) !== String(me.id) && new Date(m.timestamp || 0) > new Date(seen)).length;
   });
   const badge = document.getElementById('dmBadge');
@@ -2956,6 +3082,9 @@ async function handleTeamImage(event) {
     renderChat();
   } catch(e) { toast('خطا','error'); }
 }
+/* ═══════════════════════════════════════════════════════════
+   RENDER FUNCTIONS
+   ═══════════════════════════════════════════════════════════ */
 
 function renderAchievements(){
   const me = getCurrentUser(); if(!me) return;
@@ -3302,7 +3431,7 @@ let mwFilter='all',mwPage=1,editingMyWork=null;
 function openMyWorkForm(){
   editingMyWork=null;
   document.getElementById('mwFormTitle').textContent='کار من';
-  document.getElementById('mwTitle').value='';
+  document.getElementById('mwTitleInput').value='';
   document.getElementById('mwPriority').value='med';
   document.getElementById('mwStatus').value='pending';
   const[jy,jm,jd]=todayJalali();
@@ -3313,7 +3442,7 @@ function openMyWorkForm(){
 }
 function closeMyWorkForm(){document.getElementById('mwFormModal').classList.remove('show');editingMyWork=null;}
 function saveMyWork(){
-  const title=document.getElementById('mwTitle').value.trim();
+  const title=document.getElementById('mwTitleInput').value.trim();
   const priority=document.getElementById('mwPriority').value;
   const status=document.getElementById('mwStatus').value;
   const deadline=document.getElementById('mwDeadline').value;
@@ -3333,7 +3462,7 @@ function editMyWork(id){
   if(item.userId && item.userId!==me.id && me.role!=='admin')return toast('دسترسی ندارید','error');
   editingMyWork=id;
   document.getElementById('mwFormTitle').textContent='ویرایش';
-  document.getElementById('mwTitle').value=item.title||'';
+  document.getElementById('mwTitleInput').value=item.title||'';
   document.getElementById('mwPriority').value=item.priority||'med';
   document.getElementById('mwStatus').value=item.status||'pending';
   document.getElementById('mwDeadline').value=item.deadline||'';
@@ -3350,21 +3479,77 @@ function delMyWork(id){
 }
 function renderMyWork(){
   const me=getCurrentUser(); if(!me)return;
+  const isManager = me.role === 'admin' || me.role === 'manager';
   const s=(document.getElementById('mwSearch').value||'').trim();
-  let list=DB.get('mywork').filter(r=>r.userId===me.id);
+
+  // فیلتر کاربر (فقط برای مدیر)
+  const userFilter = document.getElementById('mwUserFilter');
+  if (userFilter) {
+    if (isManager) {
+      userFilter.style.display = '';
+      const users = DB.getUsersCache().filter(u => u.id !== me.id);
+      const currentVal = userFilter.value || 'all';
+      const needsPopulate = userFilter.dataset.count !== String(users.length);
+      if (needsPopulate) {
+        userFilter.innerHTML =
+          '<option value="all">همه کاربران</option>' +
+          '<option value="me">فقط خودم</option>' +
+          users.map(u => `<option value="${u.id}">${escapeHtml(u.displayName)}</option>`).join('');
+        userFilter.value = currentVal;
+        if (!userFilter.value) userFilter.value = 'all';
+        userFilter.dataset.count = String(users.length);
+      }
+    } else {
+      userFilter.style.display = 'none';
+    }
+  }
+
+  // عنوان و زیرعنوان
+  const titleEl = document.getElementById('mwTitle');
+  if (titleEl) titleEl.textContent = isManager ? 'کارهای روزانه تیم' : 'کارهای روزانه من';
+  const subEl = document.getElementById('mwSubtitle');
+  if (subEl) subEl.textContent = isManager ? '👁️ به عنوان مدیر می‌توانید کارهای همه کاربران را ببینید' : 'فقط خودتان این کارها را می‌بینید';
+
+  // فیلتر بر اساس نقش
+  let list = DB.get('mywork');
+  if (isManager) {
+    const filterVal = userFilter?.value || 'all';
+    if (filterVal === 'me') list = list.filter(r => r.userId === me.id);
+    else if (filterVal !== 'all') list = list.filter(r => r.userId === +filterVal);
+  } else {
+    list = list.filter(r => r.userId === me.id);
+  }
+
   list.sort((a,b)=>{const p={high:0,med:1,low:2};if(a.status==='done'&&b.status!=='done')return 1;if(b.status==='done'&&a.status!=='done')return -1;return p[a.priority]-p[b.priority];});
   if(mwFilter!=='all')list=list.filter(r=>r.status===mwFilter);
   if(s)list=list.filter(r=>r.title.includes(s));
+
   const c=document.getElementById('myWorkContent');
   const pw=document.getElementById('mwPaginationWrap');
+
   if(!list.length){c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.star+'</div><h3>کاری نیست</h3><button class="btn btn-primary btn-lg" onclick="openMyWorkForm()">افزودن</button></div>';pw.style.display='none';return;}
+
   pw.style.display='flex';
   const{pageList,start,total,totalPages}=paginate(list,mwPage,10);
-  c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>عنوان</th><th>وضعیت</th><th>اولویت</th><th>برچسب</th><th>مهلت</th><th>عملیات</th></tr></thead><tbody>'+pageList.map((r,i)=>{
+
+  const theadHtml = '<tr><th>#</th>' + (isManager ? '<th>کاربر</th>' : '') + '<th>عنوان</th><th>وضعیت</th><th>اولویت</th><th>برچسب</th><th>مهلت</th><th>عملیات</th></tr>';
+
+  c.innerHTML='<div class="table-wrap"><table><thead>'+theadHtml+'</thead><tbody>'+pageList.map((r,i)=>{
     const pc=r.priority==='high'?'prio-high':r.priority==='med'?'prio-med':'prio-low';
     const pl=r.priority==='high'?'بالا':r.priority==='med'?'متوسط':'پایین';
     const tags=(r.tags||[]).map(t=>`<span class="tag-badge">${escapeHtml(t)}</span>`).join(' ');
-    return '<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+escapeHtml(r.title)+'</strong></td><td>'+statusBadge(r.status)+'</td><td><span class="prio-dot '+pc+'"></span>'+pl+'</td><td>'+tags+'</td><td>'+(r.deadline||'—')+'</td><td><div style="display:flex;gap:4px;"><button class="btn btn-warning btn-sm" onclick="editMyWork('+r.id+')">✎</button><button class="btn btn-danger btn-sm" onclick="delMyWork('+r.id+')">×</button></div></td></tr>';
+    let userCell = '';
+    if (isManager) {
+      const owner = DB.getUsersCache().find(u => u.id === r.userId);
+      const ownerName = owner ? escapeHtml(owner.displayName) : '—';
+      const isMe = r.userId === me.id;
+      userCell = `<td><span class="badge ${isMe ? 'badge-green' : 'badge-purple'}">${isMe ? 'من' : ownerName}</span></td>`;
+    }
+    const canEdit = r.userId === me.id || me.role === 'admin';
+    const actions = canEdit
+      ? `<div style="display:flex;gap:4px;"><button class="btn btn-warning btn-sm" onclick="editMyWork(${r.id})">✎</button><button class="btn btn-danger btn-sm" onclick="delMyWork(${r.id})">×</button></div>`
+      : '<span style="font-size:11px;color:var(--text-muted);">👁️ فقط مشاهده</span>';
+    return '<tr><td class="row-num">'+faNum(start+i+1)+'</td>'+userCell+'<td><strong>'+escapeHtml(r.title)+'</strong></td><td>'+statusBadge(r.status)+'</td><td><span class="prio-dot '+pc+'"></span>'+pl+'</td><td>'+tags+'</td><td>'+(r.deadline||'—')+'</td><td>'+actions+'</td></tr>';
   }).join('')+'</tbody></table></div>';
   document.getElementById('mwTotal').textContent=faNum(total);
   renderPages('mwPagination',mwPage,totalPages,'gotoMwPage');
@@ -3395,33 +3580,25 @@ function saveAttendance(){
 function renderAttendance(){
   const me=getCurrentUser(); if(!me)return;
   const s=(document.getElementById('attSearch').value||'').trim();
-  
   let list=DB.get('attendance').filter(r=>r.userId===me.id);
-  
   list.sort((a, b) => {
     const dateA = String(a.date || '').split('/').map(n => String(n).padStart(2, '0')).join('');
     const dateB = String(b.date || '').split('/').map(n => String(n).padStart(2, '0')).join('');
     return dateA.localeCompare(dateB);
   });
-
   if(s)list=list.filter(r=>(r.date||'').includes(s));
-  
   const c=document.getElementById('attContent');
   const pw=document.getElementById('attPaginationWrap');
-  
   if(!list.length){
     c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.clock+'</div><h3>ثبتی برای شما نیست</h3><button class="btn btn-primary btn-lg" onclick="openAttendanceForm()">ثبت اولین رکورد</button></div>';
     pw.style.display='none';
     return;
   }
-  
   pw.style.display='flex';
   const{pageList,start,total,totalPages}=paginate(list,attPage,10);
-  
   c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>ورود</th><th>خروج</th><th>مدت</th><th>عملیات</th></tr></thead><tbody>' + 
     pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+(r.date||'—')+'</strong></td><td><span class="badge badge-green">'+(r.start||'—')+'</span></td><td><span class="badge badge-red">'+(r.end||'—')+'</span></td><td><strong>'+formatHours(r.hours||0)+'</strong></td><td><button class="btn btn-danger btn-sm" onclick="delAttendanceRecord('+r.id+')">×</button></td></tr>').join('') + 
     '</tbody></table></div>';
-    
   document.getElementById('attTotal').textContent=faNum(total);
   renderPages('attPagination',attPage,totalPages,'gotoAttPage');
 }
@@ -3460,33 +3637,25 @@ function saveHome(){
 function renderHome(){
   const me=getCurrentUser(); if(!me)return;
   const s=(document.getElementById('homeSearch').value||'').trim();
-  
   let list=DB.get('home').filter(r=>r.userId===me.id);
-  
   list.sort((a, b) => {
     const dateA = String(a.date || '').split('/').map(n => String(n).padStart(2, '0')).join('');
     const dateB = String(b.date || '').split('/').map(n => String(n).padStart(2, '0')).join('');
     return dateA.localeCompare(dateB);
   });
-
   if(s)list=list.filter(r=>(r.date||'').includes(s));
-  
   const c=document.getElementById('homeContent');
   const pw=document.getElementById('homePaginationWrap');
-  
   if(!list.length){
     c.innerHTML='<div class="empty-guide"><div class="icon">'+ICONS.home+'</div><h3>ثبتی برای شما نیست</h3><button class="btn btn-primary btn-lg" onclick="openHomeForm()">ثبت اولین رکورد</button></div>';
     pw.style.display='none';
     return;
   }
-  
   pw.style.display='flex';
   const{pageList,start,total,totalPages}=paginate(list,homePage,10);
-  
   c.innerHTML='<div class="table-wrap"><table><thead><tr><th>#</th><th>تاریخ</th><th>شروع</th><th>پایان</th><th>مدت</th><th>توضیحات</th><th>عملیات</th></tr></thead><tbody>' + 
     pageList.map((r,i)=>'<tr><td class="row-num">'+faNum(start+i+1)+'</td><td><strong>'+(r.date||'—')+'</strong></td><td><span class="badge badge-green">'+(r.start||'—')+'</span></td><td><span class="badge badge-red">'+(r.end||'—')+'</span></td><td><strong>'+formatHours(r.hours||0)+'</strong></td><td>'+(r.desc||'—')+'</td><td><button class="btn btn-danger btn-sm" onclick="delHomeRecord('+r.id+')">×</button></td></tr>').join('') + 
     '</tbody></table></div>';
-    
   document.getElementById('homeTotal').textContent=faNum(total);
   renderPages('homePagination',homePage,totalPages,'gotoHomePage');
 }
@@ -3867,6 +4036,205 @@ async function delUser(id){
   });
 }
 
+// ═══ STAFF REPORT — گزارش کارهای روزانه پرسنل ═══
+let currentStaffId = null;
+let staffFilterStatus = 'all';
+
+function renderStaffList() {
+  const me = getCurrentUser();
+  if (!me) return;
+  const isManager = me.role === 'admin' || me.role === 'manager';
+
+  const listPanel = document.getElementById('staffListPanel');
+  const detailPanel = document.getElementById('staffDetailPanel');
+  if (!listPanel || !detailPanel) return;
+
+  if (!isManager) {
+    listPanel.style.display = '';
+    detailPanel.style.display = 'none';
+    document.getElementById('staffListContent').innerHTML =
+      '<div class="empty-guide"><div class="icon">🔒</div><h3>دسترسی ندارید</h3><p style="color:var(--text-muted);">این بخش فقط برای مدیران قابل مشاهده است</p></div>';
+    return;
+  }
+
+  if (currentStaffId) {
+    listPanel.style.display = 'none';
+    detailPanel.style.display = '';
+    renderStaffDetail(currentStaffId);
+    return;
+  }
+
+  listPanel.style.display = '';
+  detailPanel.style.display = 'none';
+
+  const users = DB.getUsersCache().filter(u => u.id !== me.id);
+  const allMyWork = DB.get('mywork');
+  const container = document.getElementById('staffListContent');
+
+  if (!users.length) {
+    container.innerHTML = '<div class="empty-guide"><div class="icon">👥</div><h3>کاربری وجود ندارد</h3></div>';
+    return;
+  }
+
+  const totalAll = allMyWork.length;
+  const totalDone = allMyWork.filter(t => t.status === 'done').length;
+  const totalPending = allMyWork.filter(t => (t.status || 'pending') === 'pending').length;
+
+  let html = '<div class="stats-grid" style="margin-bottom:16px;">';
+  html += '<div class="stat"><div class="stat-top"><div class="stat-icon">📋</div></div><div class="stat-value">' + faNum(totalAll) + '</div><div class="stat-label">کل کارها</div></div>';
+  html += '<div class="stat success"><div class="stat-top"><div class="stat-icon">✓</div></div><div class="stat-value">' + faNum(totalDone) + '</div><div class="stat-label">انجام شده</div></div>';
+  html += '<div class="stat danger"><div class="stat-top"><div class="stat-icon">⏳</div></div><div class="stat-value">' + faNum(totalPending) + '</div><div class="stat-label">انجام نشده</div></div>';
+  html += '<div class="stat info"><div class="stat-top"><div class="stat-icon">👥</div></div><div class="stat-value">' + faNum(users.length) + '</div><div class="stat-label">پرسنل</div></div>';
+  html += '</div>';
+
+  html += '<div class="staff-grid">';
+
+  users.forEach(u => {
+    const userTasks = allMyWork.filter(t => t.userId === u.id);
+    const total = userTasks.length;
+    const done = userTasks.filter(t => t.status === 'done').length;
+    const pending = userTasks.filter(t => (t.status || 'pending') === 'pending').length;
+
+    const initial = (u.displayName || 'ک').charAt(0);
+    const avatarHtml = u.avatar ? '<img src="' + u.avatar + '">' : initial;
+    const rl = {admin:'مدیر', manager:'سرپرست', user:'کاربر', viewer:'مشاهده‌گر'};
+
+    html += '<div class="staff-card" onclick="openStaffReport(' + u.id + ')">';
+    html += '<div class="staff-card-head">';
+    html += '<div class="staff-card-avatar">' + avatarHtml + '</div>';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<span class="staff-card-name">' + escapeHtml(u.displayName || '—') + '</span>';
+    html += '<div class="staff-card-phone">' + escapeHtml(u.username || '') + '</div>';
+    html += '<span class="role-badge ' + u.role + '" style="margin-top:4px;display:inline-block;">' + (rl[u.role] || 'کاربر') + '</span>';
+    html += '</div></div>';
+    html += '<div class="staff-card-stats">';
+    html += '<div class="staff-stat-item total"><div class="val">' + faNum(total) + '</div><div class="lbl">کل</div></div>';
+    html += '<div class="staff-stat-item done"><div class="val">' + faNum(done) + '</div><div class="lbl">انجام</div></div>';
+    html += '<div class="staff-stat-item pending"><div class="val">' + faNum(pending) + '</div><div class="lbl">باقی</div></div>';
+    html += '</div>';
+    html += '<div class="staff-card-footer"><span style="font-size:12px;color:var(--text-muted);">مشاهده گزارش کامل</span><span class="staff-card-arrow">←</span></div>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function openStaffReport(userId) {
+  currentStaffId = userId;
+  staffFilterStatus = 'all';
+  renderStaffList();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeStaffReport() {
+  currentStaffId = null;
+  staffFilterStatus = 'all';
+  renderStaffList();
+}
+
+function setStaffFilterStatus(status) {
+  staffFilterStatus = status;
+  renderStaffDetail(currentStaffId);
+}
+
+function renderStaffDetail(userId) {
+  const me = getCurrentUser();
+  if (!me) return;
+  const user = DB.getUsersCache().find(u => u.id === userId);
+  if (!user) { closeStaffReport(); return; }
+
+  const container = document.getElementById('staffDetailPanel');
+  if (!container) return;
+
+  const allTasks = DB.get('mywork').filter(t => t.userId === userId);
+  const total = allTasks.length;
+  const done = allTasks.filter(t => t.status === 'done').length;
+  const inprogress = allTasks.filter(t => t.status === 'inprogress').length;
+  const pending = allTasks.filter(t => (t.status || 'pending') === 'pending').length;
+  const high = allTasks.filter(t => t.priority === 'high').length;
+  const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  let filtered = [...allTasks];
+  if (staffFilterStatus !== 'all') {
+    filtered = filtered.filter(t => (t.status || 'pending') === staffFilterStatus);
+  }
+  filtered.sort((a, b) => {
+    const p = {high: 0, med: 1, low: 2};
+    if (a.status === 'done' && b.status !== 'done') return 1;
+    if (b.status === 'done' && a.status !== 'done') return -1;
+    return (p[a.priority] || 1) - (p[b.priority] || 1);
+  });
+
+  const initial = (user.displayName || 'ک').charAt(0);
+  const avatarHtml = user.avatar ? '<img src="' + user.avatar + '">' : initial;
+  const rl = {admin:'مدیر', manager:'سرپرست', user:'کاربر', viewer:'مشاهده‌گر'};
+
+  let html = '<div class="panel-card">';
+  html += '<div class="staff-detail-head">';
+  html += '<button class="staff-detail-back" onclick="closeStaffReport()" title="بازگشت"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;"><polyline points="9 18 15 12 9 6"></polyline></svg></button>';
+  html += '<div class="staff-detail-avatar">' + avatarHtml + '</div>';
+  html += '<div class="staff-detail-info"><h2>' + escapeHtml(user.displayName || '—') + '</h2>';
+  html += '<div class="staff-detail-meta"><span>📱 ' + escapeHtml(user.username || '—') + '</span><span class="role-badge ' + user.role + '">' + (rl[user.role] || 'کاربر') + '</span></div>';
+  html += '</div></div>';
+
+  html += '<div class="staff-detail-stats">';
+  html += '<div class="staff-detail-stat"><div class="val">' + faNum(total) + '</div><div class="lbl">کل کارها</div></div>';
+  html += '<div class="staff-detail-stat done"><div class="val">' + faNum(done) + '</div><div class="lbl">انجام شده</div></div>';
+  html += '<div class="staff-detail-stat inprogress"><div class="val">' + faNum(inprogress) + '</div><div class="lbl">در حال انجام</div></div>';
+  html += '<div class="staff-detail-stat pending"><div class="val">' + faNum(pending) + '</div><div class="lbl">انجام نشده</div></div>';
+  html += '<div class="staff-detail-stat high"><div class="val">' + faNum(high) + '</div><div class="lbl">اولویت بالا</div></div>';
+  html += '</div>';
+
+  html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;">';
+  html += '<div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;font-weight:600;"><span>پیشرفت کلی</span><span style="color:var(--success);">' + faNum(percent) + '٪</span></div>';
+  html += '<div class="progress-bar" style="height:10px;"><div style="width:' + percent + '%;height:100%;"></div></div>';
+  html += '</div>';
+
+  html += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">';
+  html += '<button class="btn ' + (staffFilterStatus==='all'?'btn-primary':'btn-ghost') + ' btn-sm" onclick="setStaffFilterStatus(\'all\')">همه (' + faNum(total) + ')</button>';
+  html += '<button class="btn ' + (staffFilterStatus==='pending'?'btn-danger':'btn-ghost') + ' btn-sm" onclick="setStaffFilterStatus(\'pending\')">انجام نشده (' + faNum(pending) + ')</button>';
+  html += '<button class="btn ' + (staffFilterStatus==='inprogress'?'btn-warning':'btn-ghost') + ' btn-sm" onclick="setStaffFilterStatus(\'inprogress\')">در حال انجام (' + faNum(inprogress) + ')</button>';
+  html += '<button class="btn ' + (staffFilterStatus==='done'?'btn-success':'btn-ghost') + ' btn-sm" onclick="setStaffFilterStatus(\'done\')">انجام شده (' + faNum(done) + ')</button>';
+  html += '</div>';
+
+  html += '<div id="staffTasksTable"></div>';
+  html += '</div>';
+
+  container.innerHTML = html;
+  renderStaffTasksTable(filtered);
+}
+
+function renderStaffTasksTable(tasks) {
+  const container = document.getElementById('staffTasksTable');
+  if (!container) return;
+
+  if (!tasks.length) {
+    container.innerHTML = '<div class="empty-state" style="padding:40px 20px;">📋 کاری در این دسته وجود ندارد</div>';
+    return;
+  }
+
+  let html = '<div class="table-wrap"><table><thead><tr><th>#</th><th>عنوان</th><th>وضعیت</th><th>اولویت</th><th>برچسب</th><th>مهلت</th></tr></thead><tbody>';
+
+  tasks.forEach((r, i) => {
+    const pc = r.priority === 'high' ? 'prio-high' : r.priority === 'med' ? 'prio-med' : 'prio-low';
+    const pl = r.priority === 'high' ? 'بالا' : r.priority === 'med' ? 'متوسط' : 'پایین';
+    const tags = (r.tags || []).map(t => '<span class="tag-badge">' + escapeHtml(t) + '</span>').join(' ');
+
+    html += '<tr>';
+    html += '<td class="row-num">' + faNum(i + 1) + '</td>';
+    html += '<td><strong>' + escapeHtml(r.title || '—') + '</strong></td>';
+    html += '<td>' + statusBadge(r.status) + '</td>';
+    html += '<td><span class="prio-dot ' + pc + '"></span>' + pl + '</td>';
+    html += '<td>' + (tags || '—') + '</td>';
+    html += '<td>' + (r.deadline || '—') + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
+}
+
 let pendingAvatarData=null;
 function openProfileForm(){
   const u=getCurrentUser(); if(!u)return;
@@ -4166,7 +4534,7 @@ let audioCtx = null;
 document.addEventListener('click', () => { if (!audioCtx) try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} }, { once: true });
 function playNotifSound() { if (!getSetting('sound', false)) return; try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); const notes = [880, 1046.50, 1318.51]; notes.forEach((freq, i) => { const t = audioCtx.currentTime + i * 0.18; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine'; osc.frequency.value = freq; gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.15, t + 0.02); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12); osc.start(t); osc.stop(t + 0.12); }); } catch(e) {} }
 function renderSettingsAccount() { const me = getCurrentUser(); if (!me) return; const av = document.getElementById('settingsAccountAvatar'); if (av) { if (me.avatar) av.innerHTML = `<img src="${me.avatar}" style="width:100%;height:100%;object-fit:cover;">`; else av.textContent = (me.displayName || 'ک').charAt(0); } const nm = document.getElementById('settingsAccountName'); if (nm) nm.textContent = me.displayName || '—'; const rl = {admin:'مدیر',manager:'سرپرست',user:'کاربر',viewer:'مشاهده‌گر'}; const rr = document.getElementById('settingsAccountRole'); if (rr) rr.textContent = rl[me.role] || 'کاربر'; const ph = document.getElementById('settingsPhoneInput'); if (ph) ph.value = me.username || ''; }
-function renderSystemInfo() { const c = document.getElementById('systemInfoRows'); if (!c) return; const counts = { users: DB.getUsersCache().length, tasks: DB.get('tasks').length, tickets: DB.get('tickets').length, systems: getAllSystems().length, devices: DB.get('devices').length }; const rows = [['نسخه', 'v9.1'],['تعداد کاربران', faNum(counts.users)],['تعداد کارها', faNum(counts.tasks)],['تعداد سیستم‌ها', faNum(counts.systems)],['تعداد وسایل', faNum(counts.devices)],['اتصال', navigator.onLine ? '🟢 آنلاین' : '🔴 آفلاین'],['Supabase', window.supabaseClient ? '✅ متصل' : '❌ قطع']]; c.innerHTML = rows.map(([lbl, val]) => `<div class="detail-row"><div class="lbl">${lbl}</div><div class="val rtl">${val}</div></div>`).join(''); }
+function renderSystemInfo() { const c = document.getElementById('systemInfoRows'); if (!c) return; const counts = { users: DB.getUsersCache().length, tasks: DB.get('tasks').length, tickets: DB.get('tickets').length, systems: getAllSystems().length, devices: DB.get('devices').length }; const rows = [['نسخه', 'v9.2'],['تعداد کاربران', faNum(counts.users)],['تعداد کارها', faNum(counts.tasks)],['تعداد سیستم‌ها', faNum(counts.systems)],['تعداد وسایل', faNum(counts.devices)],['اتصال', navigator.onLine ? '🟢 آنلاین' : '🔴 آفلاین'],['Supabase', window.supabaseClient ? '✅ متصل' : '❌ قطع']]; c.innerHTML = rows.map(([lbl, val]) => `<div class="detail-row"><div class="lbl">${lbl}</div><div class="val rtl">${val}</div></div>`).join(''); }
 function renderIntegrations() {} function renderErrorLogs() {} function clearErrorLogs() { localStorage.removeItem('errorLogs'); toast('پاک شد','success'); }
 function testSupabaseConnection() { if (!window.supabaseClient) return toast('Supabase متصل نیست','error'); window.supabaseClient.from('panel_data').select('key', {count:'exact'}).limit(1).then(({error}) => { if (error) toast('❌ خطا: ' + error.message,'error'); else toast('✅ اتصال موفق','success'); }).catch(e => toast('❌ ' + e.message,'error')); }
 function testWebhook() { toast('تست شد','success'); }
@@ -4209,7 +4577,7 @@ async function initApp(){
   const bindInput=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('input',fn);};
   bindInput('attSearch',()=>{attPage=1;renderAttendance();}); bindInput('homeSearch',()=>{homePage=1;renderHome();}); bindInput('taskSearch',()=>{taskPage=1;renderTasks();}); bindInput('mwSearch',()=>{mwPage=1;renderMyWork();});
   document.querySelectorAll('input[name="ufRole"]').forEach(r=>{r.addEventListener('change',()=>renderUserPermsList(ROLE_DEFAULTS[r.value]));});
-  renderMyWork();renderAttendance();renderHome();renderTasks();renderJobs();renderAssigned();renderDevices();renderDepts();updateDeptSelects();renderSystems();renderUsers();renderDashboard();renderWidgets();renderKanban();renderActivity();renderTickets();renderLicenses();renderLeave();updateDate();renderUserReport();renderChat();renderDm();renderAchievements();
+  renderMyWork();renderAttendance();renderHome();renderTasks();renderJobs();renderAssigned();renderDevices();renderDepts();updateDeptSelects();renderSystems();renderUsers();renderDashboard();renderWidgets();renderKanban();renderActivity();renderTickets();renderLicenses();renderLeave();updateDate();renderUserReport();renderChat();renderDm();renderAchievements();renderStaffList();
   highlightColor();updateNotifBadge();initSessionTimeout();ensureAdminUser().catch(e => {});syncInBackground();
   setTimeout(initAdvancedSettings, 300); setTimeout(showWelcomeMessage, 1500);
   
