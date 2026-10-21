@@ -1914,7 +1914,40 @@ function setupRealtimeSubscriptions() {
       if (payload.new && payload.new.key) {
         if (payload.new.key === 'users') return;
         if (payload.new.key.startsWith('user_settings_') || payload.new.key.startsWith('auto_backup_')) return;
-        if (payload.new.key.startsWith('dm_typing_') || payload.new.key.startsWith('dm_read_')) return;
+        if (payload.new.key.startsWith('dm_typing_')) return;
+        // وضعیت «خوانده شده» چت خصوصی: فقط کلیدهای مربوط به کاربر جاری اعمال می‌شوند
+        // تا پیام‌های خوانده‌شده در دستگاه/نشست دیگر دوباره خوانده‌نشده دیده نشوند
+        if (payload.new.key.startsWith('dm_read_')) {
+          const meRt = getCurrentUser();
+          if (meRt && payload.new.key.startsWith('dm_read_' + meRt.id + '_')) {
+            try { localStorage.setItem(payload.new.key, JSON.stringify(payload.new.value)); } catch(e) {}
+            updateDmBadge();
+            if (document.getElementById('page-dm')?.classList.contains('active')) debouncedRefresh();
+          }
+          return;
+        }
+        // پیام‌های چت خصوصی: ادغام نسخه سرور با نسخه محلی تا در ارسال همزمان، پیامی از دست نرود
+        if (/^dm_\d+_\d+$/.test(payload.new.key)) {
+          let mergedVal = payload.new.value;
+          try {
+            const localList = JSON.parse(localStorage.getItem(payload.new.key) || '[]');
+            const map = new Map();
+            const put = (m) => { if (m && m.id != null) map.set(String(m.id), m); };
+            (Array.isArray(payload.new.value) ? payload.new.value : []).forEach(put);
+            localList.forEach(m => {
+              const ex = map.get(String(m.id));
+              if (!ex) { map.set(String(m.id), m); return; }
+              const exT = new Date(ex.timestamp || 0).getTime(), mT = new Date(m.timestamp || 0).getTime();
+              if (mT > exT || (mT === exT && m.edited && !ex.edited)) map.set(String(m.id), m);
+            });
+            mergedVal = [...map.values()].sort((a,b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0)).slice(-200);
+          } catch(e) {}
+          try { localStorage.setItem(payload.new.key, JSON.stringify(mergedVal)); } catch(e) {}
+          debouncedRefresh();
+          if (document.getElementById('page-dm')?.classList.contains('active')) renderDm();
+          updateDmBadge();
+          return;
+        }
         try { localStorage.setItem(payload.new.key, JSON.stringify(payload.new.value)); } catch(e) {}
         debouncedRefresh();
         if (payload.new.key === 'internal_messages' && document.getElementById('page-chat').classList.contains('active')) renderChat();
@@ -2547,6 +2580,7 @@ let _typingTimer = null;
 let _dmPollTimer = null;
 let _lastTypingState = null;
 let _lastReadState = null;
+let _lastDmMsgCount = null;
 
 function dmKey(a, b) { return `dm_${Math.min(a,b)}_${Math.max(a,b)}`; }
 function getDmMessages(a, b) { return DB.get(dmKey(a, b)) || []; }
@@ -2570,6 +2604,26 @@ function getDmSeen(meId, otherId) {
     localStorage.setItem(key, seen);
   }
   return seen;
+}
+
+// نقشه پیام‌های خوانده‌شده (سینک‌شده بین همه دستگاه‌ها از طریق Supabase)
+function getDmReadMap(meId, otherId) {
+  try {
+    const r = JSON.parse(localStorage.getItem(`dm_read_${meId}_${otherId}`) || '{}');
+    return (r && typeof r === 'object' && !Array.isArray(r)) ? r : {};
+  } catch(e) { return {}; }
+}
+
+// تعداد خوانده‌نشده: پیام‌های طرف مقابل که نه در نقشه read هستند و نه بعد از seen رسیده‌اند
+function dmUnreadCount(me, u) {
+  const msgs = getDmMessages(me.id, u.id);
+  const readMap = getDmReadMap(me.id, u.id);
+  const seen = new Date(getDmSeen(me.id, u.id)).getTime();
+  return msgs.filter(m => {
+    if (String(m.userId) === String(me.id)) return false;
+    if (readMap[String(m.id)]) return false;
+    return new Date(m.timestamp || 0).getTime() > seen;
+  }).length;
 }
 
 function openDm(userId) {
@@ -2599,6 +2653,7 @@ function openDm(userId) {
   }
   
   updateDmBadge();
+  _lastDmMsgCount = msgs.length;
   renderDm();
   startDmPolling();
 }
@@ -2608,6 +2663,7 @@ function closeDm() {
   currentDmUserId = null;
   _lastTypingState = null;
   _lastReadState = null;
+  _lastDmMsgCount = null;
   stopDmPolling();
   renderDm();
   updateDmBadge();
@@ -2629,6 +2685,13 @@ async function pollDmState() {
   if (!currentDmUserId || !window.supabaseClient) return;
   const me = getCurrentUser(); if (!me) return;
   const other = currentDmUserId;
+
+  // اگر realtime پیام جدید را نرسانده بود، polling جای آن را می‌گیرد
+  const msgCountNow = getDmMessages(me.id, other).length;
+  if (_lastDmMsgCount !== null && msgCountNow !== _lastDmMsgCount) {
+    _lastDmMsgCount = msgCountNow;
+    renderDm();
+  }
   
   try {
     const typingKey = `dm_typing_${other}_${me.id}`;
@@ -2704,6 +2767,7 @@ async function pollDmState() {
 function renderDm() {
   const me = getCurrentUser(); if (!me) return;
   const container = document.getElementById('dmContainer'); if (!container) return;
+  fitChatContainers();
   if (currentDmUserId === null) renderDmUserList(container, me);
   else renderDmConversation(container, me);
 }
@@ -2714,8 +2778,7 @@ function renderDmUserList(container, me) {
 
   const items = users.map(u => {
     const msgs = getDmMessages(me.id, u.id);
-    const seen = getDmSeen(me.id, u.id);
-    const unread = msgs.filter(m => String(m.userId) !== String(me.id) && new Date(m.timestamp || 0) > new Date(seen)).length;
+    const unread = dmUnreadCount(me, u);
     const last = msgs.length ? msgs[msgs.length - 1] : null;
     
     let timeStr = '';
@@ -2751,8 +2814,14 @@ function renderDmUserList(container, me) {
 function renderDmConversation(container, me) {
   const other = DB.getUsersCache().find(u => u.id === currentDmUserId);
   if (!other) { currentDmUserId = null; return renderDm(); }
-  
+
+  // حفظ متن در حال تایپ هنگام رندر مجدد (مثلاً وقتی پیام جدید می‌رسد)
+  const prevInput = document.getElementById('dmInput');
+  const draft = prevInput ? prevInput.value : '';
+  const wasFocused = prevInput && document.activeElement === prevInput;
+
   const msgs = getDmMessages(me.id, other.id).slice(-200);
+  _lastDmMsgCount = msgs.length;
   
   let latestTime = null;
   msgs.forEach(m => {
@@ -2832,6 +2901,11 @@ function renderDmConversation(container, me) {
     if (backBtn) backBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); closeDm(); });
     const msgEl = document.getElementById('dmMessages');
     if (msgEl) msgEl.scrollTop = msgEl.scrollHeight;
+    const inp = document.getElementById('dmInput');
+    if (inp && draft) {
+      inp.value = draft;
+      if (wasFocused) { inp.focus(); try { inp.setSelectionRange(draft.length, draft.length); } catch(e) {} }
+    }
   }, 50);
   updateDmBadge();
 }
@@ -2914,9 +2988,7 @@ function updateDmBadge() {
   const me = getCurrentUser(); if (!me) return;
   let total = 0;
   DB.getUsersCache().filter(u => u.id !== me.id).forEach(u => {
-    const msgs = getDmMessages(me.id, u.id);
-    const seen = getDmSeen(me.id, u.id);
-    total += msgs.filter(m => String(m.userId) !== String(me.id) && new Date(m.timestamp || 0) > new Date(seen)).length;
+    total += dmUnreadCount(me, u);
   });
   const badge = document.getElementById('dmBadge');
   if (badge) { if (total > 0) { badge.style.display = 'inline-block'; badge.textContent = faNum(total); } else badge.style.display = 'none'; }
@@ -3049,8 +3121,22 @@ function addReaction(msgId, ctx = 'internal_messages'){ _reactionMsgId = msgId; 
 function pickReaction(emoji){ document.getElementById('reactionModal').classList.remove('show'); if (_reactionMsgId != null) toggleReaction(_reactionMsgId, emoji, _reactionCtx); _reactionMsgId = null; _reactionCtx = null; }
 function viewChatImage(src) { const w = window.open('', '_blank'); if (w) { w.document.write(`<html><body style="margin:0;background:#000;display:grid;place-items:center;height:100vh"><img src="${src}" style="max-width:100%;max-height:100%"></body></html>`); w.document.close(); } }
 
+// تنظیم دقیق ارتفاع کانتینر چت بر اساس فضای واقعی موجود (کلیدواژه، نوار آدرس موبایل، چرخش)
+function fitChatContainers() {
+  document.querySelectorAll('.chat-container').forEach(c => {
+    const page = c.closest('.page');
+    if (page && !page.classList.contains('active')) { c.style.height = ''; return; }
+    const vv = window.visualViewport;
+    const top = c.getBoundingClientRect().top;
+    let h = (vv ? vv.height : window.innerHeight) - top - 8;
+    h = Math.min(h, window.innerHeight - 64);
+    c.style.height = (h > 200 && top > 0) ? Math.round(h) + 'px' : '';
+  });
+}
+
 function renderChat() {
   const me = getCurrentUser(); if (!me) return;
+  fitChatContainers();
   const container = document.getElementById('chatMessages'); if (!container) return;
   const messages = (DB.get('internal_messages') || []).slice(-200);
   if (!messages.length) { container.innerHTML = '<div class="empty-state" style="margin:auto;">شروع به گفتگو کنید...</div>'; return; }
@@ -4584,17 +4670,10 @@ async function initApp(){
   initSidebarTooltips();
   
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', () => {
-      const chatContainers = document.querySelectorAll('.chat-container');
-      chatContainers.forEach(c => {
-        if (window.visualViewport.height < window.innerHeight - 100) {
-          c.style.height = window.visualViewport.height - 70 + 'px';
-        } else {
-          c.style.height = ''; 
-        }
-      });
-    });
+    window.visualViewport.addEventListener('resize', fitChatContainers);
   }
+  window.addEventListener('resize', fitChatContainers);
+  window.addEventListener('orientationchange', () => setTimeout(fitChatContainers, 250));
   
   if (localStorage.getItem('sidebarCollapsed') === '1' && window.innerWidth > 900) {
     document.body.classList.add('sidebar-collapsed');
