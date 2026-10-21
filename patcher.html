@@ -1914,20 +1914,34 @@ function setupRealtimeSubscriptions() {
     .on('presence', { event: 'sync' }, syncPresence)
     .on('presence', { event: 'join' }, syncPresence)
     .on('presence', { event: 'leave' }, syncPresence)
-    .subscribe(async (status) => {
+      .subscribe(async (status) => {
       if (status === 'SUBSCRIBED' && me) {
         try {
+          // عکس را ارسال نمی‌کنیم تا حجم سیگنال کم شود
           await presenceChannel.track({
             user_id: String(me.id),
             display_name: me.displayName,
             username: me.username,
             role: me.role,
-            avatar: me.avatar,
             online_at: new Date().toISOString()
           });
         } catch(e) {}
       }
     });
+
+  // کد جدید: وقتی کاربر از حالت خواب/پس‌زمینه به مرورگر برمی‌گردد، دوباره خودش را آنلاین ثبت کند
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && presenceChannel && me) {
+      presenceChannel.track({
+        user_id: String(me.id),
+        display_name: me.displayName,
+        username: me.username,
+        role: me.role,
+        online_at: new Date().toISOString()
+      }).catch(()=>{});
+    }
+  });
+}
 }
 
 function updateOnlineBadge() {
