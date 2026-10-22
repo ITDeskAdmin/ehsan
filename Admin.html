@@ -1995,14 +1995,21 @@ function setupRealtimeSubscriptions() {
     }).subscribe();
   
   // ═══ PRESENCE ═══
+  setupPresence();
+}
+
+// کانال حضور آنلاین: در صورت خطا/قطعی شبکه به‌جای subscribe مجدد، کانال کاملاً بازسازی می‌شود
+// چون روی کانالِ خطاخورده، subscribe() دوباره کار نمی‌کند و تا رفرش دستی لیست خالی می‌ماند
+function setupPresence() {
+  if (!window.supabaseClient) return;
   const me = getCurrentUser();
   if (!me) return;
-  
+
   if (me.id == null || isNaN(me.id)) {
     console.warn('[PRESENCE] Invalid user id:', me.id);
     return;
   }
-  
+
   if (presenceChannel) {
     try {
       if (_presenceHeartbeat) clearInterval(_presenceHeartbeat);
@@ -2010,7 +2017,7 @@ function setupRealtimeSubscriptions() {
     } catch(e) {}
     presenceChannel = null;
   }
-  
+
   const userId = String(me.id);
   const presencePayload = {
     user_id: userId,
@@ -2019,11 +2026,11 @@ function setupRealtimeSubscriptions() {
     role: me.role || 'user',
     avatar: me.avatar || null
   };
-  
+
   presenceChannel = window.supabaseClient.channel('online_users_room', {
     config: { presence: { key: userId } }
   });
-  
+
   const trackNow = () => {
     if (!presenceChannel) return;
     presenceChannel
@@ -2031,7 +2038,7 @@ function setupRealtimeSubscriptions() {
       .then(() => console.log('[PRESENCE] ✅ Tracked as', userId))
       .catch(e => console.warn('[PRESENCE] ❌ track failed:', e));
   };
-  
+
   const syncPresence = () => {
     try {
       const state = presenceChannel.presenceState();
@@ -2052,7 +2059,7 @@ function setupRealtimeSubscriptions() {
       if (currentDmUserId && document.getElementById('page-dm')?.classList.contains('active')) renderDm();
     } catch(e) { console.error('[PRESENCE_SYNC]', e); }
   };
-  
+
   presenceChannel
     .on('presence', { event: 'sync' }, syncPresence)
     .on('presence', { event: 'join' }, syncPresence)
@@ -2063,24 +2070,30 @@ function setupRealtimeSubscriptions() {
         await trackNow();
         setTimeout(trackNow, 1500);
       } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
-        console.warn('[PRESENCE] Reconnecting in 3s...');
-        setTimeout(() => {
-          try { presenceChannel.subscribe(); } catch(e) {}
-        }, 3000);
+        console.warn('[PRESENCE] Rebuilding channel in 3s...');
+        setTimeout(setupPresence, 3000);
       }
     });
-  
+
   if (_presenceHeartbeat) clearInterval(_presenceHeartbeat);
   _presenceHeartbeat = setInterval(() => {
-    if (!presenceChannel) return;
+    if (!presenceChannel) { setupPresence(); return; }
     if (presenceChannel.state === 'joined') {
       trackNow();
     } else {
-      console.log('[PRESENCE] Heartbeat: reconnecting...');
-      try { presenceChannel.subscribe(); } catch(e) {}
+      console.log('[PRESENCE] Heartbeat: rebuilding channel...');
+      setupPresence();
     }
   }, 30000);
 }
+
+// وقتی تب دوباره visible می‌شود (بعد از قفل صفحه/رفتن به پس‌زمینه) اتصال presence چک می‌شود
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (window.supabaseClient && (!presenceChannel || presenceChannel.state !== 'joined')) {
+    setTimeout(setupPresence, 500);
+  }
+});
 
 function updateOnlineBadge() {
   const b = document.getElementById('onlineUsersBadge');
