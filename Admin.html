@@ -1933,13 +1933,15 @@ function setupRealtimeSubscriptions() {
         if (payload.new.key.startsWith('user_settings_') || payload.new.key.startsWith('auto_backup_')) return;
         if (payload.new.key.startsWith('dm_typing_')) return;
         // وضعیت «خوانده شده» چت خصوصی: فقط کلیدهای مربوط به کاربر جاری اعمال می‌شوند
-        // تا پیام‌های خوانده‌شده در دستگاه/نشست دیگر دوباره خوانده‌نشده دیده نشوند
+        // توجه: در حالت مکالمه باز رندر مجدد انجام نمی‌شود چون باعث از دست رفتن فوکوس
+        // و بسته/باز شدن کیبورد موبایل حین تایپ می‌شود؛ تیک‌ها را polling به‌روز می‌کند
         if (payload.new.key.startsWith('dm_read_')) {
           const meRt = getCurrentUser();
           if (meRt && payload.new.key.startsWith('dm_read_' + meRt.id + '_')) {
             try { localStorage.setItem(payload.new.key, JSON.stringify(payload.new.value)); } catch(e) {}
+            _dmReadSig.set(payload.new.key, Object.keys(payload.new.value || {}).sort().join(','));
             updateDmBadge();
-            if (document.getElementById('page-dm')?.classList.contains('active')) debouncedRefresh();
+            if (document.getElementById('page-dm')?.classList.contains('active') && currentDmUserId === null) renderDm();
           }
           return;
         }
@@ -1960,7 +1962,6 @@ function setupRealtimeSubscriptions() {
             mergedVal = [...map.values()].sort((a,b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0)).slice(-200);
           } catch(e) {}
           try { localStorage.setItem(payload.new.key, JSON.stringify(mergedVal)); } catch(e) {}
-          debouncedRefresh();
           if (document.getElementById('page-dm')?.classList.contains('active')) renderDm();
           updateDmBadge();
           return;
@@ -2644,6 +2645,23 @@ function dmUnreadCount(me, u) {
   }).length;
 }
 
+// علامت‌گذاری پیام‌های طرف مقابل به‌عنوان خوانده‌شده.
+// اگر مجموعه پیام‌های خوانده‌شده تغییری نکرده باشد، آپلود به سرور انجام نمی‌شود
+// تا echo realtime باعث رندر مجدد و بسته/باز شدن کیبورد نشود.
+const _dmReadSig = new Map();
+function markDmRead(meId, otherId, msgs) {
+  const readData = {};
+  msgs.forEach(m => { if (String(m.userId) === String(otherId)) readData[m.id] = 1; });
+  const key = `dm_read_${meId}_${otherId}`;
+  try { localStorage.setItem(key, JSON.stringify(readData)); } catch(e) {}
+  const sig = Object.keys(readData).sort().join(',');
+  if (_dmReadSig.get(key) === sig) return;
+  _dmReadSig.set(key, sig);
+  if (window.supabaseClient) {
+    window.supabaseClient.from('panel_data').upsert({ key, value: readData, updated_at: new Date().toISOString() }, { onConflict: 'key' }).then(()=>{}).catch(()=>{});
+  }
+}
+
 function openDm(userId) {
   currentDmUserId = userId;
   const me = getCurrentUser();
@@ -2658,17 +2676,7 @@ function openDm(userId) {
   });
   localStorage.setItem(dmSeenKey(me.id, userId), latestTime ? new Date(latestTime).toISOString() : new Date().toISOString());
   
-  const readKey = `dm_read_${me.id}_${userId}`;
-  const readData = {};
-  msgs.forEach(m => { if (String(m.userId) === String(userId)) readData[m.id] = Date.now(); });
-  if (Object.keys(readData).length) {
-    localStorage.setItem(readKey, JSON.stringify(readData));
-    if (window.supabaseClient) {
-      window.supabaseClient.from('panel_data').upsert({
-        key: readKey, value: readData, updated_at: new Date().toISOString()
-      }, { onConflict: 'key' }).then(()=>{}).catch(()=>{});
-    }
-  }
+  markDmRead(me.id, userId, msgs);
   
   updateDmBadge();
   _lastDmMsgCount = msgs.length;
@@ -2852,13 +2860,7 @@ function renderDmConversation(container, me) {
     localStorage.setItem(dmSeenKey(me.id, other.id), new Date(latestTime).toISOString());
   }
   
-  const readKey = `dm_read_${me.id}_${other.id}`;
-  const readData = {};
-  msgs.forEach(m => { if (String(m.userId) === String(other.id)) readData[m.id] = Date.now(); });
-  if (Object.keys(readData).length) {
-    localStorage.setItem(readKey, JSON.stringify(readData));
-    if (window.supabaseClient) { window.supabaseClient.from('panel_data').upsert({ key: readKey, value: readData, updated_at: new Date().toISOString() }, { onConflict: 'key' }).then(()=>{}).catch(()=>{}); }
-  }
+  markDmRead(me.id, other.id, msgs);
   
   const otherOnline = onlineUsersMap.has(String(other.id));
   const otherPresence = onlineUsersMap.get(String(other.id));
