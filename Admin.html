@@ -2056,7 +2056,8 @@ function setupPresence() {
       unique.forEach((v,k) => onlineUsersMap.set(k,v));
       updateOnlineBadge();
       renderOnlineUsers();
-      if (currentDmUserId && document.getElementById('page-dm')?.classList.contains('active')) renderDm();
+      // چت خصوصی (هم لیست و هم مکالمه) با تغییر آنلاین/آفلاین زنده به‌روز شود
+      if (document.getElementById('page-dm')?.classList.contains('active')) renderDm();
     } catch(e) { console.error('[PRESENCE_SYNC]', e); }
   };
 
