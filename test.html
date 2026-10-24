@@ -1584,10 +1584,30 @@ body.sidebar-position-left.sidebar-collapsed .main{margin-left:70px;margin-right
     </button>
     <input type="text" id="attMonthInput" readonly style="position:absolute;width:0;height:0;opacity:0;pointer-events:none;">
     <button class="att-month-today" onclick="attGoToThisMonth()">📅 ماه جاری</button>
+    <button class="att-month-today" onclick="openAttAddForm()" style="background:var(--primary);color:#fff;border-color:var(--primary);">＋ افزودن روز</button>
   </div>
   <div id="attStats" class="stats-grid" style="margin-bottom:16px;"></div>
   <div class="panel-card">
     <div id="attContent"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="attAddModal">
+  <div class="modal">
+    <h3>افزودن دستی روز کاری</h3>
+    <p>تاریخ و ساعت ورود و خروج را وارد کنید. اگر برای آن تاریخ رکوردی باشد، به‌روزرسانی می‌شود.</p>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>تاریخ <span class="req">*</span></label>
+      <input type="text" id="attAddDate" placeholder="انتخاب تاریخ..." onclick="openCal('attAddDate', this)" readonly style="cursor:pointer;font-family:'JetBrains Mono',monospace;direction:ltr;text-align:center;">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div class="form-group"><label>ساعت ورود</label><input type="time" id="attAddStart" style="font-family:'JetBrains Mono',monospace;direction:ltr;text-align:center;"></div>
+      <div class="form-group"><label>ساعت خروج</label><input type="time" id="attAddEnd" style="font-family:'JetBrains Mono',monospace;direction:ltr;text-align:center;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveAttManual()">ذخیره</button>
+      <button class="btn btn-ghost" onclick="closeAttAddForm()">بستن</button>
+    </div>
   </div>
 </div>
       
@@ -4039,6 +4059,38 @@ function deleteAttendanceDay(dateStr) {
     updateAttendanceStats();
     toast('حذف شد', 'success');
   });
+}
+
+// ═══ افزودن دستی روز کاری ═══
+function openAttAddForm() {
+  initAttendanceMonth();
+  const [jy, jm, jd] = todayJalali();
+  const dateEl = document.getElementById('attAddDate');
+  if (attSelectedYear === jy && attSelectedMonth === jm) dateEl.value = jy + '/' + pad(jm) + '/' + pad(jd);
+  else dateEl.value = attSelectedYear + '/' + pad(attSelectedMonth) + '/01';
+  document.getElementById('attAddStart').value = '';
+  document.getElementById('attAddEnd').value = '';
+  document.getElementById('attAddModal').classList.add('show');
+  setTimeout(() => { const s = document.getElementById('attAddStart'); if (s) s.focus(); }, 100);
+}
+function closeAttAddForm() { document.getElementById('attAddModal').classList.remove('show'); }
+function saveAttManual() {
+  const me = getCurrentUser(); if (!me) return;
+  const dateStr = (document.getElementById('attAddDate').value || '').trim();
+  const start = document.getElementById('attAddStart').value;
+  const end = document.getElementById('attAddEnd').value;
+  if (!/^\d{4}\/\d{2}\/\d{2}$/.test(dateStr)) return toast('تاریخ معتبر انتخاب کنید', 'error');
+  if (!start || !end) return toast('ساعت ورود و خروج را وارد کنید', 'error');
+  const list = DB.get('attendance');
+  const idx = list.findIndex(r => r.userId === me.id && r.date === dateStr);
+  const rec = { id: idx >= 0 ? list[idx].id : Date.now(), userId: me.id, date: dateStr, start, end, hours: diffHours(start, end) };
+  if (idx >= 0) list[idx] = rec; else list.push(rec);
+  DB.set('attendance', list);
+  closeAttAddForm();
+  const [jy, jm] = dateStr.split('/').map(Number);
+  setAttendanceMonth(jy, jm);
+  renderAttendance();
+  toast('✅ ثبت شد — ' + formatHours(rec.hours), 'success');
 }
 
 let homePage=1;
